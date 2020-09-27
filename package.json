@@ -27,6 +27,8 @@
     "react-native-sensitive-info": "^5.5.5",
     "react-native-simple-card-view": "https://github.com/qasimmehdi/react-native-simple-card-view",
     "react-native-vector-icons": "^6.6.0",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
     "require": "^2.4.20",
     "requirejs": "^2.3.6",
     "yarn": "^1.22.4"

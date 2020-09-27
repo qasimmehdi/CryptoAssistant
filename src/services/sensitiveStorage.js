@@ -1,13 +1,25 @@
 import SInfo from 'react-native-sensitive-info';
 
 export const SInfoSet = async (key, val) => {
-    SInfo.setItem(key, val, {});
+    const savingFirstData = await SInfo.setItem(key, val, {
+        sharedPreferencesName: 'CryptoAssistant',
+        keychainService: 'myKeychain'
+    });
+    console.log('set ' +savingFirstData);
 }
 
 export const SInfoGet = async (key) => {
-    SInfo.getItem(key,{})
-        .then(value => {
-            console.log('get '+value) //value2
-            return value;
-        });
+    const gettingFirstData = await SInfo.getItem(key, {
+        sharedPreferencesName: 'CryptoAssistant',
+        keychainService: 'myKeychain'
+    });
+    console.log('get '+ gettingFirstData);
+    return gettingFirstData;
+}
+
+export const SDeleteInfo = async (key) => {
+    return SInfo.deleteItem(key, {
+        sharedPreferencesName: 'CryptoAssistant',
+        keychainService: 'myKeychain'
+    });
 }
