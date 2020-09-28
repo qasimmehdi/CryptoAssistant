@@ -7,9 +7,10 @@ import { EnterUsername, EnterPassword, EnterEmail } from './src/components/Regis
 import AccountCreated from './src/components/AccountCreated';
 import EmailAdded from './src/components/EmailAdded';
 import Dashboard from './src/components/Dashboard';
-import Loader from './src/components/loading';
+import StartupScreen from './src/components/StartupScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,7 @@ const App = () => {
           headerTitleAlign: 'center'
         }}
       >
-        <Stack.Screen name="Loader" component={Loader} options={{ title: '' }} />
+        <Stack.Screen name="StartupScreen" component={StartupScreen} options={{ title: '' }} />
         <Stack.Screen name="SigninOrRegister" component={SigninOrRegister} options={{ title: '' }} />
         <Stack.Screen name="EnterUsername" component={EnterUsername} options={{ title: 'Register' }} />
         <Stack.Screen name="EnterPassword" component={EnterPassword} options={{ title: 'Register' }} />

@@ -3,8 +3,6 @@ import { View } from 'react-native';
 import { SInfoGet } from '../services/sensitiveStorage';
 
 import { loginStyles } from '../styles/loginStyles';
-
-
 import Loading from './SplashScreen';
 
 const check = async (navigation) => {
@@ -19,7 +17,7 @@ const check = async (navigation) => {
         }
 }
 
-const Loader = ({ navigation }) => {
+const StartupScreen = ({ navigation }) => {
     useEffect(() => {
         check(navigation);
     }, []);
@@ -30,4 +28,4 @@ const Loader = ({ navigation }) => {
     );
 
 }
-export default Loader;
+export default StartupScreen;

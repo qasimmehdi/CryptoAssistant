@@ -2,13 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import { Input, Button, Text } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {connect} from 'react-redux';
 import { loginStyles } from '../styles/loginStyles';
 import registerStyles from '../styles/registerStyles';
+import {updateRegistration} from '../redux/actions/updateRegistration';
 
-function EnterUsername({ navigation }) {
+function EnterUsernameNC(props) {
     const [user, onChangeUser] = React.useState('');
-
+    const info = props.register.info;
     return (
         <View style={registerStyles.body}>
             <View style={registerStyles.inputContainer}>
@@ -29,7 +30,12 @@ function EnterUsername({ navigation }) {
                     style={loginStyles.linearGradient}
                 >
                     <Button round color='transparent' style={loginStyles.borderless}
-                        onPress={() => (navigation.navigate('EnterPassword'))}
+                        onPress={
+                            () => {
+                                props.updateRegistration({username: user, password: info.password, email: info.email});
+                                props.navigation.navigate('EnterPassword');
+                            }
+                        }
                     >
                         <Text color={'#fff'} h5 bold>Next</Text>
                     </Button>
@@ -41,7 +47,7 @@ function EnterUsername({ navigation }) {
     );
 }
 
-function EnterPassword({ navigation }) {
+function EnterPasswordNC({ navigation }) {
     const [pass, onChangePass] = React.useState('');
 
     return (
@@ -77,7 +83,7 @@ function EnterPassword({ navigation }) {
     );
 }
 
-function EnterEmail({ navigation }) {
+function EnterEmailNC({ navigation }) {
     const [email, onChangeEmail] = React.useState('');
 
     return (
@@ -113,4 +119,19 @@ function EnterEmail({ navigation }) {
     );
 }
 
-export { EnterUsername, EnterPassword, EnterEmail };
+const MapStateToProps = (state) => {
+    return {
+        register: state.register
+    };
+};
+const MapDispatchToProps = (dispatch) => {
+    return {
+        updateRegistration: () => dispatch(updateRegistration)
+    }
+};
+
+export const EnterUsername = connect(MapStateToProps, MapDispatchToProps)(EnterUsernameNC);
+export const EnterPassword = connect(MapStateToProps, MapDispatchToProps)(EnterPasswordNC);
+export const EnterEmail = connect(MapStateToProps, MapDispatchToProps)(EnterEmailNC);
+
+//export { EnterUsername, EnterPassword, EnterEmail };
