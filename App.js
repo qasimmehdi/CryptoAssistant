@@ -11,6 +11,8 @@ import StartupScreen from './src/components/StartupScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { Buffer } from 'buffer';
+global.Buffer = Buffer; // very important
 
 const Stack = createStackNavigator();
 
@@ -38,7 +40,7 @@ const App = () => {
         <Stack.Screen name="AccountCreated" component={AccountCreated} options={{ title: '' }} />
         <Stack.Screen name="EnterEmail" component={EnterEmail} options={{ title: 'Register' }} />
         <Stack.Screen name="EmailAdded" component={EmailAdded} options={{ title: '' }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Home' }} />
+        <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Crypto Assistant' }} />
         <Stack.Screen name="Sign In" component={SimpleLogin} />
         <Stack.Screen name="Forgot Password" component={Forgot} />
       </Stack.Navigator>
