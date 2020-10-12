@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Text, Button } from 'galio-framework';
+import { Text } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
 import { dashboardStyles } from '../styles/dashboardStyles';
-import { loginStyles } from '../styles/loginStyles';
-import { SDeleteInfo } from '../services/sensitiveStorage';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 import getData from '../services/getData';
-//import CCXT from '../services/ccxt';
+import CCXT from '../services/ccxt';
 
-function Dashboard({ navigation }) {
-    const [balance, setBalance] = useState('0');
+function Dashboard({ }) {
+    const [balance] = useState('0');
     const [tableHead] = useState(['Coins', 'Price', 'Holdings', '']);
     const [tableData, setTbaleData] = useState([
         ['BTC', '$11,392.1', 'Add', ''],
@@ -25,7 +23,12 @@ function Dashboard({ navigation }) {
     getData('BTC/USD')
             .then(resp => {
                 console.log(resp.data.last);
-
+                setTbaleData([
+                    ['BTC', `$${resp.data.last}`, 'Add', ''],
+                    ['ETH', '$376.04', 'Add', ''],
+                    ['BAT', '$2.55', 'Add', ''],
+                    ['ADA', '$28.84', 'Add', '']
+                ])
             })
             .catch(err => console.log(err));
 
