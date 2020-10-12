@@ -50,10 +50,10 @@ function LoginForm({ navigation }) {
                   onChangeText={onChangePass}
                 />
               </View>
-              <TouchableHighlight style={loginStyles.forgotPassword} onPress={() => navigation.navigate('Forgot Password')}>
+              <TouchableHighlight style={loginStyles.forgotPassword} onPress={() => navigation.navigate('ForgetEnterEmail')}>
                 <Text color={'#808080'} size={11} bold>
                   Forgot Password?
-          </Text>
+                </Text>
               </TouchableHighlight>
 
             </View>

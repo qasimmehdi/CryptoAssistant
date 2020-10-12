@@ -3,7 +3,8 @@ import React from 'react';
 import Forgot from './src/components/Forgot';
 import SimpleLogin from './src/components/SimpleLogin';
 import SigninOrRegister from './src/components/SigninOrRegister';
-import { EnterUsername, EnterPassword, EnterEmail } from './src/components/RegisterScreens';
+import {ForgetEnterEmail, ResetPassword} from './src/components/ForgetPasswordScreens';
+import { EnterEmail, EnterPassword, EnterUsername } from './src/components/RegisterScreens';
 import AccountCreated from './src/components/AccountCreated';
 import EmailAdded from './src/components/EmailAdded';
 import Dashboard from './src/components/Dashboard';
@@ -39,6 +40,8 @@ const App = () => {
         <Stack.Screen name="EnterEmail" component={EnterEmail} options={{ title: 'Register' }} />
         <Stack.Screen name="EmailAdded" component={EmailAdded} options={{ title: '' }} />
         <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Home' }} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ title: 'Reset Password' }} />
+        <Stack.Screen name="ForgetEnterEmail" component={ForgetEnterEmail} options={{ title: 'Forgot Password' }} />
         <Stack.Screen name="Sign In" component={SimpleLogin} />
         <Stack.Screen name="Forgot Password" component={Forgot} />
       </Stack.Navigator>

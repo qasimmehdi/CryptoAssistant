@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {SInfoGet, SInfoSet} from './sensitiveStorage';
+import { SInfoGet, SInfoSet } from './sensitiveStorage';
 
 export const loginUser = (user, pass) => {
    const data = {
@@ -32,16 +32,71 @@ export const registerUser = (user, pass, email) => {
       userName: user,
       password: pass
    }
-
+   console.log(data);
    return axios.post('/register', data)
       .then(function (response) {
          if (response.status == 200) {
+            console.log(response);
             return true;
          }
       })
       .catch(function (error) {
-         console.log(error.response.status);
+         console.log(error);
          return false;
       });
 }
+
+export const forgetGetCode = (email) => {
+   const data = {
+      email: email
+   }
+   console.log(data);
+   return axios.post('/forget', data)
+      .then(function (response) {
+         if (response.status == 200) {
+            console.log(response);
+            return true;
+         }
+      })
+      .catch(function (error) {
+         console.log(error);
+         return false;
+      });
+
+}
+
+
+export const ModifyPassword = (code, pass) => {
+   const data = {
+      code: code
+   }
+   console.log(data);
+   return axios.post('/forget/checkCode', data)
+      .then(function (response) {
+         if (response.status == 200) {
+            console.log('resp', response.data);
+            let data2 = response.data;
+            data2.password = pass;
+            console.log(data2);
+            return axios.put('/forget/save', data2)
+               .then(function (response) {
+                  if (response.status == 200) {
+                     console.log('reset',response);
+                     return true;
+                  }
+               })
+               .catch(function (error) {
+                  console.log('mod',error);
+                  return false;
+               });
+            return true;
+         }
+      })
+      .catch(function (error) {
+         console.log('check',error);
+         return false;
+      });
+
+}
+
 
