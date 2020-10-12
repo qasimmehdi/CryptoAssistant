@@ -1,15 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Input, Button, Text } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
-import {connect} from 'react-redux';
 import { loginStyles } from '../styles/loginStyles';
 import registerStyles from '../styles/registerStyles';
-import {updateRegistration} from '../redux/actions/updateRegistration';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Actions from '../store/actions';
+import { registerUser } from '../services/auth'
 
-function EnterUsernameNC(props) {
-    const [user, onChangeUser] = React.useState('');
-    const info = props.register.info;
+function EnterUsername({ navigation }) {
+    const user = useSelector(state => state.EditUsername.username);
+    const dispatch = useDispatch();
+    const onChangeUser = (text) => {
+        return dispatch(Actions.EditUsername({ username: text }))
+    }
     return (
         <View style={registerStyles.body}>
             <View style={registerStyles.inputContainer}>
@@ -18,7 +22,7 @@ function EnterUsernameNC(props) {
                     placeholder="Username"
                     placeholderTextColor="#808080"
                     value={user}
-                    onChangeText={onChangeUser}
+                    onChangeText={(text) => onChangeUser(text)}
                     color='#fff'
                 />
             </View>
@@ -30,12 +34,7 @@ function EnterUsernameNC(props) {
                     style={loginStyles.linearGradient}
                 >
                     <Button round color='transparent' style={loginStyles.borderless}
-                        onPress={
-                            () => {
-                                props.updateRegistration({username: user, password: info.password, email: info.email});
-                                props.navigation.navigate('EnterPassword');
-                            }
-                        }
+                        onPress={() => navigation.navigate("EnterPassword")}
                     >
                         <Text color={'#fff'} h5 bold>Next</Text>
                     </Button>
@@ -47,8 +46,13 @@ function EnterUsernameNC(props) {
     );
 }
 
-function EnterPasswordNC({ navigation }) {
-    const [pass, onChangePass] = React.useState('');
+function EnterPassword({ navigation }) {
+    const pass = useSelector(state => state.EditPassword.password);
+    const dispatch = useDispatch();
+    const onChangePass = (text) => {
+        return dispatch(Actions.EditPassword({ password: text }))
+    }
+
 
     return (
         <View style={registerStyles.body}>
@@ -59,7 +63,7 @@ function EnterPasswordNC({ navigation }) {
                     placeholder="Password"
                     placeholderTextColor="#808080"
                     value={pass}
-                    onChangeText={onChangePass}
+                    onChangeText={(text) => onChangePass(text)}
                     color='#fff'
                 />
             </View>
@@ -71,7 +75,7 @@ function EnterPasswordNC({ navigation }) {
                     style={loginStyles.linearGradient}
                 >
                     <Button round color='transparent' style={loginStyles.borderless}
-                        onPress={() => (navigation.navigate('AccountCreated'))}
+                        onPress={() => (navigation.navigate('EnterEmail'))}
                     >
                         <Text color={'#fff'} h5 bold>Next</Text>
                     </Button>
@@ -83,8 +87,13 @@ function EnterPasswordNC({ navigation }) {
     );
 }
 
-function EnterEmailNC({ navigation }) {
-    const [email, onChangeEmail] = React.useState('');
+function EnterEmail({ navigation }) {
+    const email = useSelector(state => state.EditEmail.email);
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
+    const onChangeEmail = (text) => {
+        return dispatch(Actions.EditEmail({ email: text }))
+    }
 
     return (
         <View style={registerStyles.body}>
@@ -107,7 +116,14 @@ function EnterEmailNC({ navigation }) {
                     style={loginStyles.linearGradient}
                 >
                     <Button round color='transparent' style={loginStyles.borderless}
-                        onPress={() => (navigation.navigate('EmailAdded'))}
+                        onPress={(async () => {
+                            if (await registerUser(state.EditUsername.username, state.EditPassword.password, state.EditEmail.email)) {
+                                navigation.navigate('AccountCreated');
+                            } else {
+                                Alert.alert("Something Went Wrong");
+                                navigation.navigate('SigninOrRegister');
+                            }
+                        })}
                     >
                         <Text color={'#fff'} h5 bold>Next</Text>
                     </Button>
@@ -119,19 +135,6 @@ function EnterEmailNC({ navigation }) {
     );
 }
 
-const MapStateToProps = (state) => {
-    return {
-        register: state.register
-    };
-};
-const MapDispatchToProps = (dispatch) => {
-    return {
-        updateRegistration: () => dispatch(updateRegistration)
-    }
-};
 
-export const EnterUsername = connect(MapStateToProps, MapDispatchToProps)(EnterUsernameNC);
-export const EnterPassword = connect(MapStateToProps, MapDispatchToProps)(EnterPasswordNC);
-export const EnterEmail = connect(MapStateToProps, MapDispatchToProps)(EnterEmailNC);
-
+export { EnterUsername, EnterPassword, EnterEmail };
 //export { EnterUsername, EnterPassword, EnterEmail };

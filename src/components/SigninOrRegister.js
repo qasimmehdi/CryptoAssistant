@@ -2,10 +2,8 @@ import React, { useEffect } from 'react';
 import { View, TouchableHighlight, Alert } from 'react-native';
 import { Input, Button, Text, theme } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
-import { loginUser } from '../services/auth';
 
 import { loginStyles } from '../styles/loginStyles';
-import { useIsFocused } from "@react-navigation/native";
 
 function SigninOrRegister({ navigation }) {
     return (

@@ -13,15 +13,15 @@ function AccountCreated({ navigation }) {
                     Account Created
                 </Text>
                 <Text color={'#808080'}>
-                    {"To be able to recover or reset your password \nyou'll need to add your email address."}
+                    {/* {"To be able to recover or reset your password \nyou'll need to add your email address."} */}
                 </Text>
             </View>
             <View style={loginStyles.SigninOrRegisterButton}>
-                <Button round color='transparent' style={{ borderColor: '#808080', marginBottom: 20 }}
+                {/* <Button round color='transparent' style={{ borderColor: '#808080', marginBottom: 20 }}
                     onPress={() => (navigation.navigate('Dashboard'))}
                 >
                     <Text color={'#fff'} h5 bold>Skip</Text>
-                </Button>
+                </Button> */}
                 <LinearGradient
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
@@ -29,9 +29,9 @@ function AccountCreated({ navigation }) {
                     style={{ ...loginStyles.linearGradient, marginBottom: 20 }}
                 >
                     <Button round color='transparent' style={loginStyles.borderless}
-                        onPress={() => (navigation.navigate('EnterEmail'))}
+                        onPress={() => (navigation.navigate('Sign In'))}
                     >
-                        <Text color={'#fff'} h5 bold>Add Email</Text>
+                        <Text color={'#fff'} h5 bold>Sign In</Text>
                     </Button>
                 </LinearGradient>
 
