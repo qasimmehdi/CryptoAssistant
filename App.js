@@ -1,5 +1,5 @@
-import 'react-native-gesture-handler';
 import React from 'react';
+import 'react-native-gesture-handler';
 import Forgot from './src/components/Forgot';
 import SimpleLogin from './src/components/SimpleLogin';
 import SigninOrRegister from './src/components/SigninOrRegister';
@@ -12,8 +12,6 @@ import StartupScreen from './src/components/StartupScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { Buffer } from 'buffer';
-global.Buffer = Buffer; // very important
 
 const Stack = createStackNavigator();
 

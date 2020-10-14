@@ -1,3 +1,4 @@
+import 'node-libs-react-native/globals';
 import React from 'react';
 import {AppRegistry} from 'react-native';
 import App from './App';
@@ -6,6 +7,9 @@ import axios from 'axios';
 import Reducer from './src/store';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux'
+
+import {http} from 'stream-http';
+global.http = http;
 
 const store = createStore(Reducer);
 
