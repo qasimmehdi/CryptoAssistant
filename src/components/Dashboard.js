@@ -4,8 +4,6 @@ import { Text } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
 import { dashboardStyles } from '../styles/dashboardStyles';
 import { Table, Row, Rows } from 'react-native-table-component';
-import getData from '../services/getData';
-import CCXT from '../services/ccxt';
 
 function Dashboard({ }) {
     const [balance] = useState('0');
@@ -16,21 +14,6 @@ function Dashboard({ }) {
         ['BAT', '$2.55', 'Add', ''],
         ['ADA', '$28.84', 'Add', '']
     ]);
-
-    useEffect(() => {
-    },[]);
-
-    getData('BTC/USD')
-            .then(resp => {
-                console.log(resp.data.last);
-                setTbaleData([
-                    ['BTC', `$${resp.data.last}`, 'Add', ''],
-                    ['ETH', '$376.04', 'Add', ''],
-                    ['BAT', '$2.55', 'Add', ''],
-                    ['ADA', '$28.84', 'Add', '']
-                ])
-            })
-            .catch(err => console.log(err));
 
     return (
         <View style={dashboardStyles.body}>

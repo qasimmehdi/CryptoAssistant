@@ -51,3 +51,6 @@ const App = () => {
 };
 
 export default App;
+
+//app start command
+//gnome-terminal -e "react-native start" & react-native run-android

@@ -43,11 +43,11 @@ export default class CCXT {
     }
 }
 
-const obj = new CCXT('BTC/USD','kraken');
+/* const obj = new CCXT('BTC/USD','kraken');
 obj.run()
 .then(data => console.log(data))
 .catch(err => console.log('yaha error aya'))
 
 obj.batchExchanges(["binance","kraken"])
 .then(data => console.log(data))
-.catch(err => console.log(err))
+.catch(err => console.log(err)) */
