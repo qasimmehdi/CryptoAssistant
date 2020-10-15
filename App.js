@@ -39,7 +39,7 @@ const App = () => {
         <Stack.Screen name="AccountCreated" component={AccountCreated} options={{ title: '' }} />
         <Stack.Screen name="EnterEmail" component={EnterEmail} options={{ title: 'Register' }} />
         <Stack.Screen name="EmailAdded" component={EmailAdded} options={{ title: '' }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Home' }} />
+        <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Crypto Assistant' }} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ title: 'Reset Password' }} />
         <Stack.Screen name="ForgetEnterEmail" component={ForgetEnterEmail} options={{ title: 'Forgot Password' }} />
         <Stack.Screen name="Sign In" component={SimpleLogin} />

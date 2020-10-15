@@ -32,7 +32,7 @@ export const dashboardStyles = StyleSheet.create({
     },
 
     container: {
-        flex: 6,
+        flex: 7,
         padding: 16,
         paddingTop: 30,
     },
@@ -49,7 +49,23 @@ export const dashboardStyles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: '#808080',
     },
-    row:{
-        //height: 30
+    thead:{
+        flexDirection: "row",
+    },
+    theadCoin:{
+        flex: 1
+    },
+    theadPrice: {
+        flex: 2,
+        textAlign: "right",
+    },
+    theadHoldings:{
+        flex: 2,
+        textAlign: "right"
+    },
+    theadBell:{
+        flex: 0.4,
+        alignSelf: "center",
+        textAlign: "center",
     }
 });
