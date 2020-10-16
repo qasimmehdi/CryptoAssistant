@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { COLOR } from '../components/shared/colors';
 
 export const rowStyles = StyleSheet.create({
     row:{
@@ -6,7 +7,6 @@ export const rowStyles = StyleSheet.create({
         paddingTop: 12
     },
     coinName:{
-        flex: 1,
         alignSelf: "center"
     },
     price: {
@@ -21,5 +21,21 @@ export const rowStyles = StyleSheet.create({
         flex: 0.4,
         alignSelf: "center",
         textAlign: "center",
+    },
+    addBtn:{
+        width: 50,
+        height: 25,
+        borderColor: COLOR.APP_GREY,
+        alignSelf: "flex-end"
+    },
+    coinIcon:{
+        width: 24,
+        height: 24,
+        alignSelf: "center",
+        marginRight: 10
+    },
+    coinCell:{
+        flex: 1,
+        flexDirection: "row"
     }
 });

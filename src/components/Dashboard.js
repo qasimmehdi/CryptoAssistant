@@ -8,9 +8,23 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {COLOR} from './shared/colors';
 import Row from './dashboard.row';
 import Hr from './shared/hr';
+import { ScrollView } from 'react-native';
 
 function Dashboard({navigation}) {
+    const temp = [
+        {
+            name: "BTC", price: "$381.64",
+            priceChange: "-205.07", holdingConverted: "$2,623.00",
+            holdingUnits: "10", notification: true, balance: true
+        },
+        {
+            name: "ETH", price: "$381.64",
+            priceChange: "+205.07", holdingConverted: "$2,623.00",
+            holdingUnits: "10", notification: true, balance: true
+        },
+    ]
     const [balance] = useState('0');
+    const [coinsData, setCoinsData] = useState([...temp]);
 
     return (
         <View style={dashboardStyles.body}>
@@ -69,20 +83,22 @@ function Dashboard({navigation}) {
                     </Icon>
                 </View>
                 <Hr color={COLOR.APP_GREY} />
-                <Row
-                 name="ETH"
-                 price="$381.64"
-                 priceChange="+205.07"
-                 holdingConverted="$2,623.00"
-                 holdingUnits="10"
-                />
-                <Row
-                 name="ETH"
-                 price="$381.64"
-                 priceChange="+205.07"
-                 holdingConverted="$2,623.00"
-                 holdingUnits="10"
-                />
+
+            <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
+                {coinsData.map(coin => (
+                    <Row
+                        name={coin.name}
+                        price={coin.price}
+                        priceChange={coin.priceChange}
+                        holdingConverted={coin.holdingConverted}
+                        holdingUnits={coin.holdingUnits}
+                        notification={coin.notification}
+                        balance={coin.balance}
+                        key={coin.name}
+                    />
+                ))}
+            </ScrollView>
+
             </View>
 
         </View>
