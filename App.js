@@ -11,6 +11,7 @@ import Dashboard from './src/components/Dashboard';
 import StartupScreen from './src/components/StartupScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import coinPage from './src/components/coin/coinPage';
 
 
 const Stack = createStackNavigator();
@@ -44,6 +45,7 @@ const App = () => {
         <Stack.Screen name="ForgetEnterEmail" component={ForgetEnterEmail} options={{ title: 'Forgot Password' }} />
         <Stack.Screen name="Sign In" component={SimpleLogin} />
         <Stack.Screen name="Forgot Password" component={Forgot} />
+        <Stack.Screen name="coinPage" component={coinPage} options={{title: 'BTC'}}/>
       </Stack.Navigator>
 
     </NavigationContainer>
