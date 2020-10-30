@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "673707859569",
+    "firebase_url": "https://cryptassist-fbe9f.firebaseio.com",
+    "project_id": "cryptassist-fbe9f",
+    "storage_bucket": "cryptassist-fbe9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673707859569:android:9c6fc456260578c94845d0",
+        "android_client_info": {
+          "package_name": "com.school"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673707859569-6s3chpa0b8hjp631edptqu0egpabfai3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW9mJKpFIxQ5lYxSP82h90djdSBYIG7Y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673707859569-6s3chpa0b8hjp631edptqu0egpabfai3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "673707859569-ggpp5m02d0lfc570042nto4979dofdc6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.crypt.reactnative"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect,Fragment} from 'react';
 import 'react-native-gesture-handler';
 import Forgot from './src/components/Forgot';
 import SimpleLogin from './src/components/SimpleLogin';
@@ -11,12 +11,33 @@ import Dashboard from './src/components/Dashboard';
 import StartupScreen from './src/components/StartupScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {Alert} from 'react-native';
+import FCM from './src/services/FCM';
 
 
 const Stack = createStackNavigator();
 
 const App = () => {
   //var initialRoute;
+
+  const showAlert = (title, message) => {
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      {cancelable: false},
+    );
+  }
+
+  const fcm = new FCM(showAlert);
+
+  useEffect(() => {
+   fcm.checkPermission();
+   fcm.messageListener();
+  }, []);
+
 
   return (
     <NavigationContainer>
