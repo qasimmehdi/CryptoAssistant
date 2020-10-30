@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>673707859569-ggpp5m02d0lfc570042nto4979dofdc6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.673707859569-ggpp5m02d0lfc570042nto4979dofdc6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB_LB_G66uXcl6PPaIXPzpa3HoWOg98yg8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>673707859569</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.crypt.reactnative</string>
+	<key>PROJECT_ID</key>
+	<string>cryptassist-fbe9f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cryptassist-fbe9f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:673707859569:ios:04bc5aada20233504845d0</string>
+	<key>DATABASE_URL</key>
+	<string>https://cryptassist-fbe9f.firebaseio.com</string>
+</dict>
+</plist>
