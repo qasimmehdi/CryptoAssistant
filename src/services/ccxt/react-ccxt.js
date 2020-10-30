@@ -38,7 +38,7 @@ export default class CCXT {
                     });
                   }
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
           }
         })
@@ -50,19 +50,33 @@ export default class CCXT {
 
   Candles(symbol, hr) {
     let date = new Date();
+    let interval = "";
     if (hr === "1y") {
       date.setFullYear(date.getFullYear() - 1);
-    } else if (hr === "1h") {
+      interval = "1w"
+    }
+    else if (hr === "1h") {
       date.setHours(date.getHours() - 1);
-    } else if (hr === "12h") {
+      interval = "1m"
+    }
+    else if (hr === "12h") {
       date.setHours(date.getHours() - 12);
-    } else if (hr === "1w") {
+      interval = "1m"
+    }
+    else if (hr === "1w") {
       date.setDate(date.getDate() - 7);
-    } else if (hr === "1d") {
+      interval = "1h"
+    }
+    else if (hr === "1d") {
       date.setDate(date.getDate() - 1);
-    } else if (hr === "1m") {
+      interval = "15m"
+    }
+    else if (hr === "1m") {
       date.setMonth(date.getMonth() - 1);
-    } else if (hr === "all") {
+      interval = "1d"
+    }
+    else if (hr === "all") {
+      interval = "1M"
       date = "";
     }
     return new Promise(async (resolve, reject) => {
@@ -70,20 +84,21 @@ export default class CCXT {
         (x) => x.symbols.findIndex((x) => x === symbol) > -1
       );
 
-        try {
-          let exchange = new ccxt["kraken"]({ enableRateLimit: true });
-          if (exchange.has.fetchOHLCV) {
-            let res = await exchange.fetchOHLCV(
-              symbol,
-              "1h",
-              /* new Date().toLocaleString() */
-            );
-            if (res.length > 0) {
-              resolve(res);
-              i = all.length;
-            } // milliseconds
-          }
-        } catch (e) {}
+      try {
+        let exchange = new ccxt["kraken"]({ enableRateLimit: true });
+        console.log("timeframes", exchange.timeframes);
+        if (exchange.has.fetchOHLCV) {
+          let res = await exchange.fetchOHLCV(
+            symbol,
+            interval,
+            date
+          );
+          if (res.length > 0) {
+            resolve(res);
+            i = all.length;
+          } // milliseconds
+        }
+      } catch (e) { }
 
     });
   }

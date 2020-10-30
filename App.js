@@ -45,7 +45,7 @@ const App = () => {
         <Stack.Screen name="ForgetEnterEmail" component={ForgetEnterEmail} options={{ title: 'Forgot Password' }} />
         <Stack.Screen name="Sign In" component={SimpleLogin} />
         <Stack.Screen name="Forgot Password" component={Forgot} />
-        <Stack.Screen name="coinPage" component={coinPage} options={{title: 'BTC'}}/>
+        <Stack.Screen name="coinPage" component={coinPage} options={{title: ''}}/>
       </Stack.Navigator>
 
     </NavigationContainer>

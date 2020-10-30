@@ -11,10 +11,16 @@ import Hr from './shared/hr';
 import { ScrollView } from 'react-native';
 import CCXT from '../services/ccxt/react-ccxt';
 import numeral from 'numeral';
-import { TouchableWithoutFeedback } from 'react-native';
 import { TouchableOpacity } from 'react-native';
+import * as Actions from '../store/actions';
+import { useDispatch } from 'react-redux';
+
 
 function Dashboard({ navigation }) {
+    /* navigation.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }]
+    }); */
     const ccxt = new CCXT();
     const quotes = { BTC: "BTC", USD: "USD", ETH: "ETH" };
     const temp = [
@@ -32,8 +38,12 @@ function Dashboard({ navigation }) {
     const [balance] = useState('0');
     const [coinsData, setCoinsData] = useState([...temp]);
     const [refresh, setRefresh] = useState(false);
+    const dispatch = useDispatch();
+    const onClickCoin = (coin) => {
+        return dispatch(Actions.setSelectedCoin({ base: coin, quote: 'USD' }));
+    }
 
-    function updateTable(data){
+    function updateTable(data) {
         console.log(data);
         let tempCoinsData = coinsData;
         for (let i = 0; i < tempCoinsData.length; i++) {
@@ -47,13 +57,13 @@ function Dashboard({ navigation }) {
     }
 
     useEffect(() => {
-        console.log("useEffect");
+
         let favPairs = coinsData.map((i) => (`${i.name}/USD`));
         console.log(favPairs);
         ccxt.coinDetails(favPairs)
             .then(
                 resp => {
-                    console.log("resp",resp);
+                    console.log("resp", resp);
                     setCoinsData([...updateTable(resp)]);
                 }
             )
@@ -68,13 +78,13 @@ function Dashboard({ navigation }) {
         ccxt.coinDetails(favPairs)
             .then(
                 resp => {
-                    console.log("resp",resp);
+                    console.log("resp", resp);
                     setCoinsData([...updateTable(resp)]);
                     setRefresh(false);
                 }
             )
             .catch(err => console.log(err))
-    },[]);
+    }, []);
 
     return (
         <View style={dashboardStyles.body}>
@@ -136,23 +146,26 @@ function Dashboard({ navigation }) {
 
                 <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}
                     refreshControl={
-                        <RefreshControl refreshing={refresh} onRefresh={onRefresh}/>
+                        <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
                     }
                 >
                     {coinsData.map(coin => (
                         <TouchableOpacity
-                         key={coin.name}
-                         onPress={() => navigation.navigate('coinPage')}
+                            key={coin.name}
+                            onPress={() => {
+                                onClickCoin(coin.name);
+                                navigation.navigate('coinPage');
+                            }}
                         >
-                        <Row
-                            name={coin.name}
-                            price={coin.price}
-                            priceChange={coin.priceChange}
-                            holdingConverted={coin.holdingConverted}
-                            holdingUnits={coin.holdingUnits}
-                            notification={coin.notification}
-                            balance={coin.balance}
-                        />
+                            <Row
+                                name={coin.name}
+                                price={coin.price}
+                                priceChange={coin.priceChange}
+                                holdingConverted={coin.holdingConverted}
+                                holdingUnits={coin.holdingUnits}
+                                notification={coin.notification}
+                                balance={coin.balance}
+                            />
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -165,9 +178,3 @@ function Dashboard({ navigation }) {
 }
 
 export default Dashboard;
-{/* <Icon.Button
-    name="notifications-none"
-    color="#fff"
-    backgroundColor="#121212"
-    style={dashboardStyles.theadBell}>
-</Icon.Button> */}
