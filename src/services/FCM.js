@@ -36,14 +36,14 @@ class FCM {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        const {title, body} = notification;
+        const { title, body } = notification;
         this.showAlert(title, body);
       });
 
     this.notificationOpenedListener = firebase
       .notifications()
       .onNotificationOpened(notificationOpen => {
-        const {title, body} = notificationOpen.notification;
+        const { title, body } = notificationOpen.notification;
         this.showAlert(title, body);
       });
 
@@ -51,7 +51,7 @@ class FCM {
       .notifications()
       .getInitialNotification();
     if (notificationOpen) {
-      const {title, body} = notificationOpen.notification;
+      const { title, body } = notificationOpen.notification;
       this.showAlert(title, body);
     }
 

@@ -20,7 +20,12 @@ const check = async (navigation) => {
         }
         else {
             console.log(false);
-            navigation.navigate('SigninOrRegister');
+            navigation.dispatch(
+                CommonActions.reset({
+                   index: 0,
+                   routes: [{ name: "SigninOrRegister" }],
+                })
+           );
         }
 }
 

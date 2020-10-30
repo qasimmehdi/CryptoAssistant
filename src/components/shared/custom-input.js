@@ -35,6 +35,7 @@ class CustomInput extends Component {
                 style={style}
                 onChangeText={value => this.onChange(value)}
                 {...props}
+                autoCapitalize='none'
             >
                 {children}
             </Input>

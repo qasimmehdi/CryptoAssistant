@@ -3,6 +3,7 @@ import { SInfoGet, SInfoSet } from './sensitiveStorage';
 
 export const loginUser = (user, pass) => {
    const data = {
+      email: user,
       username: user,
       password: pass
    }
@@ -12,7 +13,7 @@ export const loginUser = (user, pass) => {
          if (response.status == 200) {
             // (async () => await storeData('auth_token', response.data.access_token))();
             // (async () => await getData('auth_token'))();
-            //let token;            
+            //let token;
             (async () => await SInfoSet('auth_token', response.data.token))();
             (async () => await SInfoGet('auth_token'))();
             return true;
