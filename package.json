@@ -24,13 +24,9 @@
     "node-libs-react-native": "^1.2.0",
     "numeral": "^2.0.6",
     "react": "16.9.0",
-<<<<<<< HEAD
+    "react-native-chart-kit": "^6.6.1",
     "react-native": "0.61.4",
     "react-native-firebase": "^5.6.0",
-=======
-    "react-native": "0.61.5",
-    "react-native-chart-kit": "^6.6.1",
->>>>>>> d2cc8d1ec672e03a5b6b9a3854796e841fc8f70b
     "react-native-gesture-handler": "^1.6.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-reanimated": "^1.7.0",
