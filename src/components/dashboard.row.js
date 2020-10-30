@@ -26,7 +26,7 @@ export default function Row(props) {
                 <View style={rowStyles.price}>
                     <Text
                         color={COLOR.WHITE}
-                        size={14}
+                        size={12}
                         bold
                         style={{ textAlign: "right" }}
                     >
@@ -56,7 +56,7 @@ export default function Row(props) {
                         <React.Fragment>
                             <Text
                                 color={COLOR.WHITE}
-                                size={14}
+                                size={12}
                                 bold
                                 style={{ textAlign: "right" }}
                             >

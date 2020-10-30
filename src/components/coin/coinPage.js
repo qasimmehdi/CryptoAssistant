@@ -1,0 +1,87 @@
+import React, { useEffect, useState } from 'react';
+import { View, RefreshControl } from 'react-native';
+import { Text } from 'galio-framework';
+import { coinPageStyles } from './coinPageStyle';
+import { COLOR } from '../shared/colors';
+import { LineChart } from "react-native-chart-kit";
+import CCXT from '../../services/ccxt/react-ccxt';
+import { Dimensions } from "react-native";
+import numeral from 'numeral';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
+
+export default function coinPage({ navigation }) {
+    const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
+    let ccxt = new CCXT();
+    const [data, setData] = useState([1]);
+    const [labels, setLabels] = useState([]);
+    const [price, setPrice] = useState('0');
+    let labelRadix;
+    useEffect(() => {
+        navigation.setOptions({ title: coinPageTitle });
+        let isMounted = true;
+
+        ccxt.Candles(`${coinPageTitle}/USD`, "1d")
+            .then(resp => {
+                console.log(resp);
+                let tempData = [], tempLabels = [];
+                labelRadix = Math.max(Math.floor(resp.length / 4), 1);
+                resp.forEach((i, j) => {
+                    tempData.push(i[4]);
+                    tempLabels.push(j % labelRadix === 0 ? moment(i[0]).format("HH:mm") : '',);
+                });
+                console.log(tempData);
+                if (isMounted) {
+                    setData([...tempData]);
+                    setLabels([...tempLabels]);
+                    setPrice(tempData[tempData.length - 1]);
+                }
+            })
+            .catch(err => console.log(err));
+
+        return () => { isMounted = false };
+    }, [])
+
+    return (
+        <View style={coinPageStyles.body}>
+            <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
+                {numeral(price).format('$0,0.0[0000000]')}
+            </Text>
+            <View style={{ flex: 6 }}>
+                <LineChart
+                    data={{
+                        labels: [...labels],
+                        datasets: [
+                            {
+                                data: [...data]
+                            }
+                        ]
+                    }}
+                    width={Dimensions.get("window").width} // from react-native
+                    height={220}
+                    yAxisLabel="$"
+                    yAxisInterval={1} // optional, defaults to 1
+                    chartConfig={{
+                        backgroundGradientFrom: COLOR.BG,
+                        backgroundGradientTo: COLOR.BG,
+                        backgroundColor: COLOR.BG,
+                        decimalPlaces: 2, // optional, defaults to 2dp
+                        color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
+                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        /* propsForBackgroundLines: {
+                            strokeWidth: 0
+                        }, */
+                        style: {
+                            borderRadius: 16,
+                            backgroundColor: COLOR.BG
+                        },
+                        strokeWidth: 2
+                    }}
+                    withShadow={false}
+                    withInnerLines={false}
+                    withDots={false}
+                />
+            </View>
+        </View>
+    );
+}
