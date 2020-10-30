@@ -1,10 +1,10 @@
+import { CommonActions } from "@react-navigation/native";
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { SInfoGet } from '../services/sensitiveStorage';
-
 import { loginStyles } from '../styles/loginStyles';
 import Loading from './SplashScreen';
-import { CommonActions } from "@react-navigation/native";
+
 
 const check = async (navigation) => {
     let token = await SInfoGet('auth_token');

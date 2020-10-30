@@ -1,9 +1,9 @@
+import { Button, Text, theme } from 'galio-framework';
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Text, theme } from 'galio-framework';
 import LinearGradient from 'react-native-linear-gradient';
-
 import { loginStyles } from '../styles/loginStyles';
+
 
 function AccountCreated({ navigation }) {
     return (

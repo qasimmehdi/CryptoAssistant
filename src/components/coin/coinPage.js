@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, RefreshControl } from 'react-native';
 import { Text } from 'galio-framework';
-import { coinPageStyles } from './coinPageStyle';
-import { COLOR } from '../shared/colors';
-import { LineChart } from "react-native-chart-kit";
-import CCXT from '../../services/ccxt/react-ccxt';
-import { Dimensions } from "react-native";
-import numeral from 'numeral';
-import { useSelector } from 'react-redux';
 import moment from 'moment';
+import numeral from 'numeral';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, View } from 'react-native';
+import { LineChart } from "react-native-chart-kit";
+import { useSelector } from 'react-redux';
+import CCXT from '../../services/ccxt/react-ccxt';
+import { COLOR } from '../shared/colors';
+import { coinPageStyles } from './coinPageStyle';
 
 export default function coinPage({ navigation }) {
     const coinPageTitle = useSelector(state => state.setSelectedCoin.base);

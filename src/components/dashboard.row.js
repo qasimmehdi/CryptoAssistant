@@ -1,11 +1,11 @@
+import { Button, Text } from 'galio-framework';
 import React from 'react';
-import { COLOR } from "./shared/colors";
-import { View, Image } from 'react-native';
-import { Text, Button } from 'galio-framework';
-import { rowStyles } from '../styles/rowStyles';
+import { Image, View } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Hr from './shared/hr';
 import iconImages from '../assets/coinIcons/names';
+import { rowStyles } from '../styles/rowStyles';
+import { COLOR } from "./shared/colors";
+import Hr from './shared/hr';
 
 export default function Row(props) {
     return (

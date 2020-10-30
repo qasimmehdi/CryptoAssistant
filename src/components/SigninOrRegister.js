@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { View, TouchableHighlight, Alert } from 'react-native';
-import { Input, Button, Text, theme } from 'galio-framework';
+import { Button, Text, theme } from 'galio-framework';
+import React from 'react';
+import { View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-
 import { loginStyles } from '../styles/loginStyles';
+
 
 function SigninOrRegister({ navigation }) {
     return (

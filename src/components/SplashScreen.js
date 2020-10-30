@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
   ActivityIndicator,
   StyleSheet,
-  View,
+  View
 } from 'react-native'
 
 export default class Loading extends Component {

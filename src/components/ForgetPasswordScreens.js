@@ -1,10 +1,10 @@
+import { Button, Input, Text } from 'galio-framework';
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
-import { Input, Button, Text } from 'galio-framework';
+import { Alert, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { forgetGetCode, ModifyPassword } from '../services/auth';
 import { loginStyles } from '../styles/loginStyles';
 import registerStyles from '../styles/registerStyles';
-import { forgetGetCode, ModifyPassword } from '../services/auth'
 
 function ForgetEnterEmail({ navigation }) {
     const [email, setEmail] = useState('');

@@ -17,8 +17,6 @@ import coinPage from './src/components/coin/coinPage';
 const Stack = createStackNavigator();
 
 const App = () => {
-  //var initialRoute;
-
   return (
     <NavigationContainer>
       <Stack.Navigator

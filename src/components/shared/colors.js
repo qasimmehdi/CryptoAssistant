@@ -5,5 +5,6 @@ export const COLOR = {
     GRADIENT_1: "#6817CB",
     BG: "#121212",
     RED: "#f00",
-    GREEN: "#0f0"
+    GREEN: "#0f0",
+    DISABLED: "#3C3C3C"
 }

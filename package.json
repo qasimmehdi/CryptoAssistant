@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build-android": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.1",
@@ -34,7 +35,6 @@
     "react-native-sensitive-info": "^5.5.5",
     "react-native-simple-card-view": "https://github.com/qasimmehdi/react-native-simple-card-view",
     "react-native-svg": "^12.1.0",
-    "react-native-table-component": "^1.2.1",
     "react-native-vector-icons": "^6.6.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",

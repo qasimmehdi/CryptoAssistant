@@ -1,18 +1,18 @@
+import { Button, Input, Text, theme } from 'galio-framework';
 import React from 'react';
-import {View, Alert, TouchableHighlight} from 'react-native';
-import { Input, Button, Text, theme } from 'galio-framework';
+import { Alert, TouchableHighlight, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {loginStyles} from '../styles/loginStyles';
+import { loginStyles } from '../styles/loginStyles';
 
 const success = 'Email sent successfully';
 const failure = 'This account doesnot exist';
 const login = (user) => {
     Alert.alert(success);
   };
-  
+
   function Forgot({navigation}) {
     const [user, onChangeUser] = React.useState('');
-  
+
     return (
       <LinearGradient colors={['#114357', '#f29492']} style={loginStyles.body}>
           <View style={loginStyles.title}>
@@ -35,8 +35,8 @@ const login = (user) => {
               </Text>
           </TouchableHighlight>
       </LinearGradient>
-      
+
     );
   }
-  
+
   export default Forgot;

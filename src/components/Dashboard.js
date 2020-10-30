@@ -1,26 +1,20 @@
+import { Text } from 'galio-framework';
+import numeral from 'numeral';
 import React, { useEffect, useState } from 'react';
-import { View, RefreshControl } from 'react-native';
-import { Button, Text } from 'galio-framework';
+import { RefreshControl, ScrollView, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { dashboardStyles } from '../styles/dashboardStyles';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import { COLOR } from './shared/colors';
-import Row from './dashboard.row';
-import Hr from './shared/hr';
-import { ScrollView } from 'react-native';
-import CCXT from '../services/ccxt/react-ccxt';
-import numeral from 'numeral';
-import { TouchableOpacity } from 'react-native';
-import * as Actions from '../store/actions';
 import { useDispatch } from 'react-redux';
+import CCXT from '../services/ccxt/react-ccxt';
+import * as Actions from '../store/actions';
+import { dashboardStyles } from '../styles/dashboardStyles';
+import Row from './dashboard.row';
+import { COLOR } from './shared/colors';
+import Hr from './shared/hr';
 
 
 function Dashboard({ navigation }) {
-    /* navigation.reset({
-        index: 0,
-        routes: [{ name: 'Dashboard' }]
-    }); */
     const ccxt = new CCXT();
     const quotes = { BTC: "BTC", USD: "USD", ETH: "ETH" };
     const temp = [
