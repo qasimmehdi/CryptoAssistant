@@ -1,16 +1,15 @@
 import * as Actions from '../actions';
 
 const initialState = {
-    email: ''
-}
+  email: '',
+};
 
-export default (state = initialState, { type, payload }) => {
-    switch (type) {
-
+export default (state = initialState, {type, payload}) => {
+  switch (type) {
     case Actions.SetEmail:
-        return { ...state, ...payload }
+      return {...state, ...payload};
 
     default:
-        return state
-    }
-}
+      return state;
+  }
+};

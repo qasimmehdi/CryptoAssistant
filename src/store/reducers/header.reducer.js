@@ -1,12 +1,12 @@
 import * as Actions from '../actions';
 
 const initialState = {
-  password: '',
+  title: 'Crypto Assistant',
 };
 
 export default (state = initialState, {type, payload}) => {
   switch (type) {
-    case Actions.SetPassword:
+    case Actions.ChangeHeader:
       return {...state, ...payload};
 
     default:

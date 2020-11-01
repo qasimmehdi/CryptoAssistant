@@ -1,7 +1,6 @@
 export const SetUsername = 'SetUsername';
 
-
-export const EditUsername = (payload) => ({
-    type: SetUsername,
-    payload
-})
+export const EditUsername = payload => ({
+  type: SetUsername,
+  payload,
+});

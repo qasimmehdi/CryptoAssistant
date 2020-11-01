@@ -6,21 +6,21 @@ export const loginStyles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     alignSelf: 'center',
-    flexDirection: 'column-reverse'
+    flexDirection: 'column-reverse',
   },
   SigninOrRegisterButton: {
     flex: 1,
     marginTop: 10,
     marginBottom: 40,
     alignSelf: 'center',
-    flexDirection: 'column-reverse'
+    flexDirection: 'column-reverse',
   },
-  SigninOrRegisterBorderless:{
+  SigninOrRegisterBorderless: {
     borderWidth: 0,
-    marginBottom: 20
+    marginBottom: 20,
   },
-  borderless:{
-    borderWidth: 0
+  borderless: {
+    borderWidth: 0,
   },
   sectionContainer: {
     marginTop: 10,
@@ -35,43 +35,43 @@ export const loginStyles = StyleSheet.create({
     marginTop: 30,
   },
   body: {
-    flex:1,
-    backgroundColor: '#121212'
-  },
-  centerForm:{
     flex: 1,
-    justifyContent: 'center'
+    backgroundColor: '#121212',
+  },
+  centerForm: {
+    flex: 1,
+    justifyContent: 'center',
   },
   title: {
     alignSelf: 'center',
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
-  description:{
+  description: {
     marginTop: 20,
     paddingHorizontal: 30,
   },
-  extraText:{
+  extraText: {
     paddingTop: 10,
     alignSelf: 'center',
   },
-  row:{
+  row: {
     flexDirection: 'row',
     alignSelf: 'center',
     paddingTop: 20,
   },
-  input:{
-    borderColor: "#808080",
+  input: {
+    borderColor: '#808080',
     backgroundColor: '#121212',
     borderRadius: 0,
     borderTopWidth: 0,
     borderLeftWidth: 0,
-    borderRightWidth: 0
+    borderRightWidth: 0,
   },
-  linearGradient:{
-    borderRadius: 25
-  }
+  linearGradient: {
+    borderRadius: 25,
+  },
 
   //not used
   /*
