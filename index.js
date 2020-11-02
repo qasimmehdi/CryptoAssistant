@@ -5,21 +5,21 @@ import App from './App';
 import {name as appName} from './app.json';
 import axios from 'axios';
 import Reducer from './src/store';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux'
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
 
 import {http} from 'stream-http';
 global.http = http;
 
 const store = createStore(Reducer);
 
-axios.defaults.baseURL = "https://blooming-atoll-97481.herokuapp.com";
+axios.defaults.baseURL = 'https://blooming-atoll-97481.herokuapp.com';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const CryptoAssistant = () => (
-    <Provider store={store}>
-        <App/>
-    </Provider>
-)
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
 AppRegistry.registerComponent(appName, () => CryptoAssistant);

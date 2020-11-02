@@ -1,4 +1,4 @@
-import { Text } from 'galio-framework';
+import {Text} from 'galio-framework';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import CustomInput from '../shared/custom-input';

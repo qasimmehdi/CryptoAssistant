@@ -3,10 +3,10 @@
 import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Dashboard from '../Dashboard';
-import {COLOR} from './colors';
+import Dashboard from '../components/Dashboard';
+import {COLOR} from '../components/shared/colors';
 import {useDispatch, useSelector} from 'react-redux';
-import * as Actions from '../../store/actions';
+import * as Actions from '../store/actions';
 import {useIsFocused} from '@react-navigation/native';
 
 function TradingScreen() {
