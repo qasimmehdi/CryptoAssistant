@@ -22,6 +22,7 @@ function Dashboard({navigation}) {
   const temp = [
     {
       name: 'BTC',
+      quote: 'USD',
       price: '0',
       priceChange: '0',
       changePercentage: '0',
@@ -32,6 +33,7 @@ function Dashboard({navigation}) {
     },
     {
       name: 'ETH',
+      quote: 'USD',
       price: '0',
       priceChange: '0',
       holdingConverted: '$2,623.00',
@@ -187,6 +189,7 @@ function Dashboard({navigation}) {
                 notification={coin.notification}
                 balance={coin.balance}
                 navigation={navigation}
+                quote={coin.quote}
               />
             </TouchableOpacity>
           ))}

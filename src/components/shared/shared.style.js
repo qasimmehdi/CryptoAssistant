@@ -7,4 +7,10 @@ export const sharedStyles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: COLOR.BG,
   },
+  borderless: {
+    borderWidth: 0,
+  },
+  linearGradient: {
+    borderRadius: 25,
+  },
 });

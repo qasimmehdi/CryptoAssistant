@@ -43,7 +43,14 @@ export default function Row(props) {
               size={10}
               round
               style={rowStyles.addBtn}
-              onPress={() => props.navigation.navigate('AddTransaction')}>
+              onPress={() => {
+                console.log(props.name, props.quote);
+                props.navigation.navigate('AddTransaction', {
+                  base: props.name,
+                  quote: props.quote,
+                  currentPrice: props.price,
+                });
+              }}>
               <Text color={COLOR.WHITE} size={14} style={{textAlign: 'center'}}>
                 Add
               </Text>
