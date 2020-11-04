@@ -6,12 +6,15 @@ import SQLite from 'react-native-sqlite-storage';
 import {Alert} from 'react-native';
 import FCM from './src/services/FCM';
 import StackNav from './src/navigation/StackNav';
-import {DbSetup, GetTables} from './src/db/methods';
+import {dbSetup, getTables} from './src/db/methods';
 
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
-DbSetup();
-GetTables();
+
+dbSetup();
+setTimeout(() => {
+  getTables();
+}, 1000);
 
 const App = () => {
   //var initialRoute;

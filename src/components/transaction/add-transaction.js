@@ -11,11 +11,10 @@ import {TouchableOpacity} from 'react-native';
 import {Platform} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import LinearGradient from 'react-native-linear-gradient';
+import {saveTransaction} from '../../db/methods';
 
 const AddTransaction = ({route, navigation}) => {
   const {base, quote, currentPrice} = route.params;
-  const [sbase, setBase] = useState(`${base}`);
-  const [squote, setQuote] = useState(`${quote}`);
   const [price, setPrice] = useState(`${currentPrice}`);
   const [quantity, setQuantity] = useState('0');
   const [fee, setFee] = useState('0');
@@ -25,6 +24,12 @@ const AddTransaction = ({route, navigation}) => {
   const [exchange, setExchange] = useState('');
   const [showDate, setShowDate] = useState(false);
   const [showTime, setShowTime] = useState(false);
+  const [gradientColors, setGradientColors] = useState([
+    COLOR.DISABLED,
+    COLOR.DISABLED,
+  ]);
+  const [saveDisabled, setSaveDisabled] = useState(false);
+  const [type, setType] = useState('');
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -42,6 +47,21 @@ const AddTransaction = ({route, navigation}) => {
   };
   const showTimepicker = () => {
     setShowTime(true);
+  };
+
+  const onSave = () => {
+    saveTransaction(
+      exchange,
+      base,
+      quote,
+      price,
+      type,
+      quantity,
+      fee,
+      moment(date).format('x'),
+      moment(time).format('x'),
+      notes,
+    );
   };
 
   /* useEffect(() => {}, []); */
@@ -72,6 +92,20 @@ const AddTransaction = ({route, navigation}) => {
             color={COLOR.WHITE}
             value={base + '/' + quote}
             /* onChangeText={text => setPrice(text)} */
+            pattern={[regexes.password]}
+            /* onValidation={isValid => performValidation(isValid)} */
+          />
+        </View>
+        <View>
+          <Text color={COLOR.WHITE}>Side</Text>
+          <CustomInput
+            style={transactionStyles.input}
+            placeholder="SELL or BUY"
+            placeholderTextColor={COLOR.APP_GREY}
+            iconColor={COLOR.APP_GREY}
+            color={COLOR.WHITE}
+            value={type}
+            onChangeText={text => setType(text)}
             pattern={[regexes.password]}
             /* onValidation={isValid => performValidation(isValid)} */
           />
@@ -174,14 +208,14 @@ const AddTransaction = ({route, navigation}) => {
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
-          colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+          colors={gradientColors}
           style={sharedStyles.linearGradient}>
           <Button
             round
             color="transparent"
             style={sharedStyles.borderless}
-            /* onPress={} */
-          >
+            disabled={saveDisabled}
+            onPress={() => onSave()}>
             <Text color={COLOR.WHITE} h5 bold>
               Save
             </Text>

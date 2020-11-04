@@ -1,20 +1,18 @@
+/* eslint-disable quotes */
 import SQLite from 'react-native-sqlite-storage';
-import {CreateTables} from './queries';
+import * as queries from './queries';
 
-export function DbSetup() {
+export function dbSetup() {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-    DB.executeSql(CreateTables);
+    DB.executeSql(queries.createTables)
+      .then(res => console.log('setup', res))
+      .catch(err => console.log('setup', err));
   });
 }
 
-export function GetTables() {
+export function getTables() {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-    DB.executeSql(
-      `SELECT name FROM sqlite_master
-    WHERE type IN ('table','view')
-    AND name NOT LIKE 'sqlite_%'
-    ORDER BY 1;`,
-    )
+    DB.executeSql(`SELECT * FROM Transactions;`)
       .then(resp => {
         var len = resp[0].rows.length;
         for (let i = 0; i < len; i++) {
@@ -22,6 +20,26 @@ export function GetTables() {
           console.log(row);
         }
       })
+      .catch(err => console.log(err));
+  });
+}
+
+export function saveTransaction(
+  exchange,
+  base,
+  quote,
+  price,
+  type,
+  quantity,
+  fee,
+  date,
+  time,
+  notes,
+) {
+  SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+    const data = `('${exchange}', '${base}', '${quote}', '${price}', '${type}', '${quantity}', '${fee}', '${date}', '${time}', '${notes}')`;
+    DB.executeSql(queries.saveTransaction + data)
+      .then(res => console.log(res))
       .catch(err => console.log(err));
   });
 }

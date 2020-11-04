@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "build-android": "cd android && ./gradlew assembleRelease",
-    "adb-wifi": "adb tcpip 5555"
+    "git-push-master": "git add . && read -p \"Enter commit message : \" msg && git commit -m \"$msg\" && git push origin master"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.1",
@@ -37,7 +37,6 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.3.0",
     "react-native-sensitive-info": "^5.5.5",
-    "react-native-simple-card-view": "https://github.com/qasimmehdi/react-native-simple-card-view",
     "react-native-sqlite-storage": "^5.0.0",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^6.6.0",
@@ -54,8 +53,9 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@react-native-community/eslint-plugin": "^1.1.0",
     "babel-jest": "^24.9.0",
-    "eslint": "^6.5.1",
+    "eslint": "^7.12.1",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-test-renderer": "16.9.0"

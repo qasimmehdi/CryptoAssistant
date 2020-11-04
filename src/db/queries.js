@@ -1,4 +1,4 @@
-export const CreateTables = `CREATE TABLE IF NOT EXISTS "Transactions" (
+export const createTables = `CREATE TABLE IF NOT EXISTS "Transactions" (
 	"id"	INTEGER NOT NULL,
 	"exchange"	TEXT,
 	"base"	TEXT,
@@ -12,3 +12,6 @@ export const CreateTables = `CREATE TABLE IF NOT EXISTS "Transactions" (
 	"notes"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );`;
+
+export const saveTransaction =
+  'INSERT INTO Transactions (exchange, base, quote, price, type, quantity, fee, date, time, notes) VALUES ';
