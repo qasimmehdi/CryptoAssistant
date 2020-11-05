@@ -28,7 +28,7 @@ function Dashboard({navigation}) {
       changePercentage: '0',
       holdingConverted: '0',
       holdingUnits: '10',
-      notification: true,
+      notification: false,
       balance: false,
     },
     {
@@ -38,7 +38,7 @@ function Dashboard({navigation}) {
       priceChange: '0',
       holdingConverted: '$2,623.00',
       holdingUnits: '10',
-      notification: true,
+      notification: false,
       balance: false,
     },
   ];

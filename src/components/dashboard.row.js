@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Button, Text} from 'galio-framework';
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import {Image, View} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import iconImages from '../assets/coinIcons/names';
@@ -73,12 +74,21 @@ export default function Row(props) {
             </React.Fragment>
           )}
         </View>
-        <Icon
-          name={props.notification ? 'notifications' : 'notifications-none'}
-          color={props.notification ? COLOR.WHITE : COLOR.APP_GREY}
-          size={17}
-          style={rowStyles.rowBell}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            props.navigation.navigate('AddNotification', {
+              base: props.name,
+              quote: props.quote,
+              currentPrice: props.price,
+            })
+          }>
+          <Icon
+            name={props.notification ? 'notifications' : 'notifications-none'}
+            color={props.notification ? COLOR.WHITE : COLOR.APP_GREY}
+            size={17}
+            style={rowStyles.rowBell}
+          />
+        </TouchableOpacity>
       </View>
       <Hr color={COLOR.APP_GREY} />
     </React.Fragment>

@@ -18,6 +18,7 @@ import coinPage from '../components/coin/coinPage';
 import {COLOR} from '../components/shared/colors';
 import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';
+import AddNotifications from '../components/notfication/AddNotifications';
 
 const Stack = createStackNavigator();
 
@@ -90,6 +91,11 @@ export default function StackNav() {
         name="AddTransaction"
         component={AddTransaction}
         options={{title: 'Add Transaction'}}
+      />
+      <Stack.Screen
+        name="AddNotification"
+        component={AddNotifications}
+        options={{title: 'Add Notification'}}
       />
     </Stack.Navigator>
   );
