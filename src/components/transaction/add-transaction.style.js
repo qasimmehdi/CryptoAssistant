@@ -8,6 +8,10 @@ export const transactionStyles = StyleSheet.create({
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
+    flex: 1,
+    flexDirection: 'row-reverse',
+    width: 170,
+    justifyContent: 'flex-start',
   },
   formFields: {
     flex: 1,
@@ -16,17 +20,18 @@ export const transactionStyles = StyleSheet.create({
     marginLeft: 15,
   },
   saveBtn: {
-    flex: 1,
-    flexDirection: 'column',
     marginRight: 15,
     marginLeft: 15,
   },
   field: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   fieldText: {
-    textAlign: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    textAlign: 'left',
     alignSelf: 'center',
   },
 });

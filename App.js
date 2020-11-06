@@ -12,9 +12,6 @@ SQLite.DEBUG(true);
 SQLite.enablePromise(true);
 
 dbSetup();
-setTimeout(() => {
-  getTables();
-}, 1000);
 
 const App = () => {
   //var initialRoute;

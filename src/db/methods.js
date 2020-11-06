@@ -4,8 +4,16 @@ import * as queries from './queries';
 
 export function dbSetup() {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-    DB.executeSql(queries.createTables)
+    DB.executeSql(queries.createTransactionsTables)
       .then(res => console.log('setup', res))
+      .catch(err => console.log('setup', err));
+    DB.executeSql(queries.createFavouritesTable)
+      .then(res => {
+        console.log('setup', res);
+        DB.executeSql(queries.populateFavouritesTable)
+          .then(res2 => console.log('setup', res2))
+          .catch(err => console.log('setup', err));
+      })
       .catch(err => console.log('setup', err));
   });
 }
@@ -41,5 +49,24 @@ export function saveTransaction(
     DB.executeSql(queries.saveTransaction + data)
       .then(res => console.log(res))
       .catch(err => console.log(err));
+  });
+}
+
+export function saveFavourites(exchange, base, quote, balance, notification) {
+  SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+    const data = `(${exchange}, ${base}, ${quote}, ${balance}, ${notification})`;
+    DB.executeSql(queries.saveFavourites + data)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  });
+}
+
+export function getFavourites() {
+  return new Promise((resolve, reject) => {
+    SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+      DB.executeSql(queries.getFavourites)
+        .then(res => resolve(res))
+        .catch(err => reject(err));
+    });
   });
 }

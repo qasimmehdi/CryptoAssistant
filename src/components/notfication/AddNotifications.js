@@ -19,7 +19,9 @@ export default function AddNotifications({route, navigation}) {
   return (
     <View style={sharedStyles.body}>
       <View style={notificationsStyle.formFields}>
-        <Text color={COLOR.WHITE}>Alert me when {base} price crosses</Text>
+        <Text color={COLOR.WHITE}>
+          You will get two alerts a day about change in price
+        </Text>
         <CustomInput
           style={notificationsStyle.input}
           placeholder="Expected Price"
