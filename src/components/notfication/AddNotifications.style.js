@@ -10,15 +10,14 @@ export const notificationsStyle = StyleSheet.create({
     borderLeftWidth: 0,
     borderRightWidth: 0,
   },
-  formFields: {
+  infoText: {
     flex: 7,
     flexDirection: 'column',
-    marginRight: 15,
-    marginLeft: 15,
   },
   saveBtn: {
     flex: 1,
-    marginRight: 15,
-    marginLeft: 15,
+  },
+  pairInfo: {
+    marginTop: 10,
   },
 });

@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "build-android": "cd android && ./gradlew assembleRelease",
-    "git-push-master": "git add . && read -p \"Enter commit message : \" msg && git commit -m \"$msg\" && git push origin master"
+    "git-push-master": "git add . && read -p \"Enter commit message : \" msg && git commit -m \"$msg\" && git push origin master",
+    "start-android": "gnome-terminal -e \"react-native start\" & react-native run-android"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.1",
@@ -17,6 +18,7 @@
     "@react-native-community/masked-view": "^0.1.7",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
     "@react-navigation/bottom-tabs": "^5.10.2",
+    "@react-navigation/drawer": "^5.10.6",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "axios": "^0.19.2",

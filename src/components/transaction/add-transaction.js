@@ -70,15 +70,13 @@ const AddTransaction = ({route, navigation}) => {
   /* useEffect(() => {}, []); */
   return (
     <ScrollView style={sharedStyles.body} showsVerticalScrollIndicator={false}>
-      {/*  <View style={sharedStyles.body}> */}
-      {/* <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}> */}
       <View style={transactionStyles.formFields}>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Exchange
           </Text>
           <CustomInput
-            style={transactionStyles.input}
+            style={transactionStyles.input} textAlign={'right'}
             placeholder="Exchange"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
@@ -90,11 +88,11 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Pair
           </Text>
           <CustomInput
-            style={transactionStyles.input}
+            style={transactionStyles.input} textAlign={'right'}
             placeholder="0"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
@@ -106,11 +104,11 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Side
           </Text>
           <CustomInput
-            style={transactionStyles.input}
+            style={transactionStyles.input} textAlign={'right'}
             placeholder="SELL or BUY"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
@@ -122,7 +120,7 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Price per coin
           </Text>
           <CustomInput
@@ -139,7 +137,7 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Quantity
           </Text>
           <CustomInput
@@ -156,7 +154,7 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Fee
           </Text>
           <CustomInput
@@ -173,12 +171,12 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Date
           </Text>
           <TouchableOpacity onPress={showDatepicker}>
             <CustomInput
-              style={transactionStyles.input}
+              style={transactionStyles.input} textAlign={'right'}
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
@@ -198,12 +196,12 @@ const AddTransaction = ({route, navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Time
           </Text>
           <TouchableOpacity onPress={showTimepicker}>
             <CustomInput
-              style={transactionStyles.input}
+              style={transactionStyles.input} textAlign={'right'}
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
@@ -223,7 +221,7 @@ const AddTransaction = ({route, navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={transactionStyles.field}>
-          <Text style={transactionStyles.fieldText} color={COLOR.WHITE}>
+          <Text style={transactionStyles.fieldText} bold color={COLOR.APP_GREY}>
             Notes
           </Text>
           <CustomInput
@@ -239,7 +237,7 @@ const AddTransaction = ({route, navigation}) => {
           />
         </View>
       </View>
-      <View style={transactionStyles.saveBtn}>
+      <View>
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
@@ -252,13 +250,11 @@ const AddTransaction = ({route, navigation}) => {
             disabled={saveDisabled}
             onPress={() => onSave()}>
             <Text color={COLOR.WHITE} h5 bold>
-              Save
+              Save Transaction
             </Text>
           </Button>
         </LinearGradient>
       </View>
-      {/* </ScrollView> */}
-      {/* </View> */}
     </ScrollView>
   );
 };

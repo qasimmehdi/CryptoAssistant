@@ -81,7 +81,7 @@ function Dashboard({navigation}) {
   }, [isFocused]);
 
   useEffect(() => {
-    let favPairs = coinsData.map(i => `${i.name}/USD`);
+    let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
     console.log(favPairs);
     ccxt
       .coinDetails(favPairs)
@@ -90,7 +90,7 @@ function Dashboard({navigation}) {
         setCoinsData([...updateTable(resp)]);
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [coinsData.length]);
 
   useEffect(() => {
     getFavourites()
@@ -114,7 +114,7 @@ function Dashboard({navigation}) {
                 balance: parseFloat(item.balance) > 0 ? true : false,
               },
             ];
-            setCoinsData(state => [...state]);
+            setCoinsData(state => [...state, ...tempArray]);
           }
         }
       })

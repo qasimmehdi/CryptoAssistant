@@ -6,6 +6,8 @@ export const sharedStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: COLOR.BG,
+    paddingRight: 15,
+    paddingLeft: 15,
   },
   borderless: {
     borderWidth: 0,

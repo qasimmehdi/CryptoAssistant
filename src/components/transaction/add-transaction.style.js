@@ -5,9 +5,7 @@ export const transactionStyles = StyleSheet.create({
     borderColor: '#808080',
     backgroundColor: '#121212',
     borderRadius: 0,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
+    borderWidth: 0,
     flex: 1,
     flexDirection: 'row-reverse',
     width: 170,
@@ -16,12 +14,6 @@ export const transactionStyles = StyleSheet.create({
   formFields: {
     flex: 1,
     flexDirection: 'column',
-    marginRight: 15,
-    marginLeft: 15,
-  },
-  saveBtn: {
-    marginRight: 15,
-    marginLeft: 15,
   },
   field: {
     flex: 1,
