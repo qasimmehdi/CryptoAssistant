@@ -79,7 +79,7 @@ export default function Row(props) {
             props.navigation.navigate('AddNotification', {
               base: props.name,
               quote: props.quote,
-              currentPrice: props.price,
+              isNotificationOn: props.notification,
             })
           }>
           <Icon

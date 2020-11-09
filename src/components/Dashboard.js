@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useIsFocused} from '@react-navigation/native';
+import {DrawerActions, useIsFocused} from '@react-navigation/native';
 import {Text} from 'galio-framework';
 import numeral from 'numeral';
 import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {getAllItems} from 'react-native-sensitive-info';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {useDispatch} from 'react-redux';
@@ -19,36 +18,12 @@ import {COLOR} from './shared/colors';
 import Hr from './shared/hr';
 
 function Dashboard({navigation}) {
-  //changeTitle('Crypto Assistant');
+  const isFocused = useIsFocused();
   const ccxt = new CCXT();
-  const temp = [
-    {
-      name: 'BTC',
-      quote: 'USD',
-      price: '0',
-      priceChange: '0',
-      changePercentage: '0',
-      holdingConverted: '0',
-      holdingUnits: '10',
-      notification: false,
-      balance: false,
-    },
-    {
-      name: 'ETH',
-      quote: 'USD',
-      price: '0',
-      priceChange: '0',
-      holdingConverted: '$2,623.00',
-      holdingUnits: '10',
-      notification: false,
-      balance: false,
-    },
-  ];
   const [balance] = useState('0');
   const [coinsData, setCoinsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const onClickCoin = coin => {
     return dispatch(Actions.setSelectedCoin({base: coin, quote: 'USD'}));
   };
@@ -114,12 +89,12 @@ function Dashboard({navigation}) {
                 balance: parseFloat(item.balance) > 0 ? true : false,
               },
             ];
-            setCoinsData(state => [...state, ...tempArray]);
+            setCoinsData(state => [...tempArray]);
           }
         }
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [isFocused]);
 
   const onRefresh = React.useCallback(() => {
     console.log('onRefresh');

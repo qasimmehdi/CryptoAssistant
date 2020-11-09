@@ -7,6 +7,8 @@ import {Alert} from 'react-native';
 import FCM from './src/services/FCM';
 import StackNav from './src/navigation/StackNav';
 import {dbSetup, getTables} from './src/db/methods';
+import {useDispatch} from 'react-redux';
+import * as Actions from './src/store/actions';
 
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
@@ -14,7 +16,7 @@ SQLite.enablePromise(true);
 dbSetup();
 
 const App = () => {
-  //var initialRoute;
+  const dispatch = useDispatch();
 
   const showAlert = (title, message) => {
     Alert.alert(
@@ -28,8 +30,15 @@ const App = () => {
   const fcm = new FCM(showAlert);
 
   useEffect(() => {
-    fcm.checkPermission();
-    fcm.messageListener();
+    async function FcmFetch() {
+      let fcmToken = await fcm.checkPermission();
+      if (fcmToken) {
+        console.log('FCM', fcmToken);
+        dispatch(Actions.fcmToken({token: fcmToken}));
+      }
+      fcm.messageListener();
+    }
+    FcmFetch();
   }, []);
 
   return (

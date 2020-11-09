@@ -70,3 +70,15 @@ export function getFavourites() {
     });
   });
 }
+
+export function setNotification(value, base, quote) {
+  return new Promise((resolve, reject) => {
+    SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+      DB.executeSql(queries.updateNotification(value, base, quote))
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => reject(err));
+    });
+  });
+}

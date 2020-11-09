@@ -19,6 +19,7 @@ import {COLOR} from '../components/shared/colors';
 import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';
 import AddNotifications from '../components/notfication/AddNotifications';
+import DrawerNav from './DrawerNav';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +35,8 @@ export default function StackNav() {
           fontWeight: 'bold',
         },
         headerTitleAlign: 'center',
-      }}>
+      }}
+      initialRouteName="StartupScreen">
       <Stack.Screen
         name="StartupScreen"
         component={StartupScreen}
@@ -97,6 +99,7 @@ export default function StackNav() {
         component={AddNotifications}
         options={{title: 'Add Notification'}}
       />
+      <Stack.Screen name="Drawer" component={DrawerNav} />
     </Stack.Navigator>
   );
 }

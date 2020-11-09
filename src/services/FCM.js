@@ -8,7 +8,7 @@ class FCM {
   checkPermission = async () => {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
-      this.getFcmToken();
+      return await this.getFcmToken();
     } else {
       this.requestPermission();
     }
@@ -17,9 +17,10 @@ class FCM {
     const fcmToken = await firebase.messaging().getToken();
     if (fcmToken) {
       console.log('Your Firebase Token is', fcmToken);
-      this.showAlert('Your Firebase Token is:', fcmToken);
+      return fcmToken;
     } else {
       this.showAlert('Failed', 'No token received');
+      return null;
     }
   };
 
