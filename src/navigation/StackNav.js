@@ -21,9 +21,10 @@ import AddTransaction from '../components/transaction/add-transaction';
 import AddNotifications from '../components/notfication/AddNotifications';
 import DrawerNav from './DrawerNav';
 
+
 const Stack = createStackNavigator();
 
-export default function StackNav() {
+export default function StackNav({navigation}) {
   return (
     <Stack.Navigator
       screenOptions={{

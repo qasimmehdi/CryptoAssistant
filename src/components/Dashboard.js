@@ -112,6 +112,7 @@ function Dashboard({navigation}) {
   }, []);
 
   return (
+
     <View style={dashboardStyles.body}>
       <LinearGradient
         start={{x: 0, y: 0}}
@@ -202,6 +203,7 @@ function Dashboard({navigation}) {
         </ScrollView>
       </View>
     </View>
+
   );
 }
 

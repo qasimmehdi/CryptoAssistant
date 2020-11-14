@@ -2,6 +2,11 @@ import ccxt from 'ccxt';
 import {pairs} from './pairs';
 
 export default class CCXT {
+
+  constructor(){
+    this.tradeexchange = null;
+  }
+
   batchExchanges(symbols) {
     let proms = [];
     for (let symbol of symbols) {
@@ -103,5 +108,11 @@ export default class CCXT {
         }
       });
     });
+  }
+
+  addExchange(name, publickey, secretkey) {
+    this.tradeexchange = ccxt[name];
+    this.tradeexchange.apiKey = publickey;
+    this.tradeexchange.secret = secretkey;
   }
 }

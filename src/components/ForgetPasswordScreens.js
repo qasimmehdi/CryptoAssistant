@@ -12,6 +12,7 @@ function ForgetEnterEmail({navigation}) {
   const [email, setEmail] = useState('');
 
   return (
+
     <View style={registerStyles.body}>
       <View style={registerStyles.inputContainer}>
         <Input
@@ -49,6 +50,7 @@ function ForgetEnterEmail({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 
@@ -57,6 +59,7 @@ function ResetPassword({navigation}) {
   const [pass, setPass] = useState('');
   const [pass2, setPass2] = useState('');
   return (
+
     <View style={registerStyles.body}>
       <View style={registerStyles.inputContainer}>
         <Input
@@ -119,6 +122,7 @@ function ResetPassword({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 

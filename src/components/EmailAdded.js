@@ -8,6 +8,7 @@ import {loginStyles} from '../styles/loginStyles';
 function EmailAdded({navigation}) {
   let email = 'qasim_127@hotmail.com';
   return (
+
     <View style={loginStyles.body}>
       <View
         style={{
@@ -41,6 +42,7 @@ function EmailAdded({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 

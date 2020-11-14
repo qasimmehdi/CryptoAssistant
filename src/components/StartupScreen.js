@@ -37,9 +37,11 @@ const StartupScreen = ({navigation}) => {
       .catch(err => console.log(err));
   }, []);
   return (
+
     <View style={loginStyles.body}>
       <Loading />
     </View>
+
   );
 };
 export default StartupScreen;

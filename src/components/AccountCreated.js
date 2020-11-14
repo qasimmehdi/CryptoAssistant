@@ -9,6 +9,7 @@ import {COLOR} from './shared/colors';
 
 function AccountCreated({navigation}) {
   return (
+
     <View style={loginStyles.body}>
       <View
         style={{
@@ -46,6 +47,7 @@ function AccountCreated({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 

@@ -76,6 +76,7 @@ export default function TabNavigation({navigation}) {
     navigation.setOptions({title: HeaderTitle});
   }, [HeaderTitle]);
   return (
+
     <Tab.Navigator
       initialRouteName="Dashboard"
       tabBarOptions={{
@@ -111,5 +112,6 @@ export default function TabNavigation({navigation}) {
         options={{title: 'Markets'}}
       />
     </Tab.Navigator>
+
   );
 }
