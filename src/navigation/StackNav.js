@@ -20,6 +20,7 @@ import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';
 import AddNotifications from '../components/notfication/AddNotifications';
 import DrawerNav from './DrawerNav';
+import Settings from '../components/settings/Settings';
 
 const Stack = createStackNavigator();
 
@@ -100,6 +101,7 @@ export default function StackNav() {
         options={{title: 'Add Notification'}}
       />
       <Stack.Screen name="Drawer" component={DrawerNav} />
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 }

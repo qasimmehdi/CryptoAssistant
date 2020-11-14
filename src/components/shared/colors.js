@@ -8,4 +8,5 @@ export const COLOR = {
   GREEN: '#0f0',
   DISABLED: '#3C3C3C',
   TAB: '#262626',
+  DRAWER: '#1E2126',
 };

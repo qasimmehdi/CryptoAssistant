@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {Input, Text} from 'galio-framework';
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {View} from 'react-native';
 import {COLOR} from '../shared/colors';
@@ -13,6 +14,7 @@ import {Image} from 'react-native';
 import Loading from '../SplashScreen';
 import {TouchableOpacity} from 'react-native';
 import {saveFavourites} from '../../db/methods';
+import {useIsFocused} from '@react-navigation/native';
 
 const Row = props => {
   return (
@@ -73,11 +75,22 @@ export default function AddCoin({navigation}) {
     setCoin(text);
     const temp = cryptoSymbols.filter(item => {
       console.log(item);
-      return item.indexOf(text.toLowerCase()) > -1 || text === '';
+      return (
+        item.toLowerCase().indexOf(text.toString().toLowerCase()) > -1 ||
+        text === ''
+      );
     });
     console.log(temp);
     setSymbols([...temp]);
   };
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    //do not do anything here make another useEffect if needed
+    if (isFocused) {
+      setCoin('');
+      onChangeSearch('');
+    }
+  }, [isFocused]);
 
   return (
     <View style={sharedStyles.body}>
