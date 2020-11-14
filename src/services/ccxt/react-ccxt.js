@@ -97,6 +97,7 @@ export default class CCXT {
 
   coinDetails(symbols) {
     return new Promise((resolve, reject) => {
+      console.log(symbols);
       this.batchExchanges(symbols).then(resp => {
         if (resp.length < 1) {
           reject('no data found');

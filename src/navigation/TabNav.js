@@ -8,6 +8,7 @@ import {COLOR} from '../components/shared/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Actions from '../store/actions';
 import {useIsFocused} from '@react-navigation/native';
+import AddCoin from '../components/add-favourite/AddCoin';
 
 function TradingScreen() {
   const isFocused = useIsFocused();
@@ -100,6 +101,7 @@ export default function TabNavigation({navigation}) {
         component={TradingScreen}
         options={{title: 'Trade'}}
       />
+      <Tab.Screen name="Add Coin" component={AddCoin} options={{title: '+'}} />
       <Tab.Screen
         name="News"
         component={NewsScreen}

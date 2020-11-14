@@ -54,7 +54,7 @@ export function saveTransaction(
 
 export function saveFavourites(exchange, base, quote, balance, notification) {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-    const data = `(${exchange}, ${base}, ${quote}, ${balance}, ${notification})`;
+    const data = `('${exchange}', '${base}', '${quote}', '${balance}', '${notification}')`;
     DB.executeSql(queries.saveFavourites + data)
       .then(res => console.log(res))
       .catch(err => console.log(err));
