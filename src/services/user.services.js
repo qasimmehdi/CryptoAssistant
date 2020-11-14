@@ -3,11 +3,12 @@ import axios from 'axios';
 export const addNotification = (requestType, fcmToken, base, quote) => {
   const data = {
     token: fcmToken,
-    currencyName: base,
-    currencyPair: base + '/' + quote,
+    base: base,
+    quote: quote,
   };
+  console.log(data, requestType);
 
-  return axios[requestType]('/alerts', data)
+  return axios.delete('/alerts', {data: data})
     .then(function(response) {
       console.log(response);
       if (response.status === 200) {
