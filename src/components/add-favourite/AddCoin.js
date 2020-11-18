@@ -102,9 +102,7 @@ export default function AddCoin({navigation}) {
         onChangeText={text => onChangeSearch(text)}
         color={COLOR.WHITE}
       />
-      <ScrollView
-        style={{flex: 1, flexDirection: 'column'}}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView style={{flex: 1, flexDirection: 'column'}}>
         <Suspense fallback={<Loading />}>
           <RenderList data={symbols} navigation={navigation} />
         </Suspense>
