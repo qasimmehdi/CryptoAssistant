@@ -15,4 +15,12 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginRight: 10,
   },
+  bottomBtn: {
+    flex: 1,
+    flexDirection: 'column-reverse',
+    marginBottom: 10,
+  },
+  inputForm: {
+    marginTop: 10,
+  },
 });

@@ -15,7 +15,7 @@ const ExchangeRow = props => {
     <React.Fragment>
       <TouchableOpacity
         onPress={() => {
-          props.navigation.navigate('ConnectExchange');
+          props.navigation.navigate('ConnectExchange', {name: props.name});
         }}>
         <View style={styles.row}>
           <View style={styles.coinCell}>
