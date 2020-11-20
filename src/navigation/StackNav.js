@@ -20,6 +20,9 @@ import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';
 import AddNotifications from '../components/notfication/AddNotifications';
 import DrawerNav from './DrawerNav';
+import Settings from '../components/settings/Settings';
+import ConnectExchange from '../components/connect-exchange/exchange-form';
+import ExchangeList from '../components/connect-exchange/exchange-list';
 
 
 const Stack = createStackNavigator();
@@ -101,6 +104,10 @@ export default function StackNav({navigation}) {
         options={{title: 'Add Notification'}}
       />
       <Stack.Screen name="Drawer" component={DrawerNav} />
+      <Stack.Screen name="Settings" component={Settings} />
+
+      <Stack.Screen name="ConnectExchange" component={ConnectExchange} />
+      <Stack.Screen name="ExchangeList" component={ExchangeList} />
     </Stack.Navigator>
   );
 }

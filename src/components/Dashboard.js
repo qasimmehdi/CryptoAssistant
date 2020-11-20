@@ -68,6 +68,7 @@ function Dashboard({navigation}) {
   }, [coinsData.length]);
 
   useEffect(() => {
+    let tempArray = [];
     getFavourites()
       .then(resp => {
         const len = resp.length;
@@ -76,39 +77,36 @@ function Dashboard({navigation}) {
           for (let j = 0; j < resp[i].rows.length; j++) {
             let item = resp[i].rows.item(j);
             console.log(item);
-            let tempArray = [
-              {
-                name: item.base,
-                quote: item.quote,
-                price: '0',
-                priceChange: '0',
-                changePercentage: '0',
-                holdingConverted: '0',
-                holdingUnits: item.balance,
-                notification: item.notification === '1' ? true : false,
-                balance: parseFloat(item.balance) > 0 ? true : false,
-              },
-            ];
-            setCoinsData(state => [...tempArray]);
+            tempArray.push({
+              name: item.base,
+              quote: item.quote,
+              price: '0',
+              priceChange: '0',
+              changePercentage: '0',
+              holdingConverted: '0',
+              holdingUnits: item.balance,
+              notification: item.notification === '1' ? true : false,
+              balance: parseFloat(item.balance) > 0 ? true : false,
+            });
           }
         }
+        setCoinsData([...tempArray]);
       })
       .catch(err => console.log(err));
   }, [isFocused]);
 
   const onRefresh = React.useCallback(() => {
-    console.log('onRefresh');
     setRefresh(true);
-    console.log('refreshing');
+    console.log('refreshing', coinsData);
     let favPairs = coinsData.map(i => `${i.name}/USD`);
     ccxt
       .coinDetails(favPairs)
       .then(resp => {
         console.log('resp', resp);
         setCoinsData([...updateTable(resp)]);
-        setRefresh(false);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setRefresh(false));
   }, []);
 
   return (

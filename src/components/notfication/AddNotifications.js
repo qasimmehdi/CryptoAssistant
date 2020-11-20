@@ -11,6 +11,7 @@ import {setNotification} from '../../db/methods';
 
 export default function AddNotifications({route, navigation}) {
   const {base, quote, isNotificationOn} = route.params;
+  const [disableBtn, setDisableBtn] = useState(false);
   console.log('base', base, 'quote', quote);
   const fcmToken = useSelector(state => state.fcmToken.token);
   return (
@@ -42,22 +43,30 @@ export default function AddNotifications({route, navigation}) {
           colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
           style={sharedStyles.linearGradient}>
           <Button
+            disabled={disableBtn}
             round
             color="transparent"
             style={sharedStyles.borderless}
             onPress={async () => {
+              setDisableBtn(true);
               addNotification(
                 isNotificationOn ? 'delete' : 'post',
                 fcmToken,
                 base,
                 quote,
-              );
-              setNotification(isNotificationOn ? '0' : '1', base, quote)
-                .then(() => {
-                  navigation.goBack();
-                })
+              )
+                .then(
+                  setNotification(isNotificationOn ? '0' : '1', base, quote)
+                    .then(() => {
+                      navigation.goBack();
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    }),
+                )
                 .catch(err => {
                   console.log(err);
+                  setDisableBtn(false);
                 });
             }}>
             <Text color={COLOR.WHITE} h5 bold>

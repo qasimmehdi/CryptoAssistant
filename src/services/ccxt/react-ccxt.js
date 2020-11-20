@@ -1,9 +1,10 @@
+/* eslint-disable dot-notation */
+/* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
 
 export default class CCXT {
-
-  constructor(){
+  constructor() {
     this.tradeexchange = null;
   }
 
@@ -96,6 +97,7 @@ export default class CCXT {
 
   coinDetails(symbols) {
     return new Promise((resolve, reject) => {
+      console.log(symbols);
       this.batchExchanges(symbols).then(resp => {
         if (resp.length < 1) {
           reject('no data found');

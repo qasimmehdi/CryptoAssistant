@@ -15,4 +15,12 @@ export const sharedStyles = StyleSheet.create({
   linearGradient: {
     borderRadius: 25,
   },
+  input: {
+    borderColor: COLOR.APP_GREY,
+    backgroundColor: COLOR.BG,
+    borderRadius: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+  },
 });
