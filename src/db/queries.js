@@ -6,6 +6,8 @@ export const createTransactionsTables = `CREATE TABLE IF NOT EXISTS "Transaction
 	"base"	TEXT,
 	"quote"	TEXT,
 	"price"	TEXT,
+	"amount" TEXT,
+	"cost"	TEXT,
 	"type"	TEXT,
 	"quantity"	TEXT,
 	"fee"	TEXT,
@@ -35,7 +37,7 @@ WHERE NOT EXISTS (SELECT * FROM Favourites);
 `;
 
 export const saveTransaction =
-  'INSERT INTO Transactions (exchange, base, quote, price, type, quantity, fee, date, time, notes) VALUES ';
+  'INSERT INTO Transactions (exchange, base, quote, price,amount,cost, type, quantity, fee, date, time, notes) VALUES ';
 
 export const saveFavourites =
   'INSERT INTO Favourites (exchange, base, quote, balance, notification) VALUES ';

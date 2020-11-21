@@ -37,6 +37,8 @@ export function saveTransaction(
   base,
   quote,
   price,
+  amount,
+  cost,
   type,
   quantity,
   fee,
@@ -45,7 +47,7 @@ export function saveTransaction(
   notes,
 ) {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-    const data = `('${exchange}', '${base}', '${quote}', '${price}', '${type}', '${quantity}', '${fee}', '${date}', '${time}', '${notes}')`;
+    const data = `('${exchange}', '${base}', '${quote}', '${price}', '${amount}', '${cost}', '${type}', '${quantity}', '${fee}', '${date}', '${time}', '${notes}')`;
     DB.executeSql(queries.saveTransaction + data)
       .then(res => console.log(res))
       .catch(err => console.log(err));
