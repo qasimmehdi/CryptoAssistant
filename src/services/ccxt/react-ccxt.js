@@ -157,6 +157,7 @@ export default class CCXT {
           exchange
             .fetchTransactions()
             .then(data => {
+              console.log(data);
               data.forEach(x => {
                 saveTransaction(
                   exname,

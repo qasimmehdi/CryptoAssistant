@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   exchangeIcon: {
-    width: 24,
+    width: 50,
     height: 24,
     alignSelf: 'center',
     marginRight: 10,

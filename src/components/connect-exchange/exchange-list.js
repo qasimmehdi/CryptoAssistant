@@ -13,6 +13,7 @@ import CCXT from '../../services/ccxt/react-ccxt';
 import iconImages from '../../assets/coinIcons/names';
 
 const ExchangeRow = props => {
+  console.log(props.logo);
   return (
     <React.Fragment>
       <TouchableOpacity
@@ -23,7 +24,7 @@ const ExchangeRow = props => {
           <View style={styles.coinCell}>
             <Image
               style={styles.exchangeIcon}
-              uri={props.logo ? props.logo : iconImages.GENERIC}
+              source={{uri: props.logo ? props.logo : iconImages.GENERIC}}
             />
             <Text color={COLOR.WHITE} size={14} bold style={styles.coinitem}>
               {props.name}

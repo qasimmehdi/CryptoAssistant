@@ -42,7 +42,6 @@ function LoginForm({navigation}) {
   };
 
   return (
-
     <View style={loginStyles.body}>
       {progress ? (
         <Loading />
@@ -117,7 +116,6 @@ function LoginForm({navigation}) {
         </>
       )}
     </View>
-
   );
 }
 
