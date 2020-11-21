@@ -23,7 +23,7 @@ import DrawerNav from './DrawerNav';
 import Settings from '../components/settings/Settings';
 import ConnectExchange from '../components/connect-exchange/exchange-form';
 import ExchangeList from '../components/connect-exchange/exchange-list';
-
+import CoinPageTabNav from '../components/coin/coinTabNav';
 
 const Stack = createStackNavigator();
 
@@ -89,8 +89,8 @@ export default function StackNav({navigation}) {
       />
       <Stack.Screen name="Sign In" component={SimpleLogin} />
       <Stack.Screen
-        name="coinPage"
-        component={coinPage}
+        name="CoinPageTabNav"
+        component={CoinPageTabNav}
         options={{title: ''}}
       />
       <Stack.Screen

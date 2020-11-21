@@ -110,7 +110,6 @@ function Dashboard({navigation}) {
   }, []);
 
   return (
-
     <View style={dashboardStyles.body}>
       <LinearGradient
         start={{x: 0, y: 0}}
@@ -183,7 +182,7 @@ function Dashboard({navigation}) {
               key={coin.name}
               onPress={() => {
                 onClickCoin(coin.name);
-                navigation.navigate('coinPage');
+                navigation.navigate('CoinPageTabNav');
               }}>
               <Row
                 name={coin.name}
@@ -201,7 +200,6 @@ function Dashboard({navigation}) {
         </ScrollView>
       </View>
     </View>
-
   );
 }
 

@@ -12,7 +12,7 @@ import CCXT from '../../services/ccxt/react-ccxt';
 import {COLOR} from '../shared/colors';
 import {coinPageStyles} from './coinPageStyle';
 
-export default function coinPage({navigation}) {
+export default function coinPage() {
   const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
   let ccxt = new CCXT();
   const [data, setData] = useState([1]);
@@ -20,7 +20,6 @@ export default function coinPage({navigation}) {
   const [price, setPrice] = useState('0');
   let labelRadix;
   useEffect(() => {
-    navigation.setOptions({title: coinPageTitle});
     let isMounted = true;
 
     ccxt
