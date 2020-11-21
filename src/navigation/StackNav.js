@@ -24,9 +24,10 @@ import Settings from '../components/settings/Settings';
 import ConnectExchange from '../components/connect-exchange/exchange-form';
 import ExchangeList from '../components/connect-exchange/exchange-list';
 
+
 const Stack = createStackNavigator();
 
-export default function StackNav() {
+export default function StackNav({navigation}) {
   return (
     <Stack.Navigator
       screenOptions={{

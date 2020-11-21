@@ -2,10 +2,25 @@
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
+import {saveTransaction} from '../../db/methods';
 
 export default class CCXT {
   constructor() {
-    this.tradeexchange = null;
+    this.certifiedEx = [
+      {imp: new ccxt.binance(), name: 'Binance'},
+      {imp: new ccxt.bitfinex(), name: 'Bitfinex'},
+      {imp: new ccxt.bittrex(), name: 'Bittrex'},
+      {imp: new ccxt.bitvavo(), name: 'Bitvavo'},
+      {imp: new ccxt.bytetrade(), name: 'ByteTrade'},
+      {imp: new ccxt.currencycom(), name: 'Currency.com'},
+      {imp: new ccxt.eterbase(), name: 'Eterbase'},
+      {imp: new ccxt.ftx(), name: 'FTX'},
+      {imp: new ccxt.idex(), name: 'IDEX'},
+      {imp: new ccxt.kraken(), name: 'Kraken'},
+      {imp: new ccxt.upbit(), name: 'Upbit'},
+      {imp: new ccxt.wavesexchange(), name: 'Waves.Exchange'},
+      {imp: new ccxt.xena(), name: 'Xena Exchange'},
+    ];
   }
 
   batchExchanges(symbols) {
@@ -52,6 +67,10 @@ export default class CCXT {
     }
 
     return Promise.all(proms);
+  }
+
+  getAllExchangeAndLogo() {
+    return this.certifiedEx.map(x => ({name: x.name, logo: x.imp.urls.logo}));
   }
 
   Candles(symbol, hr) {
@@ -113,8 +132,104 @@ export default class CCXT {
   }
 
   addExchange(name, publickey, secretkey) {
-    this.tradeexchange = ccxt[name];
-    this.tradeexchange.apiKey = publickey;
-    this.tradeexchange.secret = secretkey;
+    const index = this.certifiedEx.findIndex(x => x.name === name);
+    this.certifiedEx[index].imp.apiKey = publickey;
+    this.certifiedEx[index].imp.secret = secretkey;
+    return new Promise((resolve, reject) => {
+      this.certifiedEx[index].imp
+        .fetchBalance()
+        .then(x => {
+          this.saveTransactionstodb(name);
+          resolve(x);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  saveTransactionstodb(exname) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    return new Promise((resolve, reject) => {
+      if (exchange && exchange.checkRequiredCredentials()) {
+        if (exchange.hasFetchTransactions) {
+          exchange
+            .fetchTransactions()
+            .then(data => {
+              data.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+        } else if (exchange.hasFetchWithdrawals && exchange.hasFetchDeposits) {
+          exchange
+            .fetchDeposits()
+            .then(deposits => {
+              deposits.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+          exchange
+            .fetchWithdrawals()
+            .then(withdrawal => {
+              withdrawal.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+        } else {
+          reject('exchange not supported');
+        }
+      } else {
+        reject('Api key not found');
+      }
+    });
   }
 }

@@ -6,9 +6,13 @@ import SQLite from 'react-native-sqlite-storage';
 import {Alert} from 'react-native';
 import FCM from './src/services/FCM';
 import StackNav from './src/navigation/StackNav';
+import SettingStackNav from './src/navigation/SettingDrawer';
 import {dbSetup, getTables} from './src/db/methods';
 import {useDispatch} from 'react-redux';
 import * as Actions from './src/store/actions';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+
+const Drawer = createDrawerNavigator();
 
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
@@ -43,7 +47,14 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <StackNav />
+      <Drawer.Navigator>
+        <Drawer.Screen name="Dashboard Main" component={StackNav} />
+        <Drawer.Screen
+          name="SettingScreenStack"
+          options={{drawerLabel: 'Setting Screen Option'}}
+          component={SettingStackNav}
+        />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

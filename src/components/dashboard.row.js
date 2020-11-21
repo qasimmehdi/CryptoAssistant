@@ -12,6 +12,7 @@ import Hr from './shared/hr';
 export default function Row(props) {
   return (
     <React.Fragment>
+
       <View style={rowStyles.row}>
         <View style={rowStyles.coinCell}>
           <Image
@@ -91,6 +92,7 @@ export default function Row(props) {
         </TouchableOpacity>
       </View>
       <Hr color={COLOR.APP_GREY} />
+
     </React.Fragment>
   );
 }

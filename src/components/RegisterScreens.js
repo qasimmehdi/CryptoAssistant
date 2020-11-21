@@ -25,6 +25,7 @@ function EnterUsername({navigation}) {
     return dispatch(Actions.EditUsername({username: text}));
   };
   return (
+
     <View style={registerStyles.body}>
       <View style={registerStyles.inputContainer}>
         <CustomInput
@@ -65,6 +66,7 @@ function EnterUsername({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 

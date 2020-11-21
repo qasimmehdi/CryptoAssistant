@@ -34,11 +34,13 @@ target 'school' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-sensitive-info', :path => '../node_modules/react-native-sensitive-info'
 
 
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
 
   target 'schoolTests' do
     inherit! :search_paths

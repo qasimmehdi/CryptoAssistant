@@ -8,6 +8,7 @@ import {COLOR} from './shared/colors';
 
 function SigninOrRegister({navigation}) {
   return (
+
     <View style={loginStyles.body}>
       <View style={loginStyles.title}>
         <Text h3 color={theme.COLORS.WHITE} bold>
@@ -41,6 +42,7 @@ function SigninOrRegister({navigation}) {
         </LinearGradient>
       </View>
     </View>
+
   );
 }
 
