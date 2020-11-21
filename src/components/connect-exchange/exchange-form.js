@@ -1,15 +1,32 @@
 import {Button, Input, Text} from 'galio-framework';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
 import {styles} from './connect-exchange.style';
+import CCXT from '../../services/ccxt/react-ccxt';
 
 export default function ConnectExchange({route, navigation}) {
   const {name} = route.params;
   const [api, setApi] = useState('');
   const [secret, setSecret] = useState('');
+  const [disbutton, setdisbutton] = useState(false);
+
+  const addexchange = () => {
+    setdisbutton(true);
+    new CCXT()
+      .addExchange(name, api, secret)
+      .then(x => {
+        Alert.alert('Success', 'Exchange added successfully');
+        setdisbutton(false);
+      })
+      .catch(err => {
+        Alert.alert('Error', 'Invalid Api Keys');
+        setdisbutton(false);
+      });
+  };
+
   return (
     <View style={sharedStyles.body}>
       <View style={styles.inputForm}>
@@ -44,7 +61,12 @@ export default function ConnectExchange({route, navigation}) {
           end={{x: 1, y: 0}}
           colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
           style={sharedStyles.linearGradient}>
-          <Button round color="transparent" style={sharedStyles.borderless}>
+          <Button
+            disabled={disbutton}
+            onPress={() => addexchange()}
+            round
+            color="transparent"
+            style={sharedStyles.borderless}>
             <Text color={COLOR.WHITE} h5 bold>
               Add Connection
             </Text>

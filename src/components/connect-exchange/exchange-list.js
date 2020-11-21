@@ -9,6 +9,8 @@ import {sharedStyles} from '../shared/shared.style';
 import Hr from '../shared/hr';
 import {styles} from './connect-exchange.style';
 import {ScrollView} from 'react-native';
+import CCXT from '../../services/ccxt/react-ccxt';
+import iconImages from '../../assets/coinIcons/names';
 
 const ExchangeRow = props => {
   return (
@@ -19,7 +21,10 @@ const ExchangeRow = props => {
         }}>
         <View style={styles.row}>
           <View style={styles.coinCell}>
-            <Image style={styles.exchangeIcon} />
+            <Image
+              style={styles.exchangeIcon}
+              uri={props.logo ? props.logo : iconImages.GENERIC}
+            />
             <Text color={COLOR.WHITE} size={14} bold style={styles.coinitem}>
               {props.name}
             </Text>
@@ -32,11 +37,22 @@ const ExchangeRow = props => {
 };
 
 export default function ExchangeList({navigation}) {
+  const [exchanges, setexchanges] = React.useState(
+    new CCXT().getAllExchangeAndLogo(),
+  );
+
   return (
     <View style={sharedStyles.body}>
       <ScrollView style={{flex: 1, flexDirection: 'column'}}>
         <Hr color={COLOR.APP_GREY} />
-        <ExchangeRow navigation={navigation} name="Binance" />
+        {exchanges.map((x, i) => (
+          <ExchangeRow
+            key={i}
+            navigation={navigation}
+            name={x.name}
+            logo={x.logo}
+          />
+        ))}
       </ScrollView>
     </View>
   );
