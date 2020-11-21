@@ -7,19 +7,25 @@ import {saveTransaction} from '../../db/methods';
 export default class CCXT {
   constructor() {
     this.certifiedEx = [
-      {imp: new ccxt.binance(), name: 'Binance'},
-      {imp: new ccxt.bitfinex(), name: 'Bitfinex'},
-      {imp: new ccxt.bittrex(), name: 'Bittrex'},
-      {imp: new ccxt.bitvavo(), name: 'Bitvavo'},
-      {imp: new ccxt.bytetrade(), name: 'ByteTrade'},
-      {imp: new ccxt.currencycom(), name: 'Currency.com'},
-      {imp: new ccxt.eterbase(), name: 'Eterbase'},
-      {imp: new ccxt.ftx(), name: 'FTX'},
-      {imp: new ccxt.idex(), name: 'IDEX'},
-      {imp: new ccxt.kraken(), name: 'Kraken'},
-      {imp: new ccxt.upbit(), name: 'Upbit'},
-      {imp: new ccxt.wavesexchange(), name: 'Waves.Exchange'},
-      {imp: new ccxt.xena(), name: 'Xena Exchange'},
+      {imp: new ccxt.binance({enableRateLimit: true}), name: 'Binance'},
+      {imp: new ccxt.bitfinex({enableRateLimit: true}), name: 'Bitfinex'},
+      {imp: new ccxt.bittrex({enableRateLimit: true}), name: 'Bittrex'},
+      {imp: new ccxt.bitvavo({enableRateLimit: true}), name: 'Bitvavo'},
+      {imp: new ccxt.bytetrade({enableRateLimit: true}), name: 'ByteTrade'},
+      {
+        imp: new ccxt.currencycom({enableRateLimit: true}),
+        name: 'Currency.com',
+      },
+      {imp: new ccxt.eterbase({enableRateLimit: true}), name: 'Eterbase'},
+      {imp: new ccxt.ftx({enableRateLimit: true}), name: 'FTX'},
+      {imp: new ccxt.idex({enableRateLimit: true}), name: 'IDEX'},
+      {imp: new ccxt.kraken({enableRateLimit: true}), name: 'Kraken'},
+      {imp: new ccxt.upbit({enableRateLimit: true}), name: 'Upbit'},
+      {
+        imp: new ccxt.wavesexchange({enableRateLimit: true}),
+        name: 'Waves.Exchange',
+      },
+      {imp: new ccxt.xena({enableRateLimit: true}), name: 'Xena Exchange'},
     ];
   }
 
@@ -137,10 +143,34 @@ export default class CCXT {
     this.certifiedEx[index].imp.secret = secretkey;
     return new Promise((resolve, reject) => {
       this.certifiedEx[index].imp
-        .fetchBalance()
-        .then(x => {
-          this.saveTransactionstodb(name);
-          resolve(x);
+        .fetchBalance({recvWindow: 59000})
+        .then(balance => {
+          this.getTradeData(name)
+            .then(tradedata => {
+              tradedata.forEach(resp => {
+                resp.forEach(x => {
+                  saveTransaction(
+                    name,
+                    x?.symbol?.split('/')[0],
+                    x?.symbol?.split('/')[1],
+                    x?.price,
+                    x?.amount,
+                    x?.cost,
+                    x?.side,
+                    x?.info?.qty,
+                    x?.fee?.cost,
+                    x?.datetime,
+                    x?.timestamp,
+                    'N/A',
+                  );
+                });
+                resolve(balance);
+              });
+            })
+            .catch(err => {
+              console.log(err);
+              reject(err);
+            });
         })
         .catch(err => {
           console.log(err);
@@ -232,5 +262,30 @@ export default class CCXT {
         reject('Api key not found');
       }
     });
+  }
+
+  getTradeData(exname) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const symbols = pairs.find(x => x.exchange === exname.toLowerCase())
+      .symbols;
+    const promises = [];
+    symbols.forEach(x => {
+      if (exchange.hasFetchMyTrades) {
+        promises.push(
+          new Promise((resolve, reject) => {
+            exchange
+              .fetchMyTrades(x, undefined, undefined, {recvWindow: 59000})
+              .then(resp => {
+                resolve(resp);
+              })
+              .catch(err => {
+                resolve([]);
+              });
+          }),
+        );
+      }
+    });
+
+    return Promise.all(promises);
   }
 }

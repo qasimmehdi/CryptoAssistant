@@ -19,7 +19,7 @@ export default function ConnectExchange({route, navigation}) {
     setdisbutton(true);
     setIsLoading(true);
     new CCXT()
-      .addExchange(name, api, secret)
+      .addExchange(name,api,secret)
       .then(x => {
         Alert.alert('Success', 'Exchange added successfully');
         setdisbutton(false);
