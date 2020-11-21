@@ -182,7 +182,7 @@ function Dashboard({navigation}) {
               key={coin.name}
               onPress={() => {
                 onClickCoin(coin.name);
-                navigation.navigate('coinPage');
+                navigation.navigate('CoinPageTabNav');
               }}>
               <Row
                 name={coin.name}

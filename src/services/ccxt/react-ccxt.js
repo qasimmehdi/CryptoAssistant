@@ -1,11 +1,33 @@
+/* eslint-disable handle-callback-err */
 /* eslint-disable dot-notation */
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
+import {saveTransaction} from '../../db/methods';
 
 export default class CCXT {
   constructor() {
-    this.tradeexchange = null;
+    this.certifiedEx = [
+      {imp: new ccxt.binance({enableRateLimit: true}), name: 'Binance'},
+      {imp: new ccxt.bitfinex({enableRateLimit: true}), name: 'Bitfinex'},
+      {imp: new ccxt.bittrex({enableRateLimit: true}), name: 'Bittrex'},
+      {imp: new ccxt.bitvavo({enableRateLimit: true}), name: 'Bitvavo'},
+      {imp: new ccxt.bytetrade({enableRateLimit: true}), name: 'ByteTrade'},
+      {
+        imp: new ccxt.currencycom({enableRateLimit: true}),
+        name: 'Currency.com',
+      },
+      {imp: new ccxt.eterbase({enableRateLimit: true}), name: 'Eterbase'},
+      {imp: new ccxt.ftx({enableRateLimit: true}), name: 'FTX'},
+      {imp: new ccxt.idex({enableRateLimit: true}), name: 'IDEX'},
+      {imp: new ccxt.kraken({enableRateLimit: true}), name: 'Kraken'},
+      {imp: new ccxt.upbit({enableRateLimit: true}), name: 'Upbit'},
+      {
+        imp: new ccxt.wavesexchange({enableRateLimit: true}),
+        name: 'Waves.Exchange',
+      },
+      {imp: new ccxt.xena({enableRateLimit: true}), name: 'Xena Exchange'},
+    ];
   }
 
   batchExchanges(symbols) {
@@ -52,6 +74,10 @@ export default class CCXT {
     }
 
     return Promise.all(proms);
+  }
+
+  getAllExchangeAndLogo() {
+    return this.certifiedEx.map(x => ({name: x.name, logo: x.imp.urls.logo}));
   }
 
   Candles(symbol, hr) {
@@ -113,8 +139,154 @@ export default class CCXT {
   }
 
   addExchange(name, publickey, secretkey) {
-    this.tradeexchange = ccxt[name];
-    this.tradeexchange.apiKey = publickey;
-    this.tradeexchange.secret = secretkey;
+    const index = this.certifiedEx.findIndex(x => x.name === name);
+    this.certifiedEx[index].imp.apiKey = publickey;
+    this.certifiedEx[index].imp.secret = secretkey;
+    return new Promise((resolve, reject) => {
+      this.certifiedEx[index].imp
+        .fetchBalance({recvWindow: 59000})
+        .then(balance => {
+          this.getTradeData(name)
+            .then(tradedata => {
+              tradedata.forEach(resp => {
+                resp.forEach(x => {
+                  saveTransaction(
+                    name,
+                    x?.symbol?.split('/')[0],
+                    x?.symbol?.split('/')[1],
+                    x?.price,
+                    x?.amount,
+                    x?.cost,
+                    x?.side,
+                    x?.info?.qty,
+                    x?.fee?.cost,
+                    x?.datetime,
+                    x?.timestamp,
+                    'N/A',
+                  );
+                });
+                resolve(balance);
+              });
+            })
+            .catch(err => {
+              console.log(err);
+              reject(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  saveTransactionstodb(exname) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    return new Promise((resolve, reject) => {
+      if (exchange && exchange.checkRequiredCredentials()) {
+        if (exchange.hasFetchTransactions) {
+          exchange
+            .fetchTransactions()
+            .then(data => {
+              console.log(data);
+              data.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+        } else if (exchange.hasFetchWithdrawals && exchange.hasFetchDeposits) {
+          exchange
+            .fetchDeposits()
+            .then(deposits => {
+              deposits.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+          exchange
+            .fetchWithdrawals()
+            .then(withdrawal => {
+              withdrawal.forEach(x => {
+                saveTransaction(
+                  exname,
+                  x?.currency,
+                  '',
+                  x?.amount,
+                  x?.type,
+                  '',
+                  x?.fee?.cost,
+                  x?.datetime,
+                  x?.timestamp,
+                  x?.comment,
+                );
+              });
+
+              resolve('Data saved');
+            })
+            .catch(err => {
+              reject(err);
+            });
+        } else {
+          reject('exchange not supported');
+        }
+      } else {
+        reject('Api key not found');
+      }
+    });
+  }
+
+  getTradeData(exname) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const symbols = pairs.find(x => x.exchange === exname.toLowerCase())
+      .symbols;
+    const promises = [];
+    symbols.forEach(x => {
+      if (exchange.hasFetchMyTrades) {
+        promises.push(
+          new Promise((resolve, reject) => {
+            exchange
+              .fetchMyTrades(x, undefined, undefined, {recvWindow: 59000})
+              .then(resp => {
+                resolve(resp);
+              })
+              .catch(err => {
+                resolve([]);
+              });
+          }),
+        );
+      }
+    });
+
+    return Promise.all(promises);
   }
 }

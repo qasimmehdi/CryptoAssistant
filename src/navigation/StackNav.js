@@ -14,7 +14,6 @@ import AccountCreated from '../components/AccountCreated';
 import EmailAdded from '../components/EmailAdded';
 import StartupScreen from '../components/StartupScreen';
 import {createStackNavigator} from '@react-navigation/stack';
-import coinPage from '../components/coin/coinPage';
 import {COLOR} from '../components/shared/colors';
 import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';
@@ -23,6 +22,7 @@ import DrawerNav from './DrawerNav';
 import Settings from '../components/settings/Settings';
 import ConnectExchange from '../components/connect-exchange/exchange-form';
 import ExchangeList from '../components/connect-exchange/exchange-list';
+import CoinPageTabNav from '../components/coin/coinTabNav';
 
 const Stack = createStackNavigator();
 
@@ -88,8 +88,8 @@ export default function StackNav() {
       />
       <Stack.Screen name="Sign In" component={SimpleLogin} />
       <Stack.Screen
-        name="coinPage"
-        component={coinPage}
+        name="CoinPageTabNav"
+        component={CoinPageTabNav}
         options={{title: ''}}
       />
       <Stack.Screen
