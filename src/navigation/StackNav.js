@@ -14,7 +14,6 @@ import AccountCreated from '../components/AccountCreated';
 import EmailAdded from '../components/EmailAdded';
 import StartupScreen from '../components/StartupScreen';
 import {createStackNavigator} from '@react-navigation/stack';
-import coinPage from '../components/coin/coinPage';
 import {COLOR} from '../components/shared/colors';
 import TabNavigation from './TabNav';
 import AddTransaction from '../components/transaction/add-transaction';

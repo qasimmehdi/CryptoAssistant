@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 /* eslint-disable dot-notation */
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';

@@ -7,6 +7,7 @@ export default class Loading extends Component {
     return (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size="large" color={COLOR.APP_GREY} />
+        {this.props.children}
       </View>
     );
   }

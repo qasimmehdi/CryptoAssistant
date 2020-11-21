@@ -1,6 +1,6 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import ViewTransactions from '../transaction/view-transactions';
+import ViewTransactions from '../transaction/view-transaction';
 import coinPage from './coinPage';
 import {COLOR} from '../shared/colors';
 import {useSelector} from 'react-redux';
