@@ -9,7 +9,6 @@ import {sharedStyles} from '../shared/shared.style';
 import * as Actions from '../../store/actions';
 import {dashboardStyles} from '../../styles/dashboardStyles';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import Icon from 'react-native-vector-icons/Entypo';
 import Hr from '../shared/hr';
 import {styles} from './markets.style';
 import {ScrollView} from 'react-native';
