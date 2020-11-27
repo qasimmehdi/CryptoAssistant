@@ -9,4 +9,6 @@ export const COLOR = {
   DISABLED: '#3C3C3C',
   TAB: '#262626',
   DRAWER: '#1E2126',
+  BUY: '#00C087',
+  SELL: '#E5036F',
 };

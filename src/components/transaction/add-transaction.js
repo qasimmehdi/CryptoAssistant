@@ -65,6 +65,7 @@ const AddTransaction = ({route, navigation}) => {
       moment(time).format('x'),
       notes,
     );
+    navigation.navigate('Dashboard');
   };
 
   /* useEffect(() => {}, []); */

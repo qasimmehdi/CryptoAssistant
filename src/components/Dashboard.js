@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {DrawerActions, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {Text} from 'galio-framework';
 import numeral from 'numeral';
 import React, {useEffect, useState} from 'react';
