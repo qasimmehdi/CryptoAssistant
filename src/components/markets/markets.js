@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useIsFocused} from '@react-navigation/native';
 import {Text} from 'galio-framework';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {COLOR} from '../shared/colors';
@@ -14,9 +14,21 @@ import {styles} from './markets.style';
 import {ScrollView} from 'react-native';
 import MarketRow from './market-rows';
 import {TouchableOpacity} from 'react-native';
+import {getCoins} from '../../services/marketService';
+
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  const paddingToBottom = 0;
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom
+  );
+};
 
 export default function MarketScreen({navigation}) {
   const isFocused = useIsFocused();
+  const [coins, setcoins] = useState([]);
+  const [limit, setlimit] = useState(20);
+  const [isCalling, setisCalling] = useState(false);
   const dispatch = useDispatch();
   const changeTitle = title => {
     return dispatch(Actions.Header({title: title}));
@@ -30,6 +42,18 @@ export default function MarketScreen({navigation}) {
       changeTitle('Markets');
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    setisCalling(true);
+    getCoins(limit)
+      .then(result => {
+        setcoins(result.data);
+        setisCalling(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [limit]);
   return (
     <View style={sharedStyles.body}>
       <View style={styles.thead}>
@@ -58,20 +82,31 @@ export default function MarketScreen({navigation}) {
         <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" />
       </View>
       <Hr color={COLOR.APP_GREY} />
-      <ScrollView style={{flex: 1}}>
-        <TouchableOpacity
-          onPress={() => {
-            onClickCoin('BTC');
-            navigation.navigate('CoinPageTabNav');
-          }}>
-          <MarketRow
-            name="BTC"
-            price="$12,000"
-            priceChange="12%"
-            cap="$309.29B"
-            vol="$57.37B"
-          />
-        </TouchableOpacity>
+      <ScrollView
+        onScroll={({nativeEvent}) => {
+          if (isCloseToBottom(nativeEvent)) {
+            if (!isCalling) {
+              setlimit(pr => pr + 20);
+            }
+          }
+        }}
+        style={{flex: 1}}>
+        {coins.map((res, i) => (
+          <TouchableOpacity
+            key={i}
+            onPress={() => {
+              onClickCoin(res?.symbol);
+              navigation.navigate('CoinPageTabNav');
+            }}>
+            <MarketRow
+              name={res?.symbol}
+              price={'$' + res?.quote?.USD?.price.toFixed(0)}
+              priceChange={res?.quote?.USD?.percent_change_1h.toFixed(3) + '%'}
+              cap={res?.quote?.USD?.market_cap.toFixed(0)}
+              vol={res?.quote?.USD?.volume_24h.toFixed(0)}
+            />
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );

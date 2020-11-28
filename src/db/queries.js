@@ -28,6 +28,16 @@ CREATE TABLE IF NOT EXISTS "Favourites" (
 );
 `;
 
+export const createExchangesTable = `
+CREATE TABLE IF NOT EXISTS "Exchanges" (
+	"id"	INTEGER,
+	"exchange"	TEXT,
+	"public" TEXT,
+	"secret" TEXT,
+	PRIMARY KEY("Id" AUTOINCREMENT)
+);
+`;
+
 export const populateFavouritesTable = `
 INSERT INTO Favourites (exchange, base, quote, balance, notification)
 SELECT 'Binance', 'BTC', 'USD', '0', '0'
@@ -40,7 +50,12 @@ export const saveTransaction =
 export const saveFavourites =
   'INSERT INTO Favourites (exchange, base, quote, balance, notification) VALUES ';
 
+export const saveExchange =
+  'INSERT INTO Exchanges (exchange, public, secret) VALUES ';
+
 export const getFavourites = 'SELECT * FROM Favourites';
+
+export const getExchange = 'SELECT * FROM Exchanges';
 
 export const updateNotification = (value, base, quote) =>
   `UPDATE Favourites SET notification = '${value}' WHERE base = '${base}' AND quote = '${quote}';`;

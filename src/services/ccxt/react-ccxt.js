@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
-import {saveTransaction} from '../../db/methods';
+import {saveTransaction, saveExchange, getExchange} from '../../db/methods';
 
 export default class CCXT {
   constructor() {
@@ -146,6 +146,7 @@ export default class CCXT {
       this.certifiedEx[index].imp
         .fetchBalance({recvWindow: 59000})
         .then(balance => {
+          saveExchange(name, publickey, secretkey);
           this.getTradeData(name)
             .then(tradedata => {
               tradedata.forEach(resp => {
@@ -288,5 +289,46 @@ export default class CCXT {
     });
 
     return Promise.all(promises);
+  }
+
+  createOrder(exname, symbol, side, amount, price) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    getExchange(exname)
+      .then(resp => {
+        if (resp.length > 0) {
+          exchange.apiKey = resp[0].rows.item(1);
+          exchange.secret = resp[0].rows.item(2);
+        }
+      })
+      .catch(err => console.log(err));
+
+    let type = 'market';
+    if (!exchange.hasCreateMarketOrder) {
+      type = 'limit';
+    }
+    return new Promise((resolve, reject) => {
+      if (exchange && exchange.checkRequiredCredentials()) {
+        if (exchange.hasCreateOrder) {
+          exchange
+            .createOrder(
+              symbol.toUpperCase(),
+              type,
+              side.toLowerCase(),
+              amount,
+              price,
+            )
+            .then(x => {
+              resolve(`${side.toUpperCase()} Order successfully placed`);
+            })
+            .catch(err => {
+              reject('Something Went Wrong');
+            });
+        } else {
+          reject('Exchange Not Supported');
+        }
+      } else {
+        reject('No Api Keys Founded');
+      }
+    });
   }
 }
