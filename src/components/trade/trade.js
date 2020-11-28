@@ -2,7 +2,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import {Button, Input, Text} from 'galio-framework';
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View,Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
@@ -10,6 +10,7 @@ import * as Actions from '../../store/actions';
 import LinearGradient from 'react-native-linear-gradient';
 import {transactionStyles} from '../transaction/add-transaction.style';
 import {styles} from './trade.style';
+import CCXT from '../../services/ccxt/react-ccxt';
 
 export default function TradingScreen({navigation, route}) {
   const isFocused = useIsFocused();
@@ -20,14 +21,23 @@ export default function TradingScreen({navigation, route}) {
   ]);
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
-  const [exchange, setExchange] = useState('');
-  const [base, setBase] = useState('');
-  const [quote, setQuote] = useState('');
+  const [exchange, setExchange] = useState('Binance');
+  const [base, setBase] = useState('BTC');
+  const [quote, setQuote] = useState('ETH');
   const [price, setPrice] = useState(0);
   const [side, setSide] = useState('Buy');
   const [quantity, setQuantity] = useState(0);
   const [btnDisable, setBtnDisable] = useState(true);
   const [total, setTotal] = useState(0);
+
+  const initiateOrder = () => {
+    const ccxt = new CCXT();
+    ccxt.createOrder(exchange,base+'/'+quote,side,quantity,price).then(x => {
+      Alert.alert('Success',String(x));
+    }).catch(err => {
+      Alert.alert('Error',String(err));
+    })
+  }
 
   const changeTitle = title => {
     return dispatch(Actions.Header({title: title}));
@@ -156,7 +166,9 @@ export default function TradingScreen({navigation, route}) {
             round
             color="transparent"
             style={sharedStyles.borderless}
-            disabled={btnDisable}>
+            //disabled={btnDisable}
+            onPress={() => {initiateOrder()}}
+            >
             <Text color={COLOR.WHITE} h5 bold>
               {`${side} ${base}`}
             </Text>
