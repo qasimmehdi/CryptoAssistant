@@ -7,7 +7,7 @@ import {sharedStyles} from '../shared/shared.style';
 export default function Sentiment() {
   return (
     <View style={sharedStyles.body}>
-      <Text color={COLOR.WHITE}>Sentiments</Text>
+      <Text color={COLOR.WHITE}>Comming Soon</Text>
     </View>
   );
 }

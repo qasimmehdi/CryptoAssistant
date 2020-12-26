@@ -24,7 +24,7 @@ function Dashboard({navigation}) {
   const [balance] = useState('0');
   const [coinsData, setCoinsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const onClickCoin = coin => {
     return dispatch(Actions.setSelectedCoin({base: coin, quote: 'USD'}));
@@ -33,9 +33,10 @@ function Dashboard({navigation}) {
     return dispatch(Actions.Header({title: title}));
   };
 
-  function updateTable(data) {
-    console.log(data);
-    let tempCoinsData = coinsData;
+  function updateTable(data, tempArray) {
+    console.log('updateTable', data);
+    console.log('updateTable coinsData', tempArray);
+    let tempCoinsData = tempArray;
     for (let i = 0; i < tempCoinsData.length; i++) {
       let pair = `${tempCoinsData[i].name}-USD`;
       console.log(pair);
@@ -46,7 +47,7 @@ function Dashboard({navigation}) {
         '+0,0.0[0000000]',
       );
     }
-    console.log(tempCoinsData);
+    console.log('updateTable', tempCoinsData);
     return tempCoinsData;
   }
 
@@ -57,7 +58,7 @@ function Dashboard({navigation}) {
     }
   }, [isFocused]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (isFocused) {
       let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
       console.log(favPairs);
@@ -73,7 +74,7 @@ function Dashboard({navigation}) {
           setIsLoading(false);
         });
     }
-  }, [coinsData.length]);
+  }, [coinsData.length]); */
 
   useEffect(() => {
     if (isFocused) {
@@ -100,17 +101,19 @@ function Dashboard({navigation}) {
               });
             }
           }
+          console.log('tempArray', tempArray);
+          setCoinsData([...tempArray]);
           let favPairs = tempArray.map(i => `${i.name}/${i.quote}`);
           ccxt
             .coinDetails(favPairs)
-            .then(resp => {
-              setCoinsData([...updateTable(resp)]);
+            .then(resp2 => {
+              console.log('resp', resp2);
+              setCoinsData([...updateTable(resp2, tempArray)]);
             })
             .catch(err => console.log(err))
             .finally(() => {
               setIsLoading(false);
             });
-          setCoinsData([...tempArray]);
         })
         .catch(err => console.log(err));
     }
@@ -124,7 +127,7 @@ function Dashboard({navigation}) {
       .coinDetails(favPairs)
       .then(resp => {
         console.log('resp', resp);
-        setCoinsData([...updateTable(resp)]);
+        setCoinsData([...updateTable(resp, coinsData)]);
       })
       .catch(err => console.log(err))
       .finally(() => setRefresh(false));

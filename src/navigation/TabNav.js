@@ -29,23 +29,14 @@ export default function TabNavigation({navigation}) {
           fontSize: 12,
           marginBottom: 10,
         },
+        iconStyle: {
+          //marginTop: 10,
+          marginBottom: -25,
+        },
         style: {
           borderTopWidth: 0,
         },
-      }}
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          if (route.name === 'Add Coin') {
-            return (
-              <AntDesignIcon
-                name={focused ? 'pluscircle' : 'pluscircle'}
-                size={size}
-                color={color}
-              />
-            );
-          }
-        },
-      })}>
+      }}>
       <Tab.Screen
         name="Dashboard"
         component={DrawerNav}
@@ -56,7 +47,16 @@ export default function TabNavigation({navigation}) {
         component={TradingScreen}
         options={{title: 'Trade'}}
       />
-      <Tab.Screen name="Add Coin" component={AddCoin} options={{title: ''}} />
+      <Tab.Screen
+        name="Add Coin"
+        component={AddCoin}
+        options={{
+          title: '',
+          tabBarIcon: ({color}) => (
+            <AntDesignIcon name={'pluscircle'} size={30} color={COLOR.WHITE} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="News"
         component={NewsScreen}
