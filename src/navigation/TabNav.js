@@ -8,6 +8,7 @@ import NewsScreen from '../components/news/news';
 import {COLOR} from '../components/shared/colors';
 import TradingScreen from '../components/trade/trade';
 import DrawerNav from './DrawerNav';
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,20 @@ export default function TabNavigation({navigation}) {
         style: {
           borderTopWidth: 0,
         },
-      }}>
+      }}
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          if (route.name === 'Add Coin') {
+            return (
+              <AntDesignIcon
+                name={focused ? 'pluscircle' : 'pluscircle'}
+                size={size}
+                color={color}
+              />
+            );
+          }
+        },
+      })}>
       <Tab.Screen
         name="Dashboard"
         component={DrawerNav}
@@ -42,7 +56,7 @@ export default function TabNavigation({navigation}) {
         component={TradingScreen}
         options={{title: 'Trade'}}
       />
-      <Tab.Screen name="Add Coin" component={AddCoin} options={{title: '+'}} />
+      <Tab.Screen name="Add Coin" component={AddCoin} options={{title: ''}} />
       <Tab.Screen
         name="News"
         component={NewsScreen}

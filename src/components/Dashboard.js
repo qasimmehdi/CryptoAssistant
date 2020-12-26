@@ -16,6 +16,7 @@ import {dashboardStyles} from '../styles/dashboardStyles';
 import Row from './dashboard.row';
 import {COLOR} from './shared/colors';
 import Hr from './shared/hr';
+import Loading from './SplashScreen';
 
 function Dashboard({navigation}) {
   const isFocused = useIsFocused();
@@ -23,6 +24,7 @@ function Dashboard({navigation}) {
   const [balance] = useState('0');
   const [coinsData, setCoinsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const onClickCoin = coin => {
     return dispatch(Actions.setSelectedCoin({base: coin, quote: 'USD'}));
@@ -56,43 +58,62 @@ function Dashboard({navigation}) {
   }, [isFocused]);
 
   useEffect(() => {
-    let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
-    console.log(favPairs);
-    ccxt
-      .coinDetails(favPairs)
-      .then(resp => {
-        console.log('resp', resp);
-        setCoinsData([...updateTable(resp)]);
-      })
-      .catch(err => console.log(err));
+    if (isFocused) {
+      let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
+      console.log(favPairs);
+      setIsLoading(true);
+      ccxt
+        .coinDetails(favPairs)
+        .then(resp => {
+          console.log('resp', resp);
+          setCoinsData([...updateTable(resp)]);
+        })
+        .catch(err => console.log(err))
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   }, [coinsData.length]);
 
   useEffect(() => {
-    let tempArray = [];
-    getFavourites()
-      .then(resp => {
-        const len = resp.length;
-        console.log('dashboard get favourites', resp);
-        for (let i = 0; i < len; i++) {
-          for (let j = 0; j < resp[i].rows.length; j++) {
-            let item = resp[i].rows.item(j);
-            console.log(item);
-            tempArray.push({
-              name: item.base,
-              quote: item.quote,
-              price: '0',
-              priceChange: '0',
-              changePercentage: '0',
-              holdingConverted: '0',
-              holdingUnits: item.balance,
-              notification: item.notification === '1' ? true : false,
-              balance: parseFloat(item.balance) > 0 ? true : false,
-            });
+    if (isFocused) {
+      setIsLoading(true);
+      let tempArray = [];
+      getFavourites()
+        .then(resp => {
+          const len = resp.length;
+          console.log('dashboard get favourites', resp);
+          for (let i = 0; i < len; i++) {
+            for (let j = 0; j < resp[i].rows.length; j++) {
+              let item = resp[i].rows.item(j);
+              console.log(item);
+              tempArray.push({
+                name: item.base,
+                quote: item.quote,
+                price: '0',
+                priceChange: '0',
+                changePercentage: '0',
+                holdingConverted: '0',
+                holdingUnits: item.balance,
+                notification: item.notification === '1' ? true : false,
+                balance: parseFloat(item.balance) > 0 ? true : false,
+              });
+            }
           }
-        }
-        setCoinsData([...tempArray]);
-      })
-      .catch(err => console.log(err));
+          let favPairs = tempArray.map(i => `${i.name}/${i.quote}`);
+          ccxt
+            .coinDetails(favPairs)
+            .then(resp => {
+              setCoinsData([...updateTable(resp)]);
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+              setIsLoading(false);
+            });
+          setCoinsData([...tempArray]);
+        })
+        .catch(err => console.log(err));
+    }
   }, [isFocused]);
 
   const onRefresh = React.useCallback(() => {
@@ -107,7 +128,7 @@ function Dashboard({navigation}) {
       })
       .catch(err => console.log(err))
       .finally(() => setRefresh(false));
-  }, []);
+  }, [coinsData]);
 
   return (
     <View style={dashboardStyles.body}>
@@ -130,7 +151,10 @@ function Dashboard({navigation}) {
             </Text>
           </View>
           <View style={dashboardStyles.rightView}>
-            <Text color={COLOR.WHITE} h6 style={dashboardStyles.topCardText}>
+            <Text
+              color={COLOR.WHITE}
+              h6
+              style={{...dashboardStyles.topCardText, textAlign: 'right'}}>
               24HR
             </Text>
           </View>
@@ -177,26 +201,30 @@ function Dashboard({navigation}) {
           refreshControl={
             <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
           }>
-          {coinsData.map(coin => (
-            <TouchableOpacity
-              key={coin.name}
-              onPress={() => {
-                onClickCoin(coin.name);
-                navigation.navigate('CoinPageTabNav');
-              }}>
-              <Row
-                name={coin.name}
-                price={coin.price}
-                priceChange={coin.priceChange}
-                holdingConverted={coin.holdingConverted}
-                holdingUnits={coin.holdingUnits}
-                notification={coin.notification}
-                balance={coin.balance}
-                navigation={navigation}
-                quote={coin.quote}
-              />
-            </TouchableOpacity>
-          ))}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            coinsData.map(coin => (
+              <TouchableOpacity
+                key={coin.name}
+                onPress={() => {
+                  onClickCoin(coin.name);
+                  navigation.navigate('CoinPageTabNav');
+                }}>
+                <Row
+                  name={coin.name}
+                  price={coin.price}
+                  priceChange={coin.priceChange}
+                  holdingConverted={coin.holdingConverted}
+                  holdingUnits={coin.holdingUnits}
+                  notification={coin.notification}
+                  balance={coin.balance}
+                  navigation={navigation}
+                  quote={coin.quote}
+                />
+              </TouchableOpacity>
+            ))
+          )}
         </ScrollView>
       </View>
     </View>

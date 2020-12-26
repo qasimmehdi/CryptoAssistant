@@ -6,24 +6,21 @@ export const dashboardStyles = StyleSheet.create({
     marginLeft: 20,
   },
   topCard: {
-    paddingBottom: 10,
-    flex: 1,
+    height: 'auto',
     flexDirection: 'row',
-    justifyContent: 'center',
   },
   linearGradient: {
     borderRadius: 15,
     marginLeft: 10,
     marginRight: 10,
-    flex: 1,
+    height: 'auto',
   },
   leftView: {
-    flex: 1,
+    flex: 0,
   },
   rightView: {
-    flex: 1,
-    flexDirection: 'row-reverse',
     marginLeft: 20,
+    width: '50%',
   },
   body: {
     flex: 1,

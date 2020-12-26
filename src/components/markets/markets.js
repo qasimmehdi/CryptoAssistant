@@ -15,6 +15,7 @@ import {ScrollView} from 'react-native';
 import MarketRow from './market-rows';
 import {TouchableOpacity} from 'react-native';
 import {getCoins} from '../../services/marketService';
+import Loading from '../SplashScreen';
 
 const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   const paddingToBottom = 0;
@@ -48,10 +49,12 @@ export default function MarketScreen({navigation}) {
     getCoins(limit)
       .then(result => {
         setcoins(result.data);
-        setisCalling(false);
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        setisCalling(false);
       });
   }, [limit]);
   return (
@@ -91,22 +94,28 @@ export default function MarketScreen({navigation}) {
           }
         }}
         style={{flex: 1}}>
-        {coins.map((res, i) => (
-          <TouchableOpacity
-            key={i}
-            onPress={() => {
-              onClickCoin(res?.symbol);
-              navigation.navigate('CoinPageTabNav');
-            }}>
-            <MarketRow
-              name={res?.symbol}
-              price={'$' + res?.quote?.USD?.price.toFixed(0)}
-              priceChange={res?.quote?.USD?.percent_change_1h.toFixed(3) + '%'}
-              cap={res?.quote?.USD?.market_cap.toFixed(0)}
-              vol={res?.quote?.USD?.volume_24h.toFixed(0)}
-            />
-          </TouchableOpacity>
-        ))}
+        {isCalling ? (
+          <Loading />
+        ) : (
+          coins.map((res, i) => (
+            <TouchableOpacity
+              key={i}
+              onPress={() => {
+                onClickCoin(res?.symbol);
+                navigation.navigate('CoinPageTabNav');
+              }}>
+              <MarketRow
+                name={res?.symbol}
+                price={'$' + res?.quote?.USD?.price.toFixed(0)}
+                priceChange={
+                  res?.quote?.USD?.percent_change_1h.toFixed(3) + '%'
+                }
+                cap={res?.quote?.USD?.market_cap.toFixed(0)}
+                vol={res?.quote?.USD?.volume_24h.toFixed(0)}
+              />
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
     </View>
   );

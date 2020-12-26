@@ -6,6 +6,7 @@ import iconImages from '../../assets/coinIcons/names';
 import {rowStyles} from '../../styles/rowStyles';
 import {COLOR} from '../shared/colors';
 import Hr from '../shared/hr';
+import numeral from 'numeral';
 
 export default function MarketRow(props) {
   return (
@@ -26,7 +27,7 @@ export default function MarketRow(props) {
         </View>
         <View style={rowStyles.price}>
           <Text color={COLOR.WHITE} size={12} bold style={{textAlign: 'right'}}>
-            {props.price}
+            {numeral(props.price).format('$0,0.[00]')}
           </Text>
           <Text
             color={props.priceChange.includes('-') ? COLOR.RED : COLOR.GREEN}
@@ -37,10 +38,10 @@ export default function MarketRow(props) {
         </View>
         <View style={rowStyles.price}>
           <Text color={COLOR.WHITE} size={12} bold style={{textAlign: 'right'}}>
-            {props.cap}
+            {numeral(props.cap).format('$0,0.[00]')}
           </Text>
           <Text color={COLOR.APP_GREY} size={11} style={{textAlign: 'right'}}>
-            {props.vol}
+            {numeral(props.vol).format('$0,0.[00]')}
           </Text>
         </View>
       </View>

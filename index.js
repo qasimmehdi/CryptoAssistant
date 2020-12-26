@@ -13,7 +13,7 @@ global.http = http;
 
 const store = createStore(Reducer);
 
-axios.defaults.baseURL = 'https://blooming-atoll-97481.herokuapp.com';
+axios.defaults.baseURL = 'https://crypto-api-fyp.herokuapp.com/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const CryptoAssistant = () => (

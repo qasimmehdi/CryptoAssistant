@@ -17,6 +17,7 @@ export const loginUser = (user, pass) => {
         //let token;
         (async () => await SInfoSet('auth_token', response.data.token))();
         (async () => await SInfoGet('auth_token'))();
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
         return true;
       }
     })

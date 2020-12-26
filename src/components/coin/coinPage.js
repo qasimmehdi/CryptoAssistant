@@ -10,6 +10,7 @@ import {LineChart} from 'react-native-chart-kit';
 import {useSelector} from 'react-redux';
 import CCXT from '../../services/ccxt/react-ccxt';
 import {COLOR} from '../shared/colors';
+import Loading from '../SplashScreen';
 import {coinPageStyles} from './coinPageStyle';
 
 export default function coinPage({navigation}) {
@@ -18,11 +19,12 @@ export default function coinPage({navigation}) {
   const [data, setData] = useState([1]);
   const [labels, setLabels] = useState([]);
   const [price, setPrice] = useState('0');
+  const [isLoading, setIsLoading] = useState(false);
   let labelRadix;
   useEffect(() => {
     navigation.setOptions({title: coinPageTitle});
     let isMounted = true;
-
+    setIsLoading(true);
     ccxt
       .Candles(`${coinPageTitle}/USD`, '1d')
       .then(resp => {
@@ -43,7 +45,10 @@ export default function coinPage({navigation}) {
           setPrice(tempData[tempData.length - 1]);
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
 
     return () => {
       isMounted = false;
@@ -53,42 +58,46 @@ export default function coinPage({navigation}) {
   return (
     <View style={coinPageStyles.body}>
       <Text color={COLOR.WHITE} h3 bold style={{flex: 1, margin: 10}}>
-        {numeral(price).format('$0,0.0[0000000]')}
+        {numeral(price).format('$0,0.[00]')}
       </Text>
       <View style={{flex: 6}}>
-        <LineChart
-          data={{
-            labels: [...labels],
-            datasets: [
-              {
-                data: [...data],
-              },
-            ],
-          }}
-          width={Dimensions.get('window').width} // from react-native
-          height={220}
-          yAxisLabel="$"
-          yAxisInterval={1} // optional, defaults to 1
-          chartConfig={{
-            backgroundGradientFrom: COLOR.BG,
-            backgroundGradientTo: COLOR.BG,
-            backgroundColor: COLOR.BG,
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            /* propsForBackgroundLines: {
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <LineChart
+            data={{
+              labels: [...labels],
+              datasets: [
+                {
+                  data: [...data],
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            yAxisLabel="$"
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundGradientFrom: COLOR.BG,
+              backgroundGradientTo: COLOR.BG,
+              backgroundColor: COLOR.BG,
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              /* propsForBackgroundLines: {
                             strokeWidth: 0
                         }, */
-            style: {
-              borderRadius: 16,
-              backgroundColor: COLOR.BG,
-            },
-            strokeWidth: 2,
-          }}
-          withShadow={false}
-          withInnerLines={false}
-          withDots={false}
-        />
+              style: {
+                borderRadius: 16,
+                backgroundColor: COLOR.BG,
+              },
+              strokeWidth: 2,
+            }}
+            withShadow={false}
+            withInnerLines={false}
+            withDots={false}
+          />
+        )}
       </View>
     </View>
   );
