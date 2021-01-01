@@ -23,4 +23,10 @@ export const sharedStyles = StyleSheet.create({
     borderLeftWidth: 0,
     borderRightWidth: 0,
   },
+  borderDanger: {
+    borderColor: COLOR.RED,
+  },
+  borderOk: {
+    borderColor: COLOR.APP_GREY,
+  },
 });

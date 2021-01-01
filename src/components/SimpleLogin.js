@@ -1,14 +1,14 @@
+import {CommonActions} from '@react-navigation/native';
 import {Button, Text} from 'galio-framework';
-import CustomInput from './shared/custom-input';
 import React, {useEffect, useState} from 'react';
 import {Alert, TouchableHighlight, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {loginUser} from '../services/auth';
 import {loginStyles} from '../styles/loginStyles';
-import Loading from './SplashScreen';
-import {CommonActions} from '@react-navigation/native';
 import {COLOR} from './shared/colors';
+import CustomInput from './shared/NewCustomInput';
 import {regexes} from './shared/regexes';
+import Loading from './SplashScreen';
 
 function LoginForm({navigation}) {
   const [user, onChangeUser] = useState('');
@@ -19,27 +19,18 @@ function LoginForm({navigation}) {
     COLOR.DISABLED,
     COLOR.DISABLED,
   ]);
+  const [userV, setUserV] = useState(false);
+  const [passV, setPassV] = useState(false);
 
-  /* useEffect(() => {
-    if (validPass == 'true' && validUser == 'true') {
-      console.log('valid');
-      setDisableSignin(false);
-      setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
-    }
-    else {
-      setDisableSignin(true);
-      setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
-    }
-  }, []); */
-  const performValidation = everythingOK => {
-    if (everythingOK) {
+  useEffect(() => {
+    if (userV && passV) {
       setDisableSignin(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
     } else {
       setDisableSignin(true);
       setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
     }
-  };
+  }, [userV, passV]);
 
   return (
     <View style={loginStyles.body}>
@@ -56,8 +47,13 @@ function LoginForm({navigation}) {
                 placeholderTextColor={COLOR.APP_GREY}
                 value={user}
                 onChangeText={onChangeUser}
-                pattern={[regexes.emailOruser]}
-                onValidation={isValid => performValidation(isValid)}
+                validations={[
+                  {
+                    regex: regexes.required,
+                    errMsg: 'Required',
+                  },
+                ]}
+                onValidation={isValid => setUserV(isValid)}
                 color={COLOR.WHITE}
               />
               <CustomInput
@@ -70,8 +66,13 @@ function LoginForm({navigation}) {
                 color={COLOR.WHITE}
                 value={pass}
                 onChangeText={onChangePass}
-                pattern={[regexes.password]}
-                onValidation={isValid => performValidation(isValid)}
+                validations={[
+                  {
+                    regex: regexes.required,
+                    errMsg: 'Required',
+                  },
+                ]}
+                onValidation={isValid => setPassV(isValid)}
               />
             </View>
             <TouchableHighlight
