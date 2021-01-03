@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {CommonActions} from '@react-navigation/native';
 import {Button, Input, Text} from 'galio-framework';
 import React, {useEffect, useState} from 'react';
@@ -41,7 +42,7 @@ function ForgetEnterEmail({navigation}) {
             <CustomInput
               style={loginStyles.input}
               type="email-address"
-              placeholder="Email address or username"
+              placeholder="Email address"
               placeholderTextColor={COLOR.APP_GREY}
               value={email}
               onChangeText={setEmail}
@@ -70,15 +71,20 @@ function ForgetEnterEmail({navigation}) {
                 color="transparent"
                 style={loginStyles.borderless}
                 disabled={disableSigin}
-                onPress={async () => {
+                onPress={() => {
                   setIsLoading(true);
-                  if (await forgetGetCode(email)) {
-                    Alert.alert('Code Sent Successfully');
-                    navigation.navigate('ResetPassword');
-                  } else {
-                    Alert.alert('Email does not exist');
-                  }
-                  setIsLoading(false);
+                  forgetGetCode(email)
+                    .then(res => {
+                      console.log(res);
+                      Alert.alert('Code Sent Successfully');
+                      navigation.navigate('ResetPassword');
+                    })
+                    .catch(err => {
+                      Alert.alert(
+                        err?.response?.data?.errorMsg ?? 'Something went wrong',
+                      );
+                    })
+                    .finally(() => setIsLoading(false));
                 }}>
                 <Text color={COLOR.WHITE} h5 bold>
                   Get Code
@@ -96,68 +102,146 @@ function ResetPassword({navigation}) {
   const [code, setCode] = useState('');
   const [pass, setPass] = useState('');
   const [pass2, setPass2] = useState('');
+  const [gradientColors, setGradientColors] = useState([
+    COLOR.DISABLED,
+    COLOR.DISABLED,
+  ]);
+  const [disableSigin, setDisableSignin] = useState(true);
+  const [passV, setPassV] = useState(false);
+  const [pass2V, setPass2V] = useState(false);
+  const [codeV, setCodeV] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [matchError, setMatchError] = useState(false);
+
+  useEffect(() => {
+    if (pass2V && passV && codeV) {
+      setDisableSignin(false);
+      setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
+    } else {
+      setDisableSignin(true);
+      setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
+    }
+  }, [pass2V, passV, codeV]);
+
+  useEffect(() => {
+    if (pass.length > 0 && pass2.length > 0 && pass === pass2) {
+      setMatchError(false);
+      setDisableSignin(false);
+      setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
+    } else if (pass.length > 0 && pass2.length > 0) {
+      setMatchError(true);
+      setDisableSignin(true);
+      setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
+    }
+  }, [pass, pass2]);
+
   return (
     <View style={registerStyles.body}>
-      <View style={registerStyles.inputContainer}>
-        <Input
-          style={loginStyles.input}
-          type="number-pad"
-          placeholder="Code"
-          placeholderTextColor={COLOR.APP_GREY}
-          value={code}
-          onChangeText={setCode}
-          color={COLOR.WHITE}
-        />
-        <Input
-          style={loginStyles.input}
-          password
-          viewPass
-          placeholder="Password"
-          placeholderTextColor={COLOR.APP_GREY}
-          value={pass}
-          onChangeText={setPass}
-          color={COLOR.WHITE}
-        />
-        <Input
-          style={loginStyles.input}
-          password
-          viewPass
-          placeholder="Re-enter Password"
-          placeholderTextColor={COLOR.APP_GREY}
-          value={pass2}
-          onChangeText={setPass2}
-          color={COLOR.WHITE}
-        />
-      </View>
-      <View style={registerStyles.NextButton}>
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-          colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-          style={loginStyles.linearGradient}>
-          <Button
-            round
-            color="transparent"
-            style={loginStyles.borderless}
-            onPress={async () => {
-              if (await ModifyPassword(code, pass2)) {
-                Alert.alert('Password Reset Successfully');
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [{name: 'Sign In'}],
-                  }),
-                );
-              } else {
-                Alert.alert('Something went wrong');
-              }
-            }}>
-            <Text color={COLOR.WHITE} h5 bold>
-              Save
-            </Text>
-          </Button>
-        </LinearGradient>
-      </View>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <React.Fragment>
+          <View style={registerStyles.inputContainer}>
+            <CustomInput
+              style={loginStyles.input}
+              placeholder="Code"
+              placeholderTextColor={COLOR.APP_GREY}
+              type="number-pad"
+              color={COLOR.WHITE}
+              value={code}
+              onChangeText={setCode}
+              validations={[
+                {
+                  regex: regexes.otp,
+                  errMsg: 'Min 6 characters are required',
+                },
+              ]}
+              onValidation={isValid => setCodeV(isValid)}
+            />
+            <CustomInput
+              style={loginStyles.input}
+              placeholder="Password"
+              placeholderTextColor={COLOR.APP_GREY}
+              password
+              viewPass
+              iconColor={COLOR.APP_GREY}
+              color={COLOR.WHITE}
+              value={pass}
+              onChangeText={setPass}
+              validations={[
+                {
+                  regex: regexes.required,
+                  errMsg: 'Required',
+                },
+                {
+                  regex: regexes.password,
+                  errMsg: 'Min 8 characters are required',
+                },
+              ]}
+              onValidation={isValid => setPassV(isValid)}
+            />
+            <CustomInput
+              style={loginStyles.input}
+              placeholder="Re-enter password"
+              placeholderTextColor={COLOR.APP_GREY}
+              password
+              viewPass
+              iconColor={COLOR.APP_GREY}
+              color={COLOR.WHITE}
+              value={pass2}
+              onChangeText={setPass2}
+              validations={[
+                {
+                  regex: regexes.required,
+                  errMsg: 'Required',
+                },
+                {
+                  regex: regexes.password,
+                  errMsg: 'Min 8 characters are required',
+                },
+              ]}
+              onValidation={isValid => setPass2V(isValid)}
+            />
+            {matchError ? (
+              <Text size={10} color={COLOR.RED}>
+                Passwords donot match
+              </Text>
+            ) : null}
+          </View>
+          <View style={registerStyles.NextButton}>
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={gradientColors}
+              style={loginStyles.linearGradient}>
+              <Button
+                round
+                color="transparent"
+                style={loginStyles.borderless}
+                disabled={disableSigin}
+                onPress={async () => {
+                  setIsLoading(true);
+                  if (await ModifyPassword(code, pass2)) {
+                    Alert.alert('Password Reset Successfully');
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 1,
+                        routes: [{name: 'SigninOrRegister'}, {name: 'Sign In'}],
+                      }),
+                    );
+                  } else {
+                    Alert.alert('Something went wrong');
+                  }
+                  setIsLoading(false);
+                }}>
+                <Text color={COLOR.WHITE} h5 bold>
+                  Save
+                </Text>
+              </Button>
+            </LinearGradient>
+          </View>
+        </React.Fragment>
+      )}
     </View>
   );
 }

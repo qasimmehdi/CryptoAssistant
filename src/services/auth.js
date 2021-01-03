@@ -17,7 +17,8 @@ export const loginUser = (user, pass) => {
         //let token;
         (async () => await SInfoSet('auth_token', response.data.token))();
         (async () => await SInfoGet('auth_token'))();
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+        axios.defaults.headers.common['Authorization'] =
+          'Bearer ' + response.data.token;
         return true;
       }
     })
@@ -55,18 +56,7 @@ export const forgetGetCode = email => {
     email: email,
   };
   console.log(data);
-  return axios
-    .post('/forget', data)
-    .then(function(response) {
-      if (response.status == 200) {
-        console.log(response);
-        return true;
-      }
-    })
-    .catch(function(error) {
-      console.log(error);
-      return false;
-    });
+  return axios.post('/forget', data);
 };
 
 export const ModifyPassword = (code, pass) => {
@@ -84,9 +74,9 @@ export const ModifyPassword = (code, pass) => {
         console.log(data2);
         return axios
           .put('/forget/save', data2)
-          .then(function(response) {
-            if (response.status == 200) {
-              console.log('reset', response);
+          .then(function(response2) {
+            if (response2.status == 200) {
+              console.log('reset', response2);
               return true;
             }
           })

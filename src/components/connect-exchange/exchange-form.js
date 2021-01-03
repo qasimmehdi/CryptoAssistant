@@ -7,6 +7,7 @@ import {sharedStyles} from '../shared/shared.style';
 import {styles} from './connect-exchange.style';
 import CCXT from '../../services/ccxt/react-ccxt';
 import Loading from '../SplashScreen';
+import {CommonActions} from '@react-navigation/native';
 
 export default function ConnectExchange({route, navigation}) {
   const {name} = route.params;
@@ -23,6 +24,12 @@ export default function ConnectExchange({route, navigation}) {
       .then(x => {
         Alert.alert('Success', 'Exchange added successfully');
         setdisbutton(false);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{name: 'Dashboard'}],
+          }),
+        );
       })
       .catch(() => {
         Alert.alert('Error', 'Invalid Api Keys');

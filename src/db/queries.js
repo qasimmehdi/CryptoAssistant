@@ -1,5 +1,3 @@
-/* eslint-disable quotes */
-/* eslint-disable prettier/prettier */
 export const createTransactionsTables = `CREATE TABLE IF NOT EXISTS "Transactions" (
 	"id"	INTEGER NOT NULL,
 	"exchange"	TEXT,
@@ -56,6 +54,8 @@ export const saveExchange =
 export const getFavourites = 'SELECT * FROM Favourites';
 
 export const getExchange = 'SELECT * FROM Exchanges';
+
+export const getAllTransaction = 'SELECT * FROM Transactions where base =';
 
 export const updateNotification = (value, base, quote) =>
   `UPDATE Favourites SET notification = '${value}' WHERE base = '${base}' AND quote = '${quote}';`;

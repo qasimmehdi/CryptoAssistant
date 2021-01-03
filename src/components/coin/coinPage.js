@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import {Text} from 'galio-framework';
+import {Button, Text} from 'galio-framework';
 import moment from 'moment';
 import numeral from 'numeral';
 import React, {useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
+import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import CCXT from '../../services/ccxt/react-ccxt';
 import {COLOR} from '../shared/colors';
+import {sharedStyles} from '../shared/shared.style';
 import Loading from '../SplashScreen';
 import {coinPageStyles} from './coinPageStyle';
 
@@ -98,6 +100,19 @@ export default function coinPage({navigation}) {
             withDots={false}
           />
         )}
+      </View>
+      <View style={{padding: 10, flex: 1}}>
+        <LinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+          style={sharedStyles.linearGradient}>
+          <Button round color="transparent" style={sharedStyles.borderless}>
+            <Text color={COLOR.WHITE} h5 bold>
+              AI Coin chart predictor
+            </Text>
+          </Button>
+        </LinearGradient>
       </View>
     </View>
   );

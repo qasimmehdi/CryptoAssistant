@@ -23,6 +23,7 @@ import Settings from '../components/settings/Settings';
 import ConnectExchange from '../components/connect-exchange/exchange-form';
 import ExchangeList from '../components/connect-exchange/exchange-list';
 import CoinPageTabNav from '../components/coin/coinTabNav';
+import SelectExchangeList from '../components/trade/exchanges';
 
 const Stack = createStackNavigator();
 
@@ -107,6 +108,7 @@ export default function StackNav() {
 
       <Stack.Screen name="ConnectExchange" component={ConnectExchange} />
       <Stack.Screen name="ExchangeList" component={ExchangeList} />
+      <Stack.Screen name="SelectExchangeList" component={SelectExchangeList} />
     </Stack.Navigator>
   );
 }

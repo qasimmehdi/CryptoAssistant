@@ -17,7 +17,6 @@ export default function CustomInput(props) {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      console.log('running validate');
       if (!fresh) {
         validate(text);
       } else {

@@ -74,7 +74,7 @@ export function getFavourites() {
   });
 }
 
-export function saveExchange(exchange, publickey,secret) {
+export function saveExchange(exchange, publickey, secret) {
   SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
     const data = `('${exchange.toLowerCase()}', '${publickey}', '${secret}')`;
     DB.executeSql(queries.saveExchange + data)
@@ -86,7 +86,7 @@ export function saveExchange(exchange, publickey,secret) {
 export function getExchange(exname) {
   return new Promise((resolve, reject) => {
     SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-      const data = `where exchange = ${exname.toLowerCase()}`
+      const data = `where exchange = ${exname.toLowerCase()}`;
       DB.executeSql(queries.getExchange + data)
         .then(res => resolve(res))
         .catch(err => reject(err));
@@ -94,6 +94,15 @@ export function getExchange(exname) {
   });
 }
 
+export function getAllExchanges() {
+  return new Promise((resolve, reject) => {
+    SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+      DB.executeSql(queries.getExchange)
+        .then(res => resolve(res))
+        .catch(err => reject(err));
+    });
+  });
+}
 
 export function setNotification(value, base, quote) {
   return new Promise((resolve, reject) => {
@@ -102,6 +111,16 @@ export function setNotification(value, base, quote) {
         .then(res => {
           resolve(res);
         })
+        .catch(err => reject(err));
+    });
+  });
+}
+
+export function getAllTransactions(base) {
+  return new Promise((resolve, reject) => {
+    SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
+      DB.executeSql(`${queries.getAllTransaction} '${base}'`)
+        .then(res => resolve(res))
         .catch(err => reject(err));
     });
   });
