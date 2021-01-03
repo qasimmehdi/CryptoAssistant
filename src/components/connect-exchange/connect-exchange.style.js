@@ -23,4 +23,8 @@ export const styles = StyleSheet.create({
   inputForm: {
     marginTop: 10,
   },
+  waitText: {
+    flex: 1,
+    textAlign: 'center',
+  },
 });

@@ -40,11 +40,9 @@ function Dashboard({navigation}) {
     for (let i = 0; i < tempCoinsData.length; i++) {
       let pair = `${tempCoinsData[i].name}-USD`;
       console.log(pair);
-      tempCoinsData[i].price = numeral(data[pair].last).format(
-        '$0,0.0[0000000]',
-      );
+      tempCoinsData[i].price = numeral(data[pair].last).format('$0,0.0[0000]');
       tempCoinsData[i].priceChange = numeral(data[pair].change).format(
-        '+0,0.0[0000000]',
+        '+0,0.0[0000]',
       );
     }
     console.log('updateTable', tempCoinsData);
@@ -180,7 +178,7 @@ function Dashboard({navigation}) {
             style={dashboardStyles.theadPrice}>
             PRICE
           </Text>
-          <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" />
+          {/* <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" /> */}
           <Text
             color={COLOR.APP_GREY}
             size={12}
@@ -188,7 +186,7 @@ function Dashboard({navigation}) {
             style={dashboardStyles.theadHoldings}>
             HOLDINGS
           </Text>
-          <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" />
+          {/* <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" /> */}
 
           <Icon
             name="notifications"

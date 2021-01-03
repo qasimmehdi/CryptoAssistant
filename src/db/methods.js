@@ -86,7 +86,7 @@ export function saveExchange(exchange, publickey, secret) {
 export function getExchange(exname) {
   return new Promise((resolve, reject) => {
     SQLite.openDatabase({name: 'CryptoAssistant'}).then(DB => {
-      const data = `where exchange = ${exname.toLowerCase()}`;
+      const data = ` where exchange = '${exname.toLowerCase()}'`;
       DB.executeSql(queries.getExchange + data)
         .then(res => resolve(res))
         .catch(err => reject(err));

@@ -24,6 +24,7 @@ import ConnectExchange from '../components/connect-exchange/exchange-form';
 import ExchangeList from '../components/connect-exchange/exchange-list';
 import CoinPageTabNav from '../components/coin/coinTabNav';
 import SelectExchangeList from '../components/trade/exchanges';
+import AIPredictionChart from '../components/coin/AIPredictionChart';
 
 const Stack = createStackNavigator();
 
@@ -109,6 +110,11 @@ export default function StackNav() {
       <Stack.Screen name="ConnectExchange" component={ConnectExchange} />
       <Stack.Screen name="ExchangeList" component={ExchangeList} />
       <Stack.Screen name="SelectExchangeList" component={SelectExchangeList} />
+      <Stack.Screen
+        name="AIPredictionChart"
+        component={AIPredictionChart}
+        options={{title: 'AI Coin Predictor'}}
+      />
     </Stack.Navigator>
   );
 }

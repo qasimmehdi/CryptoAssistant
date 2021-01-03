@@ -40,7 +40,7 @@ export default function coinPage({navigation}) {
             j % labelRadix === 0 ? moment(i[0]).format('HH:mm') : '',
           );
         });
-        console.log(tempData);
+        console.log(tempData.join(' '));
         if (isMounted) {
           setData([...tempData]);
           setLabels([...tempLabels]);
@@ -60,7 +60,7 @@ export default function coinPage({navigation}) {
   return (
     <View style={coinPageStyles.body}>
       <Text color={COLOR.WHITE} h3 bold style={{flex: 1, margin: 10}}>
-        {numeral(price).format('$0,0.[00]')}
+        {!isLoading && numeral(price).format('$0,0.[00]')}
       </Text>
       <View style={{flex: 6}}>
         {isLoading ? (
@@ -107,7 +107,11 @@ export default function coinPage({navigation}) {
           end={{x: 1, y: 0}}
           colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
           style={sharedStyles.linearGradient}>
-          <Button round color="transparent" style={sharedStyles.borderless}>
+          <Button
+            round
+            color="transparent"
+            style={sharedStyles.borderless}
+            onPress={() => navigation.navigate('AIPredictionChart')}>
             <Text color={COLOR.WHITE} h5 bold>
               AI Coin chart predictor
             </Text>

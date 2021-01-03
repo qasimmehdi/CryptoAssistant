@@ -11,7 +11,7 @@ export const rowStyles = StyleSheet.create({
   },
   price: {
     flex: 2,
-    marginRight: 12,
+    marginRight: 5,
   },
   holding: {
     flex: 2,

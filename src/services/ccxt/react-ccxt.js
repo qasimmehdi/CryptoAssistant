@@ -156,12 +156,10 @@ export default class CCXT {
                     x?.symbol?.split('/')[0],
                     x?.symbol?.split('/')[1],
                     x?.price,
-                    x?.amount,
-                    x?.cost,
                     x?.side,
-                    x?.info?.qty,
-                    x?.fee?.cost,
-                    x?.datetime,
+                    x?.amount,
+                    x?.fee?.cost ?? '',
+                    x?.timestamp,
                     x?.timestamp,
                     'N/A',
                   );
@@ -296,8 +294,9 @@ export default class CCXT {
     getExchange(exname)
       .then(resp => {
         if (resp.length > 0) {
-          exchange.apiKey = resp[0].rows.item(1);
-          exchange.secret = resp[0].rows.item(2);
+          exchange.apiKey = resp[0].rows.item(0).public;
+          exchange.secret = resp[0].rows.item(0).secret;
+          console.log(exchange.apiKey, exchange.secret);
         }
       })
       .catch(err => console.log(err));

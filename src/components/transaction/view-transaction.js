@@ -8,6 +8,9 @@ import {sharedStyles} from '../shared/shared.style';
 import {getAllTransactions} from '../../db/methods';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
+import numeral from 'numeral';
+import moment from 'moment';
+import Hr from '../shared/hr';
 
 export default function ViewTransactions() {
   const [transactions, setTransactions] = useState([]);
@@ -36,27 +39,88 @@ export default function ViewTransactions() {
 
   return (
     <View style={sharedStyles.body}>
-      <ScrollView>
+      <ScrollView indicatorStyle="white">
         {transactions.map((item, i) => (
           <View
             key={i}
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               padding: 10,
             }}>
-            <Text color={COLOR.WHITE} size={12}>
-              Pair: {item.base + '/' + item.quote}
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text color={COLOR.WHITE} size={12} bold>
+                {item.type} via {item.exchange}
+              </Text>
+              <Text color={COLOR.WHITE} size={12} bold>
+                {numeral(item.quantity).format('0,0[.][0000]') +
+                  ' ' +
+                  item.base}
+              </Text>
+            </View>
+            <Text color={COLOR.APP_GREY} size={10}>
+              {moment(item.date, 'x').format('MMM DD, YYYY hh:mm a')}
             </Text>
-            <Text color={COLOR.WHITE} size={12}>
-              Price: {item.price}
-            </Text>
-            <Text color={COLOR.WHITE} size={12}>
-              {item.fee}
-            </Text>
-            <Text color={COLOR.WHITE} size={12}>
-              Date: {item.notes.split('T')[0]}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingTop: 10,
+              }}>
+              <View style={{flexDirection: 'column'}}>
+                <Text color={COLOR.APP_GREY} size={10}>
+                  Trading Pair
+                </Text>
+                <Text color={COLOR.WHITE} size={12} bold>
+                  {item.base + '/' + item.quote}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'column'}}>
+                <Text
+                  color={COLOR.APP_GREY}
+                  size={10}
+                  style={{textAlign: 'right'}}>
+                  Price
+                </Text>
+                <Text color={COLOR.WHITE} size={12} bold>
+                  {numeral(item.price).format('0,0[.][0000]') +
+                    ' ' +
+                    item.quote}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingTop: 10,
+              }}>
+              <View style={{flexDirection: 'column'}}>
+                <Text color={COLOR.APP_GREY} size={10}>
+                  Fee
+                </Text>
+                <Text color={COLOR.WHITE} size={12} bold>
+                  {item.fee || '0'}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'column'}}>
+                <Text
+                  color={COLOR.APP_GREY}
+                  size={10}
+                  style={{textAlign: 'right'}}>
+                  Total Cost
+                </Text>
+                <Text color={COLOR.WHITE} size={12} bold>
+                  {numeral(
+                    parseFloat(item.price) * parseFloat(item.quantity) +
+                      (parseFloat(item.fee) || 0),
+                  ).format('0,0[.][0000]') +
+                    ' ' +
+                    item.quote}
+                </Text>
+              </View>
+            </View>
+            <Hr color={COLOR.APP_GREY} />
           </View>
         ))}
       </ScrollView>

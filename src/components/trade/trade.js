@@ -28,8 +28,7 @@ export default function TradingScreen({navigation, route}) {
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
   const [exchange, setExchange] = useState('');
-  const [base, setBase] = useState('BTC');
-  const [quote, setQuote] = useState('ETH');
+  const [pair, setPair] = useState('BTC/ETH');
   const [price, setPrice] = useState('');
   const [side, setSide] = useState('Buy');
   const [quantity, setQuantity] = useState('');
@@ -51,21 +50,21 @@ export default function TradingScreen({navigation, route}) {
   }, [price, quantity]);
 
   useEffect(() => {
-    if (exchange && base && quote && price && side && quantity) {
+    if (exchange && pair && price && side && quantity) {
       setBtnDisable(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
     } else {
       setBtnDisable(true);
       setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
     }
-  }, [price, quantity, exchange, base, quote, side]);
+  }, [price, quantity, exchange, pair, side]);
 
   const initiateOrder = () => {
     const ccxt = new CCXT();
     ccxt
       .createOrder(
         exchange,
-        base + '/' + quote,
+        pair,
         side,
         parseFloat(quantity),
         parseFloat(price),
@@ -153,7 +152,8 @@ export default function TradingScreen({navigation, route}) {
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
-              value={base + '/' + quote}
+              value={pair}
+              onChangeText={text => setPair(text.toUpperCase())}
             />
           </View>
           <View style={transactionStyles.field}>
@@ -165,7 +165,7 @@ export default function TradingScreen({navigation, route}) {
             </Text>
             <Input
               style={transactionStyles.input}
-              placeholder={`Price (${quote})`}
+              placeholder={`Price (${pair.split('/')[1]})`}
               textAlign={'right'}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
@@ -185,7 +185,7 @@ export default function TradingScreen({navigation, route}) {
             <Input
               style={transactionStyles.input}
               textAlign={'right'}
-              placeholder={`Quantity (${quote})`}
+              placeholder={`Quantity (${pair.split('/')[0]})`}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
@@ -206,7 +206,7 @@ export default function TradingScreen({navigation, route}) {
             <Input
               style={transactionStyles.input}
               textAlign={'right'}
-              placeholder={`Total (${quote})`}
+              placeholder={`Total (${pair.split('/')[1]})`}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
@@ -231,7 +231,7 @@ export default function TradingScreen({navigation, route}) {
               initiateOrder();
             }}>
             <Text color={COLOR.WHITE} h5 bold>
-              {`${side} ${base}`}
+              {`${side} ${pair.split('/')[0]}`}
             </Text>
           </Button>
         </LinearGradient>

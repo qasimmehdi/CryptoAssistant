@@ -41,7 +41,12 @@ export default function ConnectExchange({route, navigation}) {
   return (
     <View style={sharedStyles.body}>
       {isLoading ? (
-        <Loading />
+        <React.Fragment>
+          <Loading />
+          <Text size={12} color={COLOR.APP_GREY} style={styles.waitText}>
+            This may take a few minutes
+          </Text>
+        </React.Fragment>
       ) : (
         <React.Fragment>
           <View style={styles.inputForm}>
