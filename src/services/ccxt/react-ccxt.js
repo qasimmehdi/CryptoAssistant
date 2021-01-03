@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
-import {saveTransaction, saveExchange, getExchange} from '../../db/methods';
+import {saveTransaction, saveExchange, getExchange,getAllExchanges} from '../../db/methods';
 
 export default class CCXT {
   constructor() {
@@ -330,4 +330,36 @@ export default class CCXT {
       }
     });
   }
+
+
+  async fetchBalances(){
+    let responses = [];
+    const resp = await getAllExchanges();
+      let tempArray = [];
+        const len = resp.length;
+        for (let i = 0; i < len; i++) {
+          for (let j = 0; j < resp[i].rows.length; j++) {
+            let item = resp[i].rows.item(j);
+            console.log(item);
+            tempArray.push(item);
+          }
+        }
+        console.log(tempArray);
+      console.log('Exchnages added',tempArray)
+
+      for(let ex of tempArray){
+        const Exchange = this.certifiedEx.find(x => x.name.toLowerCase() === ex.exchange.toLowerCase()).imp;
+        Exchange.apiKey = ex.public;
+        Exchange.secret = ex.secret;
+        if(Exchange.hasFetchBalance){
+          responses.push(Exchange.fetchBalance());
+        }
+      }
+      return Promise.all(responses);
+    
+  }
+
+
+
+
 }

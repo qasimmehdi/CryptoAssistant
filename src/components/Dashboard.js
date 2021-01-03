@@ -21,7 +21,7 @@ import Loading from './SplashScreen';
 function Dashboard({navigation}) {
   const isFocused = useIsFocused();
   const ccxt = new CCXT();
-  const [balance] = useState('0');
+  const [balance,setbalance] = useState(0.00);
   const [coinsData, setCoinsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -117,6 +117,26 @@ function Dashboard({navigation}) {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if(isFocused){
+      ccxt.fetchBalances().then(response => {
+        let total = 0;
+        for(let exchange of response){
+          if(exchange?.info?.balances){
+            total += exchange.info.balances.reduce((p,f) => p + parseFloat(f.free),0);
+          }     
+        }
+        setbalance(total);
+        console.log('Calculate balance')
+    }).catch(err => {
+      console.log(err);
+      setbalance(0.00);
+    })
+
+    }
+  },[isFocused])
+
+
   const onRefresh = React.useCallback(() => {
     setRefresh(true);
     console.log('refreshing', coinsData);
@@ -148,7 +168,7 @@ function Dashboard({navigation}) {
               h4
               bold
               style={dashboardStyles.topCardText}>
-              ${`${balance}`}
+              ${`${balance.toFixed(2)}`}
             </Text>
           </View>
           <View style={dashboardStyles.rightView}>
