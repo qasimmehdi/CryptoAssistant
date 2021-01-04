@@ -176,7 +176,6 @@ function Dashboard({navigation}) {
               color={COLOR.WHITE}
               h6
               style={{...dashboardStyles.topCardText, textAlign: 'right'}}>
-              24HR
             </Text>
           </View>
         </View>

@@ -3,7 +3,12 @@
 /* eslint-disable no-unused-vars */
 import ccxt from 'ccxt';
 import {pairs} from './pairs';
-import {saveTransaction, saveExchange, getExchange,getAllExchanges} from '../../db/methods';
+import {
+  saveTransaction,
+  saveExchange,
+  getExchange,
+  getAllExchanges,
+} from '../../db/methods';
 
 export default class CCXT {
   constructor() {
@@ -289,17 +294,15 @@ export default class CCXT {
     return Promise.all(promises);
   }
 
-  createOrder(exname, symbol, side, amount, price) {
+  async createOrder(exname, symbol, side, amount, price) {
     const exchange = this.certifiedEx.find(x => x.name === exname).imp;
-    getExchange(exname)
-      .then(resp => {
-        if (resp.length > 0) {
-          exchange.apiKey = resp[0].rows.item(0).public;
-          exchange.secret = resp[0].rows.item(0).secret;
-          console.log(exchange.apiKey, exchange.secret);
-        }
-      })
-      .catch(err => console.log(err));
+    const resp = await getExchange(exname);
+
+    if (resp.length > 0) {
+      exchange.apiKey = resp[0].rows.item(0).public;
+      exchange.secret = resp[0].rows.item(0).secret;
+      console.log(exchange.apiKey, exchange.secret);
+    }
 
     let type = 'market';
     if (!exchange.hasCreateMarketOrder) {
@@ -320,7 +323,8 @@ export default class CCXT {
               resolve(`${side.toUpperCase()} Order successfully placed`);
             })
             .catch(err => {
-              reject('Something Went Wrong');
+              console.log(err.message);
+              reject(err?.message ? err.message : 'Something Went Wrong');
             });
         } else {
           reject('Exchange Not Supported');
@@ -331,35 +335,31 @@ export default class CCXT {
     });
   }
 
-
-  async fetchBalances(){
+  async fetchBalances() {
     let responses = [];
     const resp = await getAllExchanges();
-      let tempArray = [];
-        const len = resp.length;
-        for (let i = 0; i < len; i++) {
-          for (let j = 0; j < resp[i].rows.length; j++) {
-            let item = resp[i].rows.item(j);
-            console.log(item);
-            tempArray.push(item);
-          }
-        }
-        console.log(tempArray);
-      console.log('Exchnages added',tempArray)
-
-      for(let ex of tempArray){
-        const Exchange = this.certifiedEx.find(x => x.name.toLowerCase() === ex.exchange.toLowerCase()).imp;
-        Exchange.apiKey = ex.public;
-        Exchange.secret = ex.secret;
-        if(Exchange.hasFetchBalance){
-          responses.push(Exchange.fetchBalance());
-        }
+    let tempArray = [];
+    const len = resp.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < resp[i].rows.length; j++) {
+        let item = resp[i].rows.item(j);
+        console.log(item);
+        tempArray.push(item);
       }
-      return Promise.all(responses);
-    
+    }
+    console.log(tempArray);
+    console.log('Exchnages added', tempArray);
+
+    for (let ex of tempArray) {
+      const Exchange = this.certifiedEx.find(
+        x => x.name.toLowerCase() === ex.exchange.toLowerCase(),
+      ).imp;
+      Exchange.apiKey = ex.public;
+      Exchange.secret = ex.secret;
+      if (Exchange.hasFetchBalance) {
+        responses.push(Exchange.fetchBalance());
+      }
+    }
+    return Promise.all(responses);
   }
-
-
-
-
 }
