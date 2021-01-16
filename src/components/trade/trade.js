@@ -28,7 +28,7 @@ export default function TradingScreen({navigation, route}) {
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
   const [exchange, setExchange] = useState('');
-  const [pair, setPair] = useState('BTC/ETH');
+  const [pair, setPair] = useState('ETH/BTC');
   const [price, setPrice] = useState('');
   const [side, setSide] = useState('Buy');
   const [quantity, setQuantity] = useState('');

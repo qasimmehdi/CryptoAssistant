@@ -21,7 +21,7 @@ import Loading from './SplashScreen';
 function Dashboard({navigation}) {
   const isFocused = useIsFocused();
   const ccxt = new CCXT();
-  const [balance,setbalance] = useState(0.00);
+  const [balance, setbalance] = useState(0.0);
   const [coinsData, setCoinsData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,24 +118,28 @@ function Dashboard({navigation}) {
   }, [isFocused]);
 
   useEffect(() => {
-    if(isFocused){
-      ccxt.fetchBalances().then(response => {
-        let total = 0;
-        for(let exchange of response){
-          if(exchange?.info?.balances){
-            total += exchange.info.balances.reduce((p,f) => p + parseFloat(f.free),0);
-          }     
-        }
-        setbalance(total);
-        console.log('Calculate balance')
-    }).catch(err => {
-      console.log(err);
-      setbalance(0.00);
-    })
-
+    if (isFocused) {
+      ccxt
+        .fetchBalances()
+        .then(response => {
+          let total = 0;
+          for (let exchange of response) {
+            if (exchange?.info?.balances) {
+              total += exchange.info.balances.reduce(
+                (p, f) => p + parseFloat(f.free),
+                0,
+              );
+            }
+          }
+          setbalance(total);
+          console.log('Calculate balance');
+        })
+        .catch(err => {
+          console.log(err);
+          setbalance(0.0);
+        });
     }
-  },[isFocused])
-
+  }, [isFocused]);
 
   const onRefresh = React.useCallback(() => {
     setRefresh(true);
@@ -175,8 +179,8 @@ function Dashboard({navigation}) {
             <Text
               color={COLOR.WHITE}
               h6
-              style={{...dashboardStyles.topCardText, textAlign: 'right'}}>
-            </Text>
+              style={{...dashboardStyles.topCardText, textAlign: 'right'}}
+            />
           </View>
         </View>
       </LinearGradient>
