@@ -95,7 +95,6 @@ export default function coinPage({navigation}) {
               },
               strokeWidth: 2,
             }}
-            withShadow={false}
             withInnerLines={false}
             withDots={false}
           />
