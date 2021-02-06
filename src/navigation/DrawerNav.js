@@ -18,6 +18,19 @@ function CustomDrawerContent({navigation}) {
           minHeight: 50,
         }}
         onPress={() => {
+          navigation.navigate('ExchangeList');
+        }}>
+        <Text style={{marginLeft: 30}} color={COLOR.WHITE} bold>
+          Connect Exchange
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          backgroundColor: COLOR.TAB,
+          justifyContent: 'center',
+          minHeight: 50,
+        }}
+        onPress={() => {
           navigation.navigate('Settings');
         }}>
         <Text style={{marginLeft: 30}} color={COLOR.WHITE} bold>
@@ -31,10 +44,10 @@ function CustomDrawerContent({navigation}) {
           minHeight: 50,
         }}
         onPress={() => {
-          navigation.navigate('ExchangeList');
+          navigation.navigate('Help');
         }}>
         <Text style={{marginLeft: 30}} color={COLOR.WHITE} bold>
-          Connect Exchange
+          Help
         </Text>
       </TouchableOpacity>
     </React.Fragment>

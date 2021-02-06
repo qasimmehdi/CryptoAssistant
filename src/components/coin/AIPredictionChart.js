@@ -1,17 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import {Button, Text} from 'galio-framework';
+import {Text} from 'galio-framework';
 import moment from 'moment';
 import numeral from 'numeral';
 import React, {useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
-import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import CCXT from '../../services/ccxt/react-ccxt';
 import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
 import Loading from '../SplashScreen';
 import {coinPageStyles} from './coinPageStyle';
 
@@ -86,12 +84,12 @@ export default function AIPredictionChart({navigation}) {
               labels: [...labels],
               datasets: [
                 {
-                  data: [...data],
-                  color: (opacity = 1) => `rgba(0, 255, 0,${opacity})`,
-                },
-                {
                   data: [...data2],
                   color: (opacity = 1) => `rgba(135, 89, 206,${opacity})`,
+                },
+                {
+                  data: [...data],
+                  color: (opacity = 1) => `rgba(0, 255, 0,${opacity})`,
                 },
               ],
               legend: ['Market', 'Prediction'],
