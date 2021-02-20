@@ -1,13 +1,6 @@
 import React from 'react';
-import {Text} from 'galio-framework';
-import {View} from 'react-native';
-import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
+import {WebView} from 'react-native-webview';
 
 export default function Sentiment() {
-  return (
-    <View style={sharedStyles.body}>
-      <Text color={COLOR.WHITE}>Comming Soon</Text>
-    </View>
-  );
+  return <WebView source={{uri: 'http://10.0.2.2:3000/'}} />;
 }

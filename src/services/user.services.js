@@ -36,3 +36,11 @@ export const addNotification = (requestType, fcmToken, base, quote) => {
       });
   }
 };
+
+export const getPrediction = (coin, days) => {
+  return axios.get(`/prediction/${coin}/${days}`);
+};
+
+export const getNews = () => {
+  return axios.get('/news/get');
+};

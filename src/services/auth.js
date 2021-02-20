@@ -11,7 +11,7 @@ export const loginUser = (user, pass) => {
   return axios
     .post('/authenticate', data)
     .then(function(response) {
-      if (response.status == 200) {
+      if (response.status === 200) {
         // (async () => await storeData('auth_token', response.data.access_token))();
         // (async () => await getData('auth_token'))();
         //let token;
@@ -40,7 +40,7 @@ export const registerUser = (user, pass, email) => {
   return axios
     .post('/register', data)
     .then(function(response) {
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log(response);
         return true;
       }
@@ -67,7 +67,7 @@ export const ModifyPassword = (code, pass) => {
   return axios
     .post('/forget/checkCode', data)
     .then(function(response) {
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log('resp', response.data);
         let data2 = response.data;
         data2.password = pass;
@@ -75,7 +75,7 @@ export const ModifyPassword = (code, pass) => {
         return axios
           .put('/forget/save', data2)
           .then(function(response2) {
-            if (response2.status == 200) {
+            if (response2.status === 200) {
               console.log('reset', response2);
               return true;
             }
