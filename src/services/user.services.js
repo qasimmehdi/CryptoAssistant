@@ -41,6 +41,6 @@ export const getPrediction = (coin, days) => {
   return axios.get(`/prediction/${coin}/${days}`);
 };
 
-export const getNews = () => {
-  return axios.get('/news/get');
+export const getNews = search => {
+  return axios.get(`/news/get?search=${search}`);
 };

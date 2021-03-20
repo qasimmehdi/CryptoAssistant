@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {Text} from 'galio-framework';
+import {Input, Text} from 'galio-framework';
 import {Linking, View} from 'react-native';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
@@ -10,22 +10,37 @@ import Loading from '../SplashScreen';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import moment from 'moment';
 import Hr from '../shared/hr';
+import {addCoinStyle} from '../add-favourite/AddCoin.style';
 
 export default function Article() {
   const [news, setNews] = useState([]);
+  const [search, setSearch] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    setIsLoading(true);
-    getNews()
-      .then(res => {
-        console.log(res.data);
-        setNews(res.data);
-      })
-      .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      setIsLoading(true);
+      getNews(search)
+        .then(res => {
+          console.log(res.data);
+          setNews(res.data);
+        })
+        .catch(err => console.log(err))
+        .finally(() => setIsLoading(false));
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search]);
   return (
     <View style={sharedStyles.body}>
+      <Input
+        style={addCoinStyle.input}
+        placeholder="Search"
+        placeholderTextColor={COLOR.APP_GREY}
+        value={search}
+        onChangeText={setSearch}
+        color={COLOR.WHITE}
+      />
       <ScrollView>
         {isLoading ? (
           <Loading />
@@ -61,7 +76,7 @@ function ArticleRow({news}) {
               flexDirection: 'row',
             }}>
             <Text color={COLOR.APP_GREY} bold style={{paddingRight: 5}}>
-              {news.source_info.name} .
+              {news.source} .
             </Text>
             <Text bold color={COLOR.APP_GREY}>
               {moment(news.published_on * 1000).fromNow()}
