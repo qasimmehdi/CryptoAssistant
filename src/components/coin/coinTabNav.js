@@ -13,6 +13,7 @@ export default function CoinPageTabNav({navigation}) {
 
   return (
     <Tab.Navigator
+      swipeEnabled={false}
       tabBarOptions={{
         activeTintColor: COLOR.WHITE,
         inactiveTintColor: COLOR.APP_GREY,

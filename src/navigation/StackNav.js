@@ -26,6 +26,7 @@ import CoinPageTabNav from '../components/coin/coinTabNav';
 import SelectExchangeList from '../components/trade/exchanges';
 import AIPredictionChart from '../components/coin/AIPredictionChart';
 import Help from '../components/help/help';
+import Graph from '../components/Graph';
 
 const Stack = createStackNavigator();
 
@@ -117,6 +118,7 @@ export default function StackNav() {
         options={{title: 'AI Coin Predictor'}}
       />
       <Stack.Screen name="Help" component={Help} options={{title: 'Help'}} />
+      <Stack.Screen name="Graph" component={Graph} options={{title: 'Graph'}} />
     </Stack.Navigator>
   );
 }

@@ -10,6 +10,7 @@ import {LineChart} from 'react-native-chart-kit';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import CCXT from '../../services/ccxt/react-ccxt';
+import Graph from '../Graph';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
 import Loading from '../SplashScreen';
@@ -18,11 +19,10 @@ import {coinPageStyles} from './coinPageStyle';
 export default function coinPage({navigation}) {
   const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
   let ccxt = new CCXT();
-  const [data, setData] = useState([1]);
-  const [labels, setLabels] = useState([]);
-  const [price, setPrice] = useState('0');
+  const [graphData, setGraphData] = useState(null);
+  const [price, setPrice] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  let labelRadix;
+
   useEffect(() => {
     navigation.setOptions({title: coinPageTitle});
     let isMounted = true;
@@ -31,20 +31,14 @@ export default function coinPage({navigation}) {
       .Candles(`${coinPageTitle}/USD`, '1d')
       .then(resp => {
         console.log(resp);
-        let tempData = [],
-          tempLabels = [];
-        labelRadix = Math.max(Math.floor(resp.length / 4), 1);
-        resp.forEach((i, j) => {
-          tempData.push(i[4]);
-          tempLabels.push(
-            j % labelRadix === 0 ? moment(i[0]).format('HH:mm') : '',
-          );
-        });
-        console.log(tempData.join(' '));
+        /* let tempData = [];
+        resp.forEach(i => {
+          tempData.push({time: i[0] / 1000, value: i[4]});
+        }); */
+        const tempData = resp.map(i => ({time: i[0] / 1000, value: i[4]}));
         if (isMounted) {
-          setData([...tempData]);
-          setLabels([...tempLabels]);
-          setPrice(tempData[tempData.length - 1]);
+          setPrice(tempData[tempData.length - 1].value);
+          setGraphData(tempData);
         }
       })
       .catch(err => console.log(err))
@@ -66,38 +60,39 @@ export default function coinPage({navigation}) {
         {isLoading ? (
           <Loading />
         ) : (
-          <LineChart
-            data={{
-              labels: [...labels],
-              datasets: [
-                {
-                  data: [...data],
-                },
-              ],
-            }}
-            width={Dimensions.get('window').width} // from react-native
-            height={220}
-            yAxisLabel="$"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundGradientFrom: COLOR.BG,
-              backgroundGradientTo: COLOR.BG,
-              backgroundColor: COLOR.BG,
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              /* propsForBackgroundLines: {
-                            strokeWidth: 0
-                        }, */
-              style: {
-                borderRadius: 16,
-                backgroundColor: COLOR.BG,
-              },
-              strokeWidth: 2,
-            }}
-            withInnerLines={false}
-            withDots={false}
-          />
+          graphData && <Graph graphData={graphData} symbol={coinPageTitle} />
+          // <LineChart
+          //   data={{
+          //     labels: [...labels],
+          //     datasets: [
+          //       {
+          //         data: [...data],
+          //       },
+          //     ],
+          //   }}
+          //   width={Dimensions.get('window').width} // from react-native
+          //   height={220}
+          //   yAxisLabel="$"
+          //   yAxisInterval={1} // optional, defaults to 1
+          //   chartConfig={{
+          //     backgroundGradientFrom: COLOR.BG,
+          //     backgroundGradientTo: COLOR.BG,
+          //     backgroundColor: COLOR.BG,
+          //     decimalPlaces: 2, // optional, defaults to 2dp
+          //     color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
+          //     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          //     /* propsForBackgroundLines: {
+          //                   strokeWidth: 0
+          //               }, */
+          //     style: {
+          //       borderRadius: 16,
+          //       backgroundColor: COLOR.BG,
+          //     },
+          //     strokeWidth: 2,
+          //   }}
+          //   withInnerLines={false}
+          //   withDots={false}
+          // />
         )}
       </View>
       <View style={{padding: 10, flex: 1}}>
