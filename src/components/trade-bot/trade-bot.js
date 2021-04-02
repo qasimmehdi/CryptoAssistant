@@ -2,27 +2,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useIsFocused} from '@react-navigation/native';
 import {Button, Input, Text} from 'galio-framework';
-import React, {useEffect, useState} from 'react';
-import {View, Alert} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
-import * as Actions from '../../store/actions';
-import LinearGradient from 'react-native-linear-gradient';
-import {transactionStyles} from '../transaction/add-transaction.style';
-import {styles} from './trade.style';
-import CCXT from '../../services/ccxt/react-ccxt';
-import {ScrollView} from 'react-native-gesture-handler';
 import numeral from 'numeral';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
+import {COLOR} from '../shared/colors';
 import {regexes} from '../shared/regexes';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {TouchableOpacity} from 'react-native';
+import {sharedStyles} from '../shared/shared.style';
+import {styles} from '../trade/trade.style';
+import {transactionStyles} from '../transaction/add-transaction.style';
 
-export default function TradingScreen({navigation, route, tabNav}) {
+export default function TradeBotScreen({navigation, route}) {
   const name = route?.params?.name;
   console.log(name);
   const isFocused = useIsFocused();
-  const dispatch = useDispatch();
   const [gradientColors, setGradientColors] = useState([
     COLOR.DISABLED,
     COLOR.DISABLED,
@@ -30,12 +24,14 @@ export default function TradingScreen({navigation, route, tabNav}) {
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
   const [exchange, setExchange] = useState('');
-  const [pair, setPair] = useState('ETH/BTC');
-  const [price, setPrice] = useState('');
+  const [pair, setPair] = useState('ADA/BTC');
   const [side, setSide] = useState('Buy');
   const [quantity, setQuantity] = useState('');
   const [btnDisable, setBtnDisable] = useState(false);
   const [total, setTotal] = useState('');
+  const [stop, setStop] = useState('');
+  const [limit, setLimit] = useState('');
+  const [percentage, setPercentage] = useState('');
 
   useEffect(() => {
     if (isFocused) {
@@ -45,74 +41,34 @@ export default function TradingScreen({navigation, route, tabNav}) {
   }, [isFocused]);
 
   useEffect(() => {
-    const temp = numeral(parseFloat(price) * parseFloat(quantity)).format(
+    const temp = numeral(parseFloat(limit) * parseFloat(quantity)).format(
       '0[.][0000]',
     );
     setTotal(temp);
-  }, [price, quantity]);
+  }, [limit, quantity]);
 
   useEffect(() => {
-    if (exchange && pair && price && side && quantity) {
+    if (exchange && pair && side && quantity && stop && limit && percentage) {
       setBtnDisable(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
     } else {
       setBtnDisable(true);
       setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
     }
-  }, [price, quantity, exchange, pair, side]);
+  }, [quantity, exchange, pair, side, stop, limit, percentage]);
 
-  const initiateOrder = () => {
-    const ccxt = new CCXT();
-    ccxt
-      .createOrder(
-        exchange,
-        pair,
-        side,
-        parseFloat(quantity),
-        parseFloat(price),
-      )
-      .then(x => {
-        Alert.alert('Success', String(x));
-      })
-      .catch(err => {
-        Alert.alert('Error', String(err));
-      });
+  const startBot = () => {
+    navigation.navigate('TradeBotStarted', {
+      quantity,
+      exchange,
+      pair,
+      side,
+      stop,
+      limit,
+      percentage,
+    });
   };
 
-  const changeTitle = title => {
-    return dispatch(Actions.Header({title: title}));
-  };
-  useEffect(() => {
-    //do not do anything here make another useEffect if needed
-    if (isFocused) {
-      changeTitle('Trade');
-      tabNav.setOptions({
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('TradeBot');
-              console.log('object');
-            }}>
-            <FontAwesome5
-              name={'robot'}
-              size={25}
-              color={COLOR.WHITE}
-              style={{
-                paddingRight: 5,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            />
-          </TouchableOpacity>
-        ),
-      });
-    }
-
-    return () =>
-      tabNav.setOptions({
-        headerRight: null,
-      });
-  }, [isFocused]);
   return (
     <View style={sharedStyles.body}>
       <ScrollView>
@@ -153,7 +109,9 @@ export default function TradingScreen({navigation, route, tabNav}) {
             </Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('SelectExchangeList', {redirect: 'Trade'})
+                navigation.navigate('SelectExchangeList', {
+                  redirect: 'TradeBot',
+                })
               }>
               <Input
                 style={transactionStyles.input}
@@ -190,7 +148,7 @@ export default function TradingScreen({navigation, route, tabNav}) {
               style={transactionStyles.fieldText}
               bold
               color={COLOR.APP_GREY}>
-              Price
+              Stop
             </Text>
             <Input
               style={transactionStyles.input}
@@ -200,8 +158,48 @@ export default function TradingScreen({navigation, route, tabNav}) {
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
-              value={price}
-              onChangeText={text => setPrice(text.replace(regexes.float, ''))}
+              value={stop}
+              onChangeText={text => setStop(text.replace(regexes.float, ''))}
+            />
+          </View>
+          <View style={transactionStyles.field}>
+            <Text
+              style={transactionStyles.fieldText}
+              bold
+              color={COLOR.APP_GREY}>
+              Limit
+            </Text>
+            <Input
+              style={transactionStyles.input}
+              placeholder={`Price (${pair.split('/')[1]})`}
+              textAlign={'right'}
+              type="decimal-pad"
+              placeholderTextColor={COLOR.APP_GREY}
+              iconColor={COLOR.APP_GREY}
+              color={COLOR.WHITE}
+              value={limit}
+              onChangeText={text => setLimit(text.replace(regexes.float, ''))}
+            />
+          </View>
+          <View style={transactionStyles.field}>
+            <Text
+              style={transactionStyles.fieldText}
+              bold
+              color={COLOR.APP_GREY}>
+              Trailing Stop %
+            </Text>
+            <Input
+              style={transactionStyles.input}
+              textAlign={'right'}
+              placeholder={'%'}
+              type="decimal-pad"
+              placeholderTextColor={COLOR.APP_GREY}
+              iconColor={COLOR.APP_GREY}
+              color={COLOR.WHITE}
+              value={percentage}
+              onChangeText={text =>
+                setPercentage(text.replace(regexes.float, ''))
+              }
             />
           </View>
           <View style={transactionStyles.field}>
@@ -256,11 +254,9 @@ export default function TradingScreen({navigation, route, tabNav}) {
             color="transparent"
             style={sharedStyles.borderless}
             disabled={btnDisable}
-            onPress={() => {
-              initiateOrder();
-            }}>
+            onPress={startBot}>
             <Text color={COLOR.WHITE} h5 bold>
-              {`${side} ${pair.split('/')[0]}`}
+              Start Bot
             </Text>
           </Button>
         </LinearGradient>

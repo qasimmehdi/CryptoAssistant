@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React, {useEffect} from 'react';
@@ -44,8 +45,10 @@ export default function TabNavigation({navigation}) {
       />
       <Tab.Screen
         name="Trade"
-        component={TradingScreen}
-        options={{title: 'Trade'}}
+        children={props => <TradingScreen {...props} tabNav={navigation} />}
+        options={{
+          title: 'Trade',
+        }}
       />
       <Tab.Screen
         name="Add Coin"

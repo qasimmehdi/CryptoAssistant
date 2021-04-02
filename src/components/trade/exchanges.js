@@ -18,7 +18,9 @@ const ExchangeRow = props => {
     <React.Fragment>
       <TouchableOpacity
         onPress={() => {
-          props.navigation.navigate('Trade', {name: props.name});
+          props.navigation.navigate(props.redirect, {
+            name: props.name,
+          });
         }}>
         <View style={styles.row}>
           <View style={styles.coinCell}>
@@ -37,7 +39,7 @@ const ExchangeRow = props => {
   );
 };
 
-export default function SelectExchangeList({navigation}) {
+export default function SelectExchangeList({navigation, route}) {
   const [exchanges] = React.useState(new CCXT().getAllExchangeAndLogo());
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function SelectExchangeList({navigation}) {
             navigation={navigation}
             name={x.name}
             logo={x.logo}
+            redirect={route?.params?.redirect}
           />
         ))}
       </ScrollView>

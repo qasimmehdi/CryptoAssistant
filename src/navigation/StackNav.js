@@ -27,6 +27,8 @@ import SelectExchangeList from '../components/trade/exchanges';
 import AIPredictionChart from '../components/coin/AIPredictionChart';
 import Help from '../components/help/help';
 import Graph from '../components/Graph';
+import TradeBotScreen from '../components/trade-bot/trade-bot';
+import TradeBotStarted from '../components/trade-bot/trade-bot-started';
 
 const Stack = createStackNavigator();
 
@@ -119,6 +121,16 @@ export default function StackNav() {
       />
       <Stack.Screen name="Help" component={Help} options={{title: 'Help'}} />
       <Stack.Screen name="Graph" component={Graph} options={{title: 'Graph'}} />
+      <Stack.Screen
+        name="TradeBot"
+        component={TradeBotScreen}
+        options={{title: 'Bot Trading'}}
+      />
+      <Stack.Screen
+        name="TradeBotStarted"
+        component={TradeBotStarted}
+        options={{title: 'Bot Trading', headerLeft: null}}
+      />
     </Stack.Navigator>
   );
 }
