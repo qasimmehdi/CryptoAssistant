@@ -4,7 +4,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Button, Input, Text} from 'galio-framework';
 import numeral from 'numeral';
 import React, {useEffect, useState} from 'react';
-import {View,Alert} from 'react-native';
+import {View, Alert} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLOR} from '../shared/colors';
@@ -61,42 +61,44 @@ export default function TradeBotScreen({navigation, route}) {
   }, [quantity, exchange, pair, side, stop, limit, percentage]);
 
   const startBot = async () => {
-    
     //for exchange is avaialble or not
-    const isExchangeAvaialble = pairs.findIndex(x => x.exchange.toLowerCase() === exchange.toLowerCase());
+    const isExchangeAvaialble = pairs.findIndex(
+      x => x.exchange.toLowerCase() === exchange.toLowerCase(),
+    );
     let balance = 0;
-    if(isExchangeAvaialble > -1){
+    if (isExchangeAvaialble > -1) {
       //for exchange keys available
       const resp = await getExchange(exchange);
-      if (resp.length > 0) {
+      console.log('bot', resp);
+      if (resp[0].rows.length > 0) {
         //for pair is supported or not
-        const isPairAvailable = pairs[isExchangeAvaialble].symbols.findIndex(x => x === pair);
-        if(isPairAvailable < 0){
-          Alert.alert("Pair Not Found",`Currently ${exchange} doesn't support market pair ${pair}`);
+        const isPairAvailable = pairs[isExchangeAvaialble].symbols.findIndex(
+          x => x === pair,
+        );
+        if (isPairAvailable < 0) {
+          Alert.alert(
+            'Pair Not Found',
+            `Currently ${exchange} doesn't support market pair ${pair}`,
+          );
           return;
-        }
-        else{
+        } else {
           //fetching balance
           balance = new CCXT().fetchBalancesByExchange(exchange);
         }
-      }
-      else{
-        Alert.alert("Keys Not Found",`Please add API keys for ${exchange}`);
+      } else {
+        Alert.alert('Keys Not Found', `Please add API keys for ${exchange}`);
         return;
       }
-    }
-    else{
-      Alert.alert("Exchange Not Found","Currently Application not support exchange");
+    } else {
+      Alert.alert(
+        'Exchange Not Found',
+        'Currently Application not support exchange',
+      );
       return;
     }
 
-    if(limit < stop){
-      Alert.alert("Input Error",`Limit price should be greater than stop price`);
-      return;
-    }
-
-    if(balance <= 0){
-      Alert.alert("Balance Error",`Unsufficient balance`);
+    if (balance <= 0) {
+      Alert.alert('Balance Error', `Unsufficient balance`);
       return;
     }
 

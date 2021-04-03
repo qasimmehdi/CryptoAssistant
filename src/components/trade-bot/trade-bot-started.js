@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {Text} from 'galio-framework';
 import React, {useEffect, useState} from 'react';
-import {View,Alert} from 'react-native';
+import {View, Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
@@ -24,10 +24,12 @@ export default function TradeBotStarted({navigation, route}) {
   const [pair, setPair] = useState('');
   const [runningTime, setRunningTime] = useState('');
   let ccxt = new CCXT();
-  let timerId = null;
-  let botId = null;
+  const [timerId, setTimerId] = useState(null);
+  const [botId, setBotId] = useState(null);
 
   const isFocused = useIsFocused();
+
+  console.log(route.params);
 
   useEffect(() => {
     if (isFocused) {
@@ -37,8 +39,8 @@ export default function TradeBotStarted({navigation, route}) {
       setQuantity(route.params.quantity);
       setPercentage(route.params.percentage);
       setPair(route.params.pair);
-      timerId = startTimer();
-      botId = startBot();
+      setTimerId(startTimer());
+      setBotId(startBot());
     } else {
       clearInterval(timerId);
       clearInterval(botId);
@@ -66,48 +68,58 @@ export default function TradeBotStarted({navigation, route}) {
       setRunningTime(
         days + 'D ' + hours + 'H ' + minutes + 'M ' + seconds + 'S',
       );
-
-      return intervalId;
+      console.log('=======================timer', timerId);
     }, 1000);
+    return intervalId;
   };
 
-
   const startBot = () => {
-    const exchangeObj = ccxt.getExchangeObj(exchange);
-    
-    const intervalId = setInterval( async function() {
+    const exchangeObj = ccxt.getExchangeObj(route.params.exchange);
 
-      const rate = await await exchangeObj.fetchTicker(pair.toUpperCase());
+    const intervalId = setInterval(async function() {
+      let rate = await ccxt.coinDetails([route.params.pair]); //await exchangeObj.fetchTicker(pair.toUpperCase());
+      console.log('--------------', rate);
+      rate = rate[route.params.pair.replace('/', '-')]['last'];
+      console.log(rate);
 
-      if (rate && rate.last) {
+      if (rate) {
+        let stp = rate - ((parseInt(percentage) / 100) * rate).toFixed(2);
 
-        let stp = rate.last - ((parseInt(percentage)/ 100) * rate.last).toFixed(2);
-
-        if(stopCopy === ''){
-          setStop(stp);
+        if (stopCopy === '') {
+          //setStop(stp);
           setStopCopy(stp);
         }
 
-        if(stopCopy <= stp){
-          setStop(stp);
+        if (stopCopy <= stp) {
+          //setStop(stp);
         }
 
-          setLast(rate.last ? rate.last : 0);
-          setDifference(limit - rate.last);
+        setLast(rate ? rate : 0);
+        setDifference(route.params.limit - rate);
 
-          if(rate.last >= limit){
-              ccxt.createOrder(exchange,pair,'sell',parseInt(quantity),parseFloat(limit));
-              Alert("Success","Order successfully created");
-          }
-          else if(rate.last <= stop){
-            ccxt.createOrder(exchange,pair,'sell',parseInt(quantity),parseFloat(stop));
-            Alert("Success","Order successfully created");
-          }
-
+        if (rate >= limit) {
+          /* ccxt.createOrder(
+            exchange,
+            pair,
+            'sell',
+            parseInt(quantity),
+            parseFloat(limit),
+          ); */
+          //Alert('Success', 'Order successfully created');
+        } else if (rate <= stop) {
+          /* ccxt.createOrder(
+            exchange,
+            pair,
+            'sell',
+            parseInt(quantity),
+            parseFloat(stop),
+          ); */
+          //Alert('Success', 'Order successfully created');
+        }
       }
-
-      return intervalId;
     }, 5000);
+
+    return intervalId;
   };
 
   return (
@@ -132,7 +144,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Stop Price ({pair.split('/')[1]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(stop).format('0,0[.][0000]')}
+                {numeral(stop).format('0,0[.][00000000]')}
               </Text>
             </View>
             <View
@@ -147,7 +159,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Limit Price ({pair.split('/')[1]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(limit).format('0,0[.][0000]')}
+                {numeral(limit).format('0,0[.][00000000]')}
               </Text>
             </View>
           </View>
@@ -169,7 +181,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Last Price ({pair.split('/')[1]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(last).format('0,0[.][0000]')}
+                {numeral(last).format('0,0[.][00000000]')}
               </Text>
             </View>
             <View
@@ -184,7 +196,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Difference ({pair.split('/')[1]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(difference).format('0,0[.][0000]')}
+                {numeral(difference).format('0,0[.][00000000]')}
               </Text>
             </View>
           </View>
@@ -207,7 +219,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Quantity ({pair.split('/')[0]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(quantity).format('0,0[.][0000]')}
+                {numeral(quantity).format('0,0[.][00000000]')}
               </Text>
             </View>
             <View
@@ -222,7 +234,7 @@ export default function TradeBotStarted({navigation, route}) {
                 Percentage
               </Text>
               <Text color={COLOR.WHITE} size={20}>
-                {numeral(percentage).format('0,0[.][0000]')}
+                {numeral(percentage).format('0,0[.][00000000]')}
               </Text>
             </View>
           </View>
@@ -298,6 +310,8 @@ export default function TradeBotStarted({navigation, route}) {
               onPress={() => {
                 navigation.navigate('TradeBot');
                 console.log('object');
+                clearInterval(timerId);
+                clearInterval(botId);
               }}>
               <FontAwesome5Icon
                 name={'power-off'}

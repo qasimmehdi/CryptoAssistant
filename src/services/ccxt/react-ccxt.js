@@ -375,17 +375,16 @@ export default class CCXT {
         const balance = await exchange.fetchBalance();
         //return balance;
         return 10; //for now not sure about reponse model
-      }
-      else{
+      } else {
         return 0;
       }
-    }
-    else{
+    } else {
       return 0;
     }
   }
 
-  async getExchangeObj(exname){
+  async getExchangeObj(exname) {
+    console.log('getExchangeObj', exname);
     const exchange = this.certifiedEx.find(x => x.name === exname).imp;
     const resp = await getExchange(exname);
 
@@ -394,8 +393,7 @@ export default class CCXT {
       exchange.secret = resp[0].rows.item(0).secret;
       console.log(exchange.apiKey, exchange.secret);
       return exchange;
-    }
-    else{
+    } else {
       return undefined;
     }
   }
