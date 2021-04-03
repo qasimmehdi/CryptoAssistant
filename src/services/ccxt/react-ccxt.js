@@ -362,4 +362,41 @@ export default class CCXT {
     }
     return Promise.all(responses);
   }
+
+  async fetchBalancesByExchange(exname) {
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const resp = await getExchange(exname);
+
+    if (resp.length > 0) {
+      exchange.apiKey = resp[0].rows.item(0).public;
+      exchange.secret = resp[0].rows.item(0).secret;
+      console.log(exchange.apiKey, exchange.secret);
+      if (exchange.hasFetchBalance) {
+        const balance = await exchange.fetchBalance();
+        //return balance;
+        return 10; //for now not sure about reponse model
+      }
+      else{
+        return 0;
+      }
+    }
+    else{
+      return 0;
+    }
+  }
+
+  async getExchangeObj(exname){
+    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const resp = await getExchange(exname);
+
+    if (resp.length > 0) {
+      exchange.apiKey = resp[0].rows.item(0).public;
+      exchange.secret = resp[0].rows.item(0).secret;
+      console.log(exchange.apiKey, exchange.secret);
+      return exchange;
+    }
+    else{
+      return undefined;
+    }
+  }
 }

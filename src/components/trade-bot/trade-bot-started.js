@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {Text} from 'galio-framework';
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View,Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {COLOR} from '../shared/colors';
 import {sharedStyles} from '../shared/shared.style';
@@ -10,9 +10,11 @@ import numeral from 'numeral';
 import {useIsFocused} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import CCXT from '../../services/ccxt/react-ccxt';
 
 export default function TradeBotStarted({navigation, route}) {
   const [stop, setStop] = useState('');
+  const [stopCopy, setStopCopy] = useState('');
   const [limit, setLimit] = useState('');
   const [last, setLast] = useState('');
   const [difference, setDifference] = useState('');
@@ -21,7 +23,9 @@ export default function TradeBotStarted({navigation, route}) {
   const [percentage, setPercentage] = useState('');
   const [pair, setPair] = useState('');
   const [runningTime, setRunningTime] = useState('');
+  let ccxt = new CCXT();
   let timerId = null;
+  let botId = null;
 
   const isFocused = useIsFocused();
 
@@ -34,8 +38,10 @@ export default function TradeBotStarted({navigation, route}) {
       setPercentage(route.params.percentage);
       setPair(route.params.pair);
       timerId = startTimer();
+      botId = startBot();
     } else {
       clearInterval(timerId);
+      clearInterval(botId);
     }
   }, [isFocused]);
 
@@ -63,6 +69,45 @@ export default function TradeBotStarted({navigation, route}) {
 
       return intervalId;
     }, 1000);
+  };
+
+
+  const startBot = () => {
+    const exchangeObj = ccxt.getExchangeObj(exchange);
+    
+    const intervalId = setInterval( async function() {
+
+      const rate = await await exchangeObj.fetchTicker(pair.toUpperCase());
+
+      if (rate && rate.last) {
+
+        let stp = rate.last - ((parseInt(percentage)/ 100) * rate.last).toFixed(2);
+
+        if(stopCopy === ''){
+          setStop(stp);
+          setStopCopy(stp);
+        }
+
+        if(stopCopy <= stp){
+          setStop(stp);
+        }
+
+          setLast(rate.last ? rate.last : 0);
+          setDifference(limit - rate.last);
+
+          if(rate.last >= limit){
+              ccxt.createOrder(exchange,pair,'sell',parseInt(quantity),parseFloat(limit));
+              Alert("Success","Order successfully created");
+          }
+          else if(rate.last <= stop){
+            ccxt.createOrder(exchange,pair,'sell',parseInt(quantity),parseFloat(stop));
+            Alert("Success","Order successfully created");
+          }
+
+      }
+
+      return intervalId;
+    }, 5000);
   };
 
   return (
