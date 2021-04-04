@@ -1,6 +1,6 @@
-export const ChangeHeader = 'Change Header';
+export const ChangeHeader = "Change Header";
 
-export const Header = payload => ({
+export const Header = (payload) => ({
   type: ChangeHeader,
   payload,
 });

@@ -1,23 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
-import AddCoin from '../components/add-favourite/AddCoin';
-import MarketScreen from '../components/markets/markets';
-import NewsScreen from '../components/news/news';
-import {COLOR} from '../components/shared/colors';
-import TradingScreen from '../components/trade/trade';
-import DrawerNav from './DrawerNav';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import AddCoin from "../components/add-favourite/AddCoin";
+import MarketScreen from "../components/markets/markets";
+import NewsScreen from "../components/news/news";
+import { COLOR } from "../components/shared/colors";
+import TradingScreen from "../components/trade/trade";
+import DrawerNav from "./DrawerNav";
+import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigation({navigation}) {
-  const HeaderTitle = useSelector(state => state.Header.title);
+export default function TabNavigation({ navigation }) {
+  const HeaderTitle = useSelector((state) => state.Header.title);
 
   useEffect(() => {
-    navigation.setOptions({title: HeaderTitle});
+    navigation.setOptions({ title: HeaderTitle });
   }, [HeaderTitle]);
   return (
     <Tab.Navigator
@@ -37,38 +37,39 @@ export default function TabNavigation({navigation}) {
         style: {
           borderTopWidth: 0,
         },
-      }}>
+      }}
+    >
       <Tab.Screen
         name="Dashboard"
         component={DrawerNav}
-        options={{title: 'Home'}}
+        options={{ title: "Home" }}
       />
       <Tab.Screen
         name="Trade"
-        children={props => <TradingScreen {...props} tabNav={navigation} />}
+        children={(props) => <TradingScreen {...props} tabNav={navigation} />}
         options={{
-          title: 'Trade',
+          title: "Trade",
         }}
       />
       <Tab.Screen
         name="Add Coin"
         component={AddCoin}
         options={{
-          title: '',
-          tabBarIcon: ({color}) => (
-            <AntDesignIcon name={'pluscircle'} size={30} color={COLOR.WHITE} />
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesignIcon name={"pluscircle"} size={30} color={COLOR.WHITE} />
           ),
         }}
       />
       <Tab.Screen
         name="News"
         component={NewsScreen}
-        options={{title: 'News'}}
+        options={{ title: "News" }}
       />
       <Tab.Screen
         name="Markets"
         component={MarketScreen}
-        options={{title: 'Markets'}}
+        options={{ title: "Markets" }}
       />
     </Tab.Navigator>
   );

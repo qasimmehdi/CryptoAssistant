@@ -1,11 +1,11 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useRef} from 'react';
-import {Dimensions, View} from 'react-native';
-import WebView from 'react-native-webview';
-import {COLOR} from './shared/colors';
+import React, { useEffect, useRef } from "react";
+import { Dimensions, View } from "react-native";
+import WebView from "react-native-webview";
+import { COLOR } from "./shared/colors";
 
-export default function Graph({graphData, symbol}) {
+export default function Graph({ graphData, symbol }) {
   const webRef = useRef(null);
   function getInjectableJSMessage(message) {
     const string = JSON.stringify(message);
@@ -30,7 +30,7 @@ export default function Graph({graphData, symbol}) {
           getInjectableJSMessage({
             graphData,
             symbol,
-          }),
+          })
         );
       }, 1000);
 
@@ -42,18 +42,19 @@ export default function Graph({graphData, symbol}) {
     <View
       style={{
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: "column",
         backgroundColor: COLOR.BG,
-      }}>
-      <View style={{width: Dimensions.get('window').width, height: 235}}>
+      }}
+    >
+      <View style={{ width: Dimensions.get("window").width, height: 235 }}>
         <WebView
           ref={webRef}
-          originWhitelist={['*']}
-          source={{uri: 'file:///android_asset/graph.html'}}
+          originWhitelist={["*"]}
+          source={{ uri: "file:///android_asset/graph.html" }}
           style={{
             backgroundColor: COLOR.BG,
           }}
-          onMessage={event => {
+          onMessage={(event) => {
             console.log(event.nativeEvent.data);
           }}
         />

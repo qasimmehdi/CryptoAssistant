@@ -1,18 +1,18 @@
-import {Button, Input, Text} from 'galio-framework';
-import React, {useState} from 'react';
-import {View, Alert} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
-import {styles} from './connect-exchange.style';
-import CCXT from '../../services/ccxt/react-ccxt';
-import Loading from '../SplashScreen';
-import {CommonActions} from '@react-navigation/native';
+import { Button, Input, Text } from "galio-framework";
+import React, { useState } from "react";
+import { View, Alert } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { COLOR } from "../shared/colors";
+import { sharedStyles } from "../shared/shared.style";
+import { styles } from "./connect-exchange.style";
+import CCXT from "../../services/ccxt/react-ccxt";
+import Loading from "../SplashScreen";
+import { CommonActions } from "@react-navigation/native";
 
-export default function ConnectExchange({route, navigation}) {
-  const {name} = route.params;
-  const [api, setApi] = useState('');
-  const [secret, setSecret] = useState('');
+export default function ConnectExchange({ route, navigation }) {
+  const { name } = route.params;
+  const [api, setApi] = useState("");
+  const [secret, setSecret] = useState("");
   const [disbutton, setdisbutton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,18 +21,18 @@ export default function ConnectExchange({route, navigation}) {
     setIsLoading(true);
     new CCXT()
       .addExchange(name, api, secret)
-      .then(x => {
-        Alert.alert('Success', 'Exchange added successfully');
+      .then((x) => {
+        Alert.alert("Success", "Exchange added successfully");
         setdisbutton(false);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{name: 'Dashboard'}],
-          }),
+            routes: [{ name: "Dashboard" }],
+          })
         );
       })
       .catch(() => {
-        Alert.alert('Error', 'Invalid Api Keys');
+        Alert.alert("Error", "Invalid Api Keys");
         setdisbutton(false);
       })
       .finally(() => setIsLoading(false));
@@ -77,16 +77,18 @@ export default function ConnectExchange({route, navigation}) {
           </View>
           <View style={styles.bottomBtn}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-              style={sharedStyles.linearGradient}>
+              style={sharedStyles.linearGradient}
+            >
               <Button
                 disabled={disbutton}
                 onPress={() => addexchange()}
                 round
                 color="transparent"
-                style={sharedStyles.borderless}>
+                style={sharedStyles.borderless}
+              >
                 <Text color={COLOR.WHITE} h5 bold>
                   Add Connection
                 </Text>

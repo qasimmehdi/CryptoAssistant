@@ -1,13 +1,13 @@
-import {StyleSheet} from 'react-native';
-import {COLOR} from '../components/shared/colors';
+import { StyleSheet } from "react-native";
+import { COLOR } from "../components/shared/colors";
 
 export const rowStyles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingTop: 12,
   },
   coinName: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   price: {
     flex: 2,
@@ -19,23 +19,23 @@ export const rowStyles = StyleSheet.create({
   },
   rowBell: {
     flex: 0.4,
-    alignSelf: 'center',
-    textAlign: 'center',
+    alignSelf: "center",
+    textAlign: "center",
   },
   addBtn: {
     width: 50,
     height: 25,
     borderColor: COLOR.APP_GREY,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   coinIcon: {
     width: 24,
     height: 24,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginRight: 10,
   },
   coinCell: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

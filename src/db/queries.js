@@ -43,19 +43,19 @@ WHERE NOT EXISTS (SELECT * FROM Favourites);
 `;
 
 export const saveTransaction =
-  'INSERT INTO Transactions (exchange, base, quote, price, type, quantity, fee, date, time, notes) VALUES ';
+  "INSERT INTO Transactions (exchange, base, quote, price, type, quantity, fee, date, time, notes) VALUES ";
 
 export const saveFavourites =
-  'INSERT INTO Favourites (exchange, base, quote, balance, notification) VALUES ';
+  "INSERT INTO Favourites (exchange, base, quote, balance, notification) VALUES ";
 
 export const saveExchange =
-  'INSERT INTO Exchanges (exchange, public, secret) VALUES ';
+  "INSERT INTO Exchanges (exchange, public, secret) VALUES ";
 
-export const getFavourites = 'SELECT * FROM Favourites';
+export const getFavourites = "SELECT * FROM Favourites";
 
-export const getExchange = 'SELECT * FROM Exchanges';
+export const getExchange = "SELECT * FROM Exchanges";
 
-export const getAllTransaction = 'SELECT * FROM Transactions where base =';
+export const getAllTransaction = "SELECT * FROM Transactions where base =";
 
 export const updateNotification = (value, base, quote) =>
   `UPDATE Favourites SET notification = '${value}' WHERE base = '${base}' AND quote = '${quote}';`;

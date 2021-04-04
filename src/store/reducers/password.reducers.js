@@ -1,13 +1,13 @@
-import * as Actions from '../actions';
+import * as Actions from "../actions";
 
 const initialState = {
-  password: '',
+  password: "",
 };
 
-export default (state = initialState, {type, payload}) => {
+export default (state = initialState, { type, payload }) => {
   switch (type) {
     case Actions.SetPassword:
-      return {...state, ...payload};
+      return { ...state, ...payload };
 
     default:
       return state;

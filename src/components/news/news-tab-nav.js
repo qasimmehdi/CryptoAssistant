@@ -1,12 +1,12 @@
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React from 'react';
-import {COLOR} from '../shared/colors';
-import Article from './article';
-import Sentiment from './sentiment';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import React from "react";
+import { COLOR } from "../shared/colors";
+import Article from "./article";
+import Sentiment from "./sentiment";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function NewsTabNav({navigation}) {
+export default function NewsTabNav({ navigation }) {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -17,17 +17,18 @@ export default function NewsTabNav({navigation}) {
           borderTopWidth: 0,
           borderTopColor: COLOR.BG,
         },
-        labelStyle: {textTransform: 'none'},
-      }}>
+        labelStyle: { textTransform: "none" },
+      }}
+    >
       <Tab.Screen
         name="Articles"
         component={Article}
-        options={{tabBarLabel: 'Articles'}}
+        options={{ tabBarLabel: "Articles" }}
       />
       <Tab.Screen
         name="Sentiments"
         component={Sentiment}
-        options={{tabBarLabel: 'Sentiments'}}
+        options={{ tabBarLabel: "Sentiments" }}
       />
     </Tab.Navigator>
   );

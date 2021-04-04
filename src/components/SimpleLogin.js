@@ -1,18 +1,18 @@
-import {CommonActions} from '@react-navigation/native';
-import {Button, Text} from 'galio-framework';
-import React, {useEffect, useState} from 'react';
-import {Alert, TouchableHighlight, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {loginUser} from '../services/auth';
-import {loginStyles} from '../styles/loginStyles';
-import {COLOR} from './shared/colors';
-import CustomInput from './shared/NewCustomInput';
-import {regexes} from './shared/regexes';
-import Loading from './SplashScreen';
+import { CommonActions } from "@react-navigation/native";
+import { Button, Text } from "galio-framework";
+import React, { useEffect, useState } from "react";
+import { Alert, TouchableHighlight, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { loginUser } from "../services/auth";
+import { loginStyles } from "../styles/loginStyles";
+import { COLOR } from "./shared/colors";
+import CustomInput from "./shared/NewCustomInput";
+import { regexes } from "./shared/regexes";
+import Loading from "./SplashScreen";
 
-function LoginForm({navigation}) {
-  const [user, onChangeUser] = useState('');
-  const [pass, onChangePass] = useState('');
+function LoginForm({ navigation }) {
+  const [user, onChangeUser] = useState("");
+  const [pass, onChangePass] = useState("");
   const [progress, onChangeProgress] = useState(false);
   const [disableSigin, setDisableSignin] = useState(true);
   const [gradientColors, setGradientColors] = useState([
@@ -50,10 +50,10 @@ function LoginForm({navigation}) {
                 validations={[
                   {
                     regex: regexes.required,
-                    errMsg: 'Required',
+                    errMsg: "Required",
                   },
                 ]}
-                onValidation={isValid => setUserV(isValid)}
+                onValidation={(isValid) => setUserV(isValid)}
                 color={COLOR.WHITE}
               />
               <CustomInput
@@ -69,15 +69,16 @@ function LoginForm({navigation}) {
                 validations={[
                   {
                     regex: regexes.required,
-                    errMsg: 'Required',
+                    errMsg: "Required",
                   },
                 ]}
-                onValidation={isValid => setPassV(isValid)}
+                onValidation={(isValid) => setPassV(isValid)}
               />
             </View>
             <TouchableHighlight
               style={loginStyles.forgotPassword}
-              onPress={() => navigation.navigate('ForgetEnterEmail')}>
+              onPress={() => navigation.navigate("ForgetEnterEmail")}
+            >
               <Text color={COLOR.APP_GREY} size={11} bold>
                 Forgot Password?
               </Text>
@@ -85,10 +86,11 @@ function LoginForm({navigation}) {
           </View>
           <View style={loginStyles.button}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               colors={gradientColors}
-              style={loginStyles.linearGradient}>
+              style={loginStyles.linearGradient}
+            >
               <Button
                 round
                 color="transparent"
@@ -100,14 +102,15 @@ function LoginForm({navigation}) {
                     navigation.dispatch(
                       CommonActions.reset({
                         index: 0,
-                        routes: [{name: 'Dashboard'}],
-                      }),
+                        routes: [{ name: "Dashboard" }],
+                      })
                     );
                   } else {
                     onChangeProgress(false);
-                    Alert.alert('Login Unsuccessful');
+                    Alert.alert("Login Unsuccessful");
                   }
-                }}>
+                }}
+              >
                 <Text color={COLOR.WHITE} h5 bold>
                   Sign In
                 </Text>

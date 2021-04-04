@@ -1,30 +1,32 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import {Button, Input, Text} from 'galio-framework';
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {COLOR} from '../shared/colors';
-import CustomInput from '../shared/custom-input';
-import {regexes} from '../shared/regexes';
-import {sharedStyles} from '../shared/shared.style';
-import {transactionStyles} from './add-transaction.style';
-import moment from 'moment';
-import {TouchableOpacity} from 'react-native';
-import {Platform} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import LinearGradient from 'react-native-linear-gradient';
-import {saveTransaction} from '../../db/methods';
-import {ScrollView} from 'react-native';
+import { Button, Input, Text } from "galio-framework";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { COLOR } from "../shared/colors";
+import CustomInput from "../shared/custom-input";
+import { regexes } from "../shared/regexes";
+import { sharedStyles } from "../shared/shared.style";
+import { transactionStyles } from "./add-transaction.style";
+import moment from "moment";
+import { TouchableOpacity } from "react-native";
+import { Platform } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import LinearGradient from "react-native-linear-gradient";
+import { saveTransaction } from "../../db/methods";
+import { ScrollView } from "react-native";
 
-const AddTransaction = ({route, navigation}) => {
-  const {base, quote, currentPrice} = route.params;
-  const [price, setPrice] = useState(`${currentPrice.replace(regexes.float, '')}`);
-  const [quantity, setQuantity] = useState('');
-  const [fee, setFee] = useState('');
+const AddTransaction = ({ route, navigation }) => {
+  const { base, quote, currentPrice } = route.params;
+  const [price, setPrice] = useState(
+    `${currentPrice.replace(regexes.float, "")}`
+  );
+  const [quantity, setQuantity] = useState("");
+  const [fee, setFee] = useState("");
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
-  const [notes, setNotes] = useState('');
-  const [exchange, setExchange] = useState('');
+  const [notes, setNotes] = useState("");
+  const [exchange, setExchange] = useState("");
   const [showDate, setShowDate] = useState(false);
   const [showTime, setShowTime] = useState(false);
   const [gradientColors, setGradientColors] = useState([
@@ -34,16 +36,16 @@ const AddTransaction = ({route, navigation}) => {
   const [saveDisabled, setSaveDisabled] = useState(true);
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
-  const [side, setSide] = useState('Buy');
+  const [side, setSide] = useState("Buy");
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShowDate(Platform.OS === 'ios');
+    setShowDate(Platform.OS === "ios");
     setDate(currentDate);
   };
   const onChangeTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShowTime(Platform.OS === 'ios');
+    setShowTime(Platform.OS === "ios");
     setTime(currentDate);
   };
 
@@ -63,11 +65,11 @@ const AddTransaction = ({route, navigation}) => {
       side,
       quantity,
       fee,
-      moment(date).format('x'),
-      moment(time).format('x'),
-      notes,
+      moment(date).format("x"),
+      moment(time).format("x"),
+      notes
     );
-    navigation.navigate('Dashboard');
+    navigation.navigate("Dashboard");
   };
 
   useEffect(() => {
@@ -90,13 +92,13 @@ const AddTransaction = ({route, navigation}) => {
           </Text>
           <CustomInput
             style={transactionStyles.input}
-            textAlign={'right'}
+            textAlign={"right"}
             placeholder="Exchange"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
             value={exchange}
-            onChangeText={text => setExchange(text)}
+            onChangeText={(text) => setExchange(text)}
             pattern={[regexes.password]}
             /* onValidation={isValid => performValidation(isValid)} */
           />
@@ -107,12 +109,12 @@ const AddTransaction = ({route, navigation}) => {
           </Text>
           <CustomInput
             style={transactionStyles.input}
-            textAlign={'right'}
+            textAlign={"right"}
             placeholder="0"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
-            value={base + '/' + quote}
+            value={base + "/" + quote}
             /* onChangeText={text => setPrice(text)} */
             pattern={[regexes.password]}
             /* onValidation={isValid => performValidation(isValid)} */
@@ -124,18 +126,20 @@ const AddTransaction = ({route, navigation}) => {
           </Text>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               flex: 1,
-              justifyContent: 'center',
-            }}>
+              justifyContent: "center",
+            }}
+          >
             <Button
               color={buyBtnColor}
               style={transactionStyles.buysellbtn}
               onPress={() => {
-                setSide('Buy');
+                setSide("Buy");
                 setBuyBtnColor(COLOR.BUY);
                 setSellBtnColor(COLOR.DISABLED);
-              }}>
+              }}
+            >
               <Text color={COLOR.WHITE} h5 bold>
                 Buy
               </Text>
@@ -145,10 +149,11 @@ const AddTransaction = ({route, navigation}) => {
               color={sellBtnColor}
               style={transactionStyles.buysellbtn}
               onPress={() => {
-                setSide('Sell');
+                setSide("Sell");
                 setBuyBtnColor(COLOR.DISABLED);
                 setSellBtnColor(COLOR.SELL);
-              }}>
+              }}
+            >
               <Text color={COLOR.WHITE} h5 bold>
                 Sell
               </Text>
@@ -162,13 +167,13 @@ const AddTransaction = ({route, navigation}) => {
           <Input
             style={transactionStyles.input}
             placeholder="0"
-            textAlign={'right'}
+            textAlign={"right"}
             type="decimal-pad"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
             value={price}
-            onChangeText={text => setPrice(text.replace(regexes.float, ''))}
+            onChangeText={(text) => setPrice(text.replace(regexes.float, ""))}
           />
         </View>
         <View style={transactionStyles.field}>
@@ -177,14 +182,16 @@ const AddTransaction = ({route, navigation}) => {
           </Text>
           <Input
             style={transactionStyles.input}
-            textAlign={'right'}
+            textAlign={"right"}
             placeholder="0"
             type="decimal-pad"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
             value={quantity}
-            onChangeText={text => setQuantity(text.replace(regexes.float, ''))}
+            onChangeText={(text) =>
+              setQuantity(text.replace(regexes.float, ""))
+            }
           />
         </View>
         <View style={transactionStyles.field}>
@@ -193,14 +200,14 @@ const AddTransaction = ({route, navigation}) => {
           </Text>
           <Input
             style={transactionStyles.input}
-            textAlign={'right'}
+            textAlign={"right"}
             placeholder="0"
             type="decimal-pad"
             placeholderTextColor={COLOR.APP_GREY}
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
             value={fee}
-            onChangeText={text => setFee(text.replace(regexes.float, ''))}
+            onChangeText={(text) => setFee(text.replace(regexes.float, ""))}
           />
         </View>
         <View style={transactionStyles.field}>
@@ -210,11 +217,11 @@ const AddTransaction = ({route, navigation}) => {
           <TouchableOpacity onPress={showDatepicker}>
             <CustomInput
               style={transactionStyles.input}
-              textAlign={'right'}
+              textAlign={"right"}
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
-              value={moment(date).format('MMMM D, YYYY')}
+              value={moment(date).format("MMMM D, YYYY")}
               editable={false}
               selectTextOnFocus={false}
             />
@@ -237,11 +244,11 @@ const AddTransaction = ({route, navigation}) => {
           <TouchableOpacity onPress={showTimepicker}>
             <CustomInput
               style={transactionStyles.input}
-              textAlign={'right'}
+              textAlign={"right"}
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
-              value={moment(time).format('hh:mm a')}
+              value={moment(time).format("hh:mm a")}
               editable={false}
               selectTextOnFocus={false}
             />
@@ -260,9 +267,10 @@ const AddTransaction = ({route, navigation}) => {
         <View
           style={{
             flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-          }}>
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }}
+        >
           <Text style={transactionStyles.notesText} bold color={COLOR.APP_GREY}>
             Notes
           </Text>
@@ -275,23 +283,25 @@ const AddTransaction = ({route, navigation}) => {
             iconColor={COLOR.APP_GREY}
             color={COLOR.WHITE}
             value={notes}
-            onChangeText={text => setNotes(text)}
+            onChangeText={(text) => setNotes(text)}
             /* onValidation={isValid => performValidation(isValid)} */
           />
         </View>
       </View>
-      <View style={{paddingBottom: 5}}>
+      <View style={{ paddingBottom: 5 }}>
         <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={gradientColors}
-          style={sharedStyles.linearGradient}>
+          style={sharedStyles.linearGradient}
+        >
           <Button
             round
             color="transparent"
             style={sharedStyles.borderless}
             disabled={saveDisabled}
-            onPress={() => onSave()}>
+            onPress={() => onSave()}
+          >
             <Text color={COLOR.WHITE} h5 bold>
               Save Transaction
             </Text>

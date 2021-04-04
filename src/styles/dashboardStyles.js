@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const dashboardStyles = StyleSheet.create({
   topCardText: {
@@ -6,26 +6,26 @@ export const dashboardStyles = StyleSheet.create({
     marginLeft: 20,
   },
   topCard: {
-    height: 'auto',
-    flexDirection: 'row',
+    height: "auto",
+    flexDirection: "row",
   },
   linearGradient: {
     borderRadius: 15,
     marginLeft: 10,
     marginRight: 10,
-    height: 'auto',
+    height: "auto",
   },
   leftView: {
     flex: 0,
   },
   rightView: {
     marginLeft: 20,
-    width: '50%',
+    width: "50%",
   },
   body: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#121212',
+    flexDirection: "column",
+    backgroundColor: "#121212",
   },
 
   container: {
@@ -39,30 +39,30 @@ export const dashboardStyles = StyleSheet.create({
   },
   text: {
     margin: 6,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   tableBorder: {
     borderWidth: 0.5,
-    borderColor: '#808080',
+    borderColor: "#808080",
   },
   thead: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   theadCoin: {
     flex: 1,
   },
   theadPrice: {
     flex: 2,
-    textAlign: 'right',
+    textAlign: "right",
   },
   theadHoldings: {
     flex: 2,
-    textAlign: 'right',
+    textAlign: "right",
   },
   theadBell: {
     flex: 0.4,
-    alignSelf: 'center',
-    textAlign: 'center',
+    alignSelf: "center",
+    textAlign: "center",
   },
 });

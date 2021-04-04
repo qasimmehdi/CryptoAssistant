@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {CommonActions} from '@react-navigation/native';
-import {Button, Input, Text} from 'galio-framework';
-import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {forgetGetCode, ModifyPassword} from '../services/auth';
-import {loginStyles} from '../styles/loginStyles';
-import registerStyles from '../styles/registerStyles';
-import {COLOR} from './shared/colors';
-import CustomInput from './shared/NewCustomInput';
-import {regexes} from './shared/regexes';
-import Loading from './SplashScreen';
+import { CommonActions } from "@react-navigation/native";
+import { Button, Input, Text } from "galio-framework";
+import React, { useEffect, useState } from "react";
+import { Alert, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { forgetGetCode, ModifyPassword } from "../services/auth";
+import { loginStyles } from "../styles/loginStyles";
+import registerStyles from "../styles/registerStyles";
+import { COLOR } from "./shared/colors";
+import CustomInput from "./shared/NewCustomInput";
+import { regexes } from "./shared/regexes";
+import Loading from "./SplashScreen";
 
-function ForgetEnterEmail({navigation}) {
-  const [email, setEmail] = useState('');
+function ForgetEnterEmail({ navigation }) {
+  const [email, setEmail] = useState("");
   const [gradientColors, setGradientColors] = useState([
     COLOR.DISABLED,
     COLOR.DISABLED,
@@ -49,23 +49,24 @@ function ForgetEnterEmail({navigation}) {
               validations={[
                 {
                   regex: regexes.required,
-                  errMsg: 'Required',
+                  errMsg: "Required",
                 },
                 {
                   regex: regexes.email,
-                  errMsg: 'Invalid email address',
+                  errMsg: "Invalid email address",
                 },
               ]}
-              onValidation={isValid => setUserV(isValid)}
+              onValidation={(isValid) => setUserV(isValid)}
               color={COLOR.WHITE}
             />
           </View>
           <View style={registerStyles.NextButton}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               colors={gradientColors}
-              style={loginStyles.linearGradient}>
+              style={loginStyles.linearGradient}
+            >
               <Button
                 round
                 color="transparent"
@@ -74,18 +75,19 @@ function ForgetEnterEmail({navigation}) {
                 onPress={() => {
                   setIsLoading(true);
                   forgetGetCode(email)
-                    .then(res => {
+                    .then((res) => {
                       console.log(res);
-                      Alert.alert('Code Sent Successfully');
-                      navigation.navigate('ResetPassword');
+                      Alert.alert("Code Sent Successfully");
+                      navigation.navigate("ResetPassword");
                     })
-                    .catch(err => {
+                    .catch((err) => {
                       Alert.alert(
-                        err?.response?.data?.errorMsg ?? 'Something went wrong',
+                        err?.response?.data?.errorMsg ?? "Something went wrong"
                       );
                     })
                     .finally(() => setIsLoading(false));
-                }}>
+                }}
+              >
                 <Text color={COLOR.WHITE} h5 bold>
                   Get Code
                 </Text>
@@ -98,10 +100,10 @@ function ForgetEnterEmail({navigation}) {
   );
 }
 
-function ResetPassword({navigation}) {
-  const [code, setCode] = useState('');
-  const [pass, setPass] = useState('');
-  const [pass2, setPass2] = useState('');
+function ResetPassword({ navigation }) {
+  const [code, setCode] = useState("");
+  const [pass, setPass] = useState("");
+  const [pass2, setPass2] = useState("");
   const [gradientColors, setGradientColors] = useState([
     COLOR.DISABLED,
     COLOR.DISABLED,
@@ -153,10 +155,10 @@ function ResetPassword({navigation}) {
               validations={[
                 {
                   regex: regexes.otp,
-                  errMsg: 'Min 6 characters are required',
+                  errMsg: "Min 6 characters are required",
                 },
               ]}
-              onValidation={isValid => setCodeV(isValid)}
+              onValidation={(isValid) => setCodeV(isValid)}
             />
             <CustomInput
               style={loginStyles.input}
@@ -171,14 +173,14 @@ function ResetPassword({navigation}) {
               validations={[
                 {
                   regex: regexes.required,
-                  errMsg: 'Required',
+                  errMsg: "Required",
                 },
                 {
                   regex: regexes.password,
-                  errMsg: 'Min 8 characters are required',
+                  errMsg: "Min 8 characters are required",
                 },
               ]}
-              onValidation={isValid => setPassV(isValid)}
+              onValidation={(isValid) => setPassV(isValid)}
             />
             <CustomInput
               style={loginStyles.input}
@@ -193,14 +195,14 @@ function ResetPassword({navigation}) {
               validations={[
                 {
                   regex: regexes.required,
-                  errMsg: 'Required',
+                  errMsg: "Required",
                 },
                 {
                   regex: regexes.password,
-                  errMsg: 'Min 8 characters are required',
+                  errMsg: "Min 8 characters are required",
                 },
               ]}
-              onValidation={isValid => setPass2V(isValid)}
+              onValidation={(isValid) => setPass2V(isValid)}
             />
             {matchError ? (
               <Text size={10} color={COLOR.RED}>
@@ -210,10 +212,11 @@ function ResetPassword({navigation}) {
           </View>
           <View style={registerStyles.NextButton}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               colors={gradientColors}
-              style={loginStyles.linearGradient}>
+              style={loginStyles.linearGradient}
+            >
               <Button
                 round
                 color="transparent"
@@ -222,18 +225,22 @@ function ResetPassword({navigation}) {
                 onPress={async () => {
                   setIsLoading(true);
                   if (await ModifyPassword(code, pass2)) {
-                    Alert.alert('Password Reset Successfully');
+                    Alert.alert("Password Reset Successfully");
                     navigation.dispatch(
                       CommonActions.reset({
                         index: 1,
-                        routes: [{name: 'SigninOrRegister'}, {name: 'Sign In'}],
-                      }),
+                        routes: [
+                          { name: "SigninOrRegister" },
+                          { name: "Sign In" },
+                        ],
+                      })
                     );
                   } else {
-                    Alert.alert('Something went wrong');
+                    Alert.alert("Something went wrong");
                   }
                   setIsLoading(false);
-                }}>
+                }}
+              >
                 <Text color={COLOR.WHITE} h5 bold>
                   Save
                 </Text>
@@ -246,4 +253,4 @@ function ResetPassword({navigation}) {
   );
 }
 
-export {ForgetEnterEmail, ResetPassword};
+export { ForgetEnterEmail, ResetPassword };

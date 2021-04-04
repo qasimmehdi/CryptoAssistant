@@ -1,19 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Text} from 'galio-framework';
-import React, {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
-import {Image} from 'react-native';
-import {View} from 'react-native';
-import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
-import Hr from '../shared/hr';
-import {styles} from './connect-exchange.style';
-import {ScrollView} from 'react-native';
-import CCXT from '../../services/ccxt/react-ccxt';
-import iconImages from '../../assets/coinIcons/names';
-import {getAllExchanges} from '../../db/methods';
+import { Text } from "galio-framework";
+import React, { useEffect } from "react";
+import { TouchableOpacity } from "react-native";
+import { Image } from "react-native";
+import { View } from "react-native";
+import { COLOR } from "../shared/colors";
+import { sharedStyles } from "../shared/shared.style";
+import Hr from "../shared/hr";
+import { styles } from "./connect-exchange.style";
+import { ScrollView } from "react-native";
+import CCXT from "../../services/ccxt/react-ccxt";
+import iconImages from "../../assets/coinIcons/names";
+import { getAllExchanges } from "../../db/methods";
 
-const ExchangeRow = props => {
+const ExchangeRow = (props) => {
   return (
     <React.Fragment>
       <TouchableOpacity
@@ -21,12 +21,13 @@ const ExchangeRow = props => {
           props.navigation.navigate(props.redirect, {
             name: props.name,
           });
-        }}>
+        }}
+      >
         <View style={styles.row}>
           <View style={styles.coinCell}>
             <Image
               style={styles.exchangeIcon}
-              source={{uri: props.logo ? props.logo : iconImages.GENERIC}}
+              source={{ uri: props.logo ? props.logo : iconImages.GENERIC }}
             />
             <Text color={COLOR.WHITE} size={14} bold style={styles.coinitem}>
               {props.name}
@@ -39,12 +40,12 @@ const ExchangeRow = props => {
   );
 };
 
-export default function SelectExchangeList({navigation, route}) {
+export default function SelectExchangeList({ navigation, route }) {
   const [exchanges] = React.useState(new CCXT().getAllExchangeAndLogo());
 
   useEffect(() => {
     getAllExchanges()
-      .then(resp => {
+      .then((resp) => {
         console.log(resp);
         let tempArray = [];
         const len = resp.length;
@@ -57,14 +58,14 @@ export default function SelectExchangeList({navigation, route}) {
         }
         console.log(tempArray);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }, []);
 
   return (
     <View style={sharedStyles.body}>
-      <ScrollView style={{flex: 1, flexDirection: 'column'}}>
+      <ScrollView style={{ flex: 1, flexDirection: "column" }}>
         <Hr color={COLOR.APP_GREY} />
         {exchanges.map((x, i) => (
           <ExchangeRow

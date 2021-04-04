@@ -1,30 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {CommonActions, useIsFocused} from '@react-navigation/native';
-import {Button, Text} from 'galio-framework';
-import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {useDispatch, useSelector} from 'react-redux';
-import {registerUser} from '../services/auth';
-import * as Actions from '../store/actions';
-import {loginStyles} from '../styles/loginStyles';
-import registerStyles from '../styles/registerStyles';
-import {COLOR} from './shared/colors';
-import CustomInput from './shared/NewCustomInput';
-import {regexes} from './shared/regexes';
-import Loading from './SplashScreen';
+import { CommonActions, useIsFocused } from "@react-navigation/native";
+import { Button, Text } from "galio-framework";
+import React, { useEffect, useState } from "react";
+import { Alert, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../services/auth";
+import * as Actions from "../store/actions";
+import { loginStyles } from "../styles/loginStyles";
+import registerStyles from "../styles/registerStyles";
+import { COLOR } from "./shared/colors";
+import CustomInput from "./shared/NewCustomInput";
+import { regexes } from "./shared/regexes";
+import Loading from "./SplashScreen";
 
-function EnterUsername({navigation}) {
+function EnterUsername({ navigation }) {
   const isFocused = useIsFocused();
   const [gradientColors, setGradientColors] = useState([
     COLOR.DISABLED,
     COLOR.DISABLED,
   ]);
   const [disableSigin, setDisableSignin] = useState(true);
-  const user = useSelector(state => state.EditUsername.username);
+  const user = useSelector((state) => state.EditUsername.username);
   const dispatch = useDispatch();
-  const onChangeUser = text => {
-    return dispatch(Actions.EditUsername({username: text}));
+  const onChangeUser = (text) => {
+    return dispatch(Actions.EditUsername({ username: text }));
   };
 
   const [userV, setUserV] = useState(false);
@@ -60,28 +60,30 @@ function EnterUsername({navigation}) {
           placeholderTextColor={COLOR.APP_GREY}
           color={COLOR.WHITE}
           value={user}
-          onChangeText={text => onChangeUser(text)}
+          onChangeText={(text) => onChangeUser(text)}
           validations={[
             {
               regex: regexes.user,
-              errMsg: 'Min 6 characters are required',
+              errMsg: "Min 6 characters are required",
             },
           ]}
-          onValidation={isValid => setUserV(isValid)}
+          onValidation={(isValid) => setUserV(isValid)}
         />
       </View>
       <View style={registerStyles.NextButton}>
         <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={gradientColors}
-          style={loginStyles.linearGradient}>
+          style={loginStyles.linearGradient}
+        >
           <Button
             round
             color="transparent"
             style={loginStyles.borderless}
-            onPress={() => navigation.navigate('EnterPassword')}
-            disabled={disableSigin}>
+            onPress={() => navigation.navigate("EnterPassword")}
+            disabled={disableSigin}
+          >
             <Text color={COLOR.WHITE} h5 bold>
               Next
             </Text>
@@ -92,17 +94,17 @@ function EnterUsername({navigation}) {
   );
 }
 
-function EnterPassword({navigation}) {
+function EnterPassword({ navigation }) {
   const isFocused = useIsFocused();
   const [disableNext, setDisableNext] = useState(true);
   const [gradientColors, setGradientColors] = useState([
     COLOR.DISABLED,
     COLOR.DISABLED,
   ]);
-  const pass = useSelector(state => state.EditPassword.password);
+  const pass = useSelector((state) => state.EditPassword.password);
   const dispatch = useDispatch();
-  const onChangePass = text => {
-    return dispatch(Actions.EditPassword({password: text}));
+  const onChangePass = (text) => {
+    return dispatch(Actions.EditPassword({ password: text }));
   };
   const [passV, setPassV] = useState(false);
 
@@ -140,28 +142,30 @@ function EnterPassword({navigation}) {
           iconColor={COLOR.APP_GREY}
           color={COLOR.WHITE}
           value={pass}
-          onChangeText={text => onChangePass(text)}
+          onChangeText={(text) => onChangePass(text)}
           validations={[
             {
               regex: regexes.password,
-              errMsg: 'Min 8 characters are required',
+              errMsg: "Min 8 characters are required",
             },
           ]}
-          onValidation={isValid => setPassV(isValid)}
+          onValidation={(isValid) => setPassV(isValid)}
         />
       </View>
       <View style={registerStyles.NextButton}>
         <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={gradientColors}
-          style={loginStyles.linearGradient}>
+          style={loginStyles.linearGradient}
+        >
           <Button
             round
             color="transparent"
             style={loginStyles.borderless}
-            onPress={() => navigation.navigate('EnterEmail')}
-            disabled={disableNext}>
+            onPress={() => navigation.navigate("EnterEmail")}
+            disabled={disableNext}
+          >
             <Text color={COLOR.WHITE} h5 bold>
               Next
             </Text>
@@ -172,7 +176,7 @@ function EnterPassword({navigation}) {
   );
 }
 
-function EnterEmail({navigation}) {
+function EnterEmail({ navigation }) {
   const isFocused = useIsFocused();
   const [disableNext, setDisableNext] = useState(true);
   const [gradientColors, setGradientColors] = useState([
@@ -180,12 +184,12 @@ function EnterEmail({navigation}) {
     COLOR.DISABLED,
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const email = useSelector(state => state.EditEmail.email);
+  const email = useSelector((state) => state.EditEmail.email);
   // eslint-disable-next-line no-shadow
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  const onChangeEmail = text => {
-    return dispatch(Actions.EditEmail({email: text}));
+  const onChangeEmail = (text) => {
+    return dispatch(Actions.EditEmail({ email: text }));
   };
   const [emailV, setEmailV] = useState(false);
 
@@ -228,19 +232,20 @@ function EnterEmail({navigation}) {
               validations={[
                 {
                   regex: regexes.email,
-                  errMsg: 'Invalid email address',
+                  errMsg: "Invalid email address",
                 },
               ]}
-              onValidation={isValid => setEmailV(isValid)}
+              onValidation={(isValid) => setEmailV(isValid)}
               color={COLOR.WHITE}
             />
           </View>
           <View style={registerStyles.NextButton}>
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
               colors={gradientColors}
-              style={loginStyles.linearGradient}>
+              style={loginStyles.linearGradient}
+            >
               <Button
                 round
                 color="transparent"
@@ -251,30 +256,31 @@ function EnterEmail({navigation}) {
                     await registerUser(
                       state.EditUsername.username,
                       state.EditPassword.password,
-                      state.EditEmail.email,
+                      state.EditEmail.email
                     )
                   ) {
                     navigation.dispatch(
                       CommonActions.reset({
                         index: 1,
                         routes: [
-                          {name: 'SigninOrRegister'},
-                          {name: 'AccountCreated'},
+                          { name: "SigninOrRegister" },
+                          { name: "AccountCreated" },
                         ],
-                      }),
+                      })
                     );
                   } else {
-                    Alert.alert('Something Went Wrong');
+                    Alert.alert("Something Went Wrong");
                     navigation.dispatch(
                       CommonActions.reset({
                         index: 0,
-                        routes: [{name: 'SigninOrRegister'}],
-                      }),
+                        routes: [{ name: "SigninOrRegister" }],
+                      })
                     );
                   }
                   setIsLoading(false);
                 }}
-                disabled={disableNext}>
+                disabled={disableNext}
+              >
                 <Text color={COLOR.WHITE} h5 bold>
                   Next
                 </Text>
@@ -287,4 +293,4 @@ function EnterEmail({navigation}) {
   );
 }
 
-export {EnterUsername, EnterPassword, EnterEmail};
+export { EnterUsername, EnterPassword, EnterEmail };

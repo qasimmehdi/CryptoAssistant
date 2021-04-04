@@ -1,31 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {Text} from 'galio-framework';
-import moment from 'moment';
-import numeral from 'numeral';
-import React, {useEffect, useState} from 'react';
-import {Dimensions, View} from 'react-native';
-import {LineChart} from 'react-native-chart-kit';
-import {useSelector} from 'react-redux';
-import {getPrediction} from '../../services/user.services';
-import {COLOR} from '../shared/colors';
-import Loading from '../SplashScreen';
-import {coinPageStyles} from './coinPageStyle';
+import { Text } from "galio-framework";
+import moment from "moment";
+import numeral from "numeral";
+import React, { useEffect, useState } from "react";
+import { Dimensions, View } from "react-native";
+import { LineChart } from "react-native-chart-kit";
+import { useSelector } from "react-redux";
+import { getPrediction } from "../../services/user.services";
+import { COLOR } from "../shared/colors";
+import Loading from "../SplashScreen";
+import { coinPageStyles } from "./coinPageStyle";
 
-export default function AIPredictionChart({navigation}) {
-  const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
+export default function AIPredictionChart({ navigation }) {
+  const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
   const [data, setData] = useState([1]);
   const [labels, setLabels] = useState([]);
-  const [price, setPrice] = useState('0');
+  const [price, setPrice] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
   let labelRadix;
   useEffect(() => {
-    navigation.setOptions({title: coinPageTitle + ' Prediction'});
+    navigation.setOptions({ title: coinPageTitle + " Prediction" });
     let isMounted = true;
     setIsLoading(true);
 
-    getPrediction(coinPageTitle, '30')
-      .then(resp => {
+    getPrediction(coinPageTitle, "30")
+      .then((resp) => {
         console.log(resp);
         let tempData = [],
           tempLabels = [];
@@ -34,8 +34,8 @@ export default function AIPredictionChart({navigation}) {
           tempData.push(i.prediction);
           tempLabels.push(
             j % labelRadix === 0
-              ? moment(i.timestamp * 1000).format('MM-DD')
-              : '',
+              ? moment(i.timestamp * 1000).format("MM-DD")
+              : ""
           );
         });
         if (isMounted) {
@@ -44,7 +44,7 @@ export default function AIPredictionChart({navigation}) {
           setPrice(tempData[tempData.length - 1]);
         }
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
@@ -56,10 +56,10 @@ export default function AIPredictionChart({navigation}) {
 
   return (
     <View style={coinPageStyles.body}>
-      <Text color={COLOR.WHITE} h3 bold style={{flex: 1, margin: 10}}>
-        {!isLoading && numeral(price).format('$0,0.[00]')}
+      <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
+        {!isLoading && numeral(price).format("$0,0.[00]")}
       </Text>
-      <View style={{flex: 6}}>
+      <View style={{ flex: 6 }}>
         {isLoading ? (
           <Loading />
         ) : (
@@ -74,7 +74,7 @@ export default function AIPredictionChart({navigation}) {
               ],
               /* legend: ['Market', 'Prediction'], */
             }}
-            width={Dimensions.get('window').width}
+            width={Dimensions.get("window").width}
             height={220}
             yAxisLabel="$"
             yAxisInterval={1}

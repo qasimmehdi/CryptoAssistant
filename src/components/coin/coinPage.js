@@ -1,47 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-native/no-inline-styles */
-import {Button, Text} from 'galio-framework';
-import moment from 'moment';
-import numeral from 'numeral';
-import React, {useEffect, useState} from 'react';
-import {Dimensions, View} from 'react-native';
-import {LineChart} from 'react-native-chart-kit';
-import LinearGradient from 'react-native-linear-gradient';
-import {useSelector} from 'react-redux';
-import CCXT from '../../services/ccxt/react-ccxt';
-import Graph from '../Graph';
-import {COLOR} from '../shared/colors';
-import {sharedStyles} from '../shared/shared.style';
-import Loading from '../SplashScreen';
-import {coinPageStyles} from './coinPageStyle';
+import { Button, Text } from "galio-framework";
+import moment from "moment";
+import numeral from "numeral";
+import React, { useEffect, useState } from "react";
+import { Dimensions, View } from "react-native";
+import { LineChart } from "react-native-chart-kit";
+import LinearGradient from "react-native-linear-gradient";
+import { useSelector } from "react-redux";
+import CCXT from "../../services/ccxt/react-ccxt";
+import Graph from "../Graph";
+import { COLOR } from "../shared/colors";
+import { sharedStyles } from "../shared/shared.style";
+import Loading from "../SplashScreen";
+import { coinPageStyles } from "./coinPageStyle";
 
-export default function coinPage({navigation}) {
-  const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
+export default function coinPage({ navigation }) {
+  const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
   let ccxt = new CCXT();
   const [graphData, setGraphData] = useState(null);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({title: coinPageTitle});
+    navigation.setOptions({ title: coinPageTitle });
     let isMounted = true;
     setIsLoading(true);
     ccxt
-      .Candles(`${coinPageTitle}/USD`, '1d')
-      .then(resp => {
+      .Candles(`${coinPageTitle}/USD`, "1d")
+      .then((resp) => {
         console.log(resp);
         /* let tempData = [];
         resp.forEach(i => {
           tempData.push({time: i[0] / 1000, value: i[4]});
         }); */
-        const tempData = resp.map(i => ({time: i[0] / 1000, value: i[4]}));
+        const tempData = resp.map((i) => ({ time: i[0] / 1000, value: i[4] }));
         if (isMounted) {
           setPrice(tempData[tempData.length - 1].value);
           setGraphData(tempData);
         }
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
@@ -53,10 +53,10 @@ export default function coinPage({navigation}) {
 
   return (
     <View style={coinPageStyles.body}>
-      <Text color={COLOR.WHITE} h3 bold style={{flex: 1, margin: 10}}>
-        {!isLoading && numeral(price).format('$0,0.[00]')}
+      <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
+        {!isLoading && numeral(price).format("$0,0.[00]")}
       </Text>
-      <View style={{flex: 6}}>
+      <View style={{ flex: 6 }}>
         {isLoading ? (
           <Loading />
         ) : (
@@ -95,17 +95,19 @@ export default function coinPage({navigation}) {
           // />
         )}
       </View>
-      <View style={{padding: 10, flex: 1}}>
+      <View style={{ padding: 10, flex: 1 }}>
         <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-          style={sharedStyles.linearGradient}>
+          style={sharedStyles.linearGradient}
+        >
           <Button
             round
             color="transparent"
             style={sharedStyles.borderless}
-            onPress={() => navigation.navigate('AIPredictionChart')}>
+            onPress={() => navigation.navigate("AIPredictionChart")}
+          >
             <Text color={COLOR.WHITE} h5 bold>
               AI Coin chart predictor
             </Text>

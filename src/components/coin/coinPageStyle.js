@@ -1,9 +1,9 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const coinPageStyles = StyleSheet.create({
   body: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#121212',
+    flexDirection: "column",
+    backgroundColor: "#121212",
   },
 });

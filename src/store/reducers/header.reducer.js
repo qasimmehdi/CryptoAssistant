@@ -1,13 +1,13 @@
-import * as Actions from '../actions';
+import * as Actions from "../actions";
 
 const initialState = {
-  title: 'Crypto Assistant',
+  title: "Crypto Assistant",
 };
 
-export default (state = initialState, {type, payload}) => {
+export default (state = initialState, { type, payload }) => {
   switch (type) {
     case Actions.ChangeHeader:
-      return {...state, ...payload};
+      return { ...state, ...payload };
 
     default:
       return state;

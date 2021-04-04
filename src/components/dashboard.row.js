@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Button, Text} from 'galio-framework';
-import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {Image, View} from 'react-native';
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import iconImages from '../assets/coinIcons/names';
-import {rowStyles} from '../styles/rowStyles';
-import {COLOR} from './shared/colors';
-import Hr from './shared/hr';
+import { Button, Text } from "galio-framework";
+import React from "react";
+import { TouchableOpacity } from "react-native";
+import { Image, View } from "react-native";
+import Icon from "react-native-vector-icons/dist/MaterialIcons";
+import iconImages from "../assets/coinIcons/names";
+import { rowStyles } from "../styles/rowStyles";
+import { COLOR } from "./shared/colors";
+import Hr from "./shared/hr";
 
 export default function Row(props) {
   return (
@@ -27,13 +27,19 @@ export default function Row(props) {
           </Text>
         </View>
         <View style={rowStyles.price}>
-          <Text color={COLOR.WHITE} size={12} bold style={{textAlign: 'right'}}>
+          <Text
+            color={COLOR.WHITE}
+            size={12}
+            bold
+            style={{ textAlign: "right" }}
+          >
             {props.price}
           </Text>
           <Text
-            color={props.priceChange.includes('-') ? COLOR.RED : COLOR.GREEN}
+            color={props.priceChange.includes("-") ? COLOR.RED : COLOR.GREEN}
             size={11}
-            style={{textAlign: 'right'}}>
+            style={{ textAlign: "right" }}
+          >
             {props.priceChange}
           </Text>
         </View>
@@ -46,13 +52,18 @@ export default function Row(props) {
               style={rowStyles.addBtn}
               onPress={() => {
                 console.log(props.name, props.quote);
-                props.navigation.navigate('AddTransaction', {
+                props.navigation.navigate("AddTransaction", {
                   base: props.name,
                   quote: props.quote,
                   currentPrice: props.price,
                 });
-              }}>
-              <Text color={COLOR.WHITE} size={14} style={{textAlign: 'center'}}>
+              }}
+            >
+              <Text
+                color={COLOR.WHITE}
+                size={14}
+                style={{ textAlign: "center" }}
+              >
                 Add
               </Text>
             </Button>
@@ -62,13 +73,15 @@ export default function Row(props) {
                 color={COLOR.WHITE}
                 size={12}
                 bold
-                style={{textAlign: 'right'}}>
+                style={{ textAlign: "right" }}
+              >
                 {props.holdingConverted}
               </Text>
               <Text
                 color={COLOR.APP_GREY}
                 size={11}
-                style={{textAlign: 'right'}}>
+                style={{ textAlign: "right" }}
+              >
                 {props.holdingUnits}
               </Text>
             </React.Fragment>
@@ -76,14 +89,15 @@ export default function Row(props) {
         </View>
         <TouchableOpacity
           onPress={() =>
-            props.navigation.navigate('AddNotification', {
+            props.navigation.navigate("AddNotification", {
               base: props.name,
               quote: props.quote,
               isNotificationOn: props.notification,
             })
-          }>
+          }
+        >
           <Icon
-            name={props.notification ? 'notifications' : 'notifications-none'}
+            name={props.notification ? "notifications" : "notifications-none"}
             color={props.notification ? COLOR.WHITE : COLOR.APP_GREY}
             size={17}
             style={rowStyles.rowBell}

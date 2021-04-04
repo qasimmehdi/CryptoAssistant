@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
-import {Input, Text} from 'galio-framework';
-import {COLOR} from './colors';
-import {sharedStyles} from './shared.style';
+import React, { useEffect, useState } from "react";
+import { Input, Text } from "galio-framework";
+import { COLOR } from "./colors";
+import { sharedStyles } from "./shared.style";
 
 export default function CustomInput(props) {
-  const {style, validations, onChangeText, onValidation, ...props2} = props;
-  const [error, setError] = useState('');
-  const [text, setText] = useState('');
+  const { style, validations, onChangeText, onValidation, ...props2 } = props;
+  const [error, setError] = useState("");
+  const [text, setText] = useState("");
   const [fresh, setFresh] = useState(true);
 
-  const handleChange = val => {
+  const handleChange = (val) => {
     setText(val);
     onChangeText && onChangeText(val);
   };
@@ -41,7 +41,7 @@ export default function CustomInput(props) {
         onValidation && onValidation(false);
         break;
       } else {
-        setError('');
+        setError("");
         onValidation && onValidation(true);
       }
     }
@@ -52,11 +52,11 @@ export default function CustomInput(props) {
       <Input
         value={text}
         style={
-          error !== ''
-            ? {...style, ...sharedStyles.borderDanger}
-            : {...style, ...sharedStyles.borderOk}
+          error !== ""
+            ? { ...style, ...sharedStyles.borderDanger }
+            : { ...style, ...sharedStyles.borderOk }
         }
-        onChangeText={value => handleChange(value)}
+        onChangeText={(value) => handleChange(value)}
         /* onBlur={() => handleBlur()} */
         {...props2}
       />

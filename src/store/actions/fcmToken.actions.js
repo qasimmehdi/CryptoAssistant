@@ -1,6 +1,6 @@
-export const setFcmToken = 'SET FCM TOKEN';
+export const setFcmToken = "SET FCM TOKEN";
 
-export const fcmToken = payload => ({
+export const fcmToken = (payload) => ({
   type: setFcmToken,
   payload,
 });

@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {COLOR} from '../shared/colors';
+import { StyleSheet } from "react-native";
+import { COLOR } from "../shared/colors";
 
 export const addCoinStyle = StyleSheet.create({
   input: {
@@ -7,11 +7,11 @@ export const addCoinStyle = StyleSheet.create({
     backgroundColor: COLOR.BG,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingTop: 12,
   },
   coinName: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   price: {
     flex: 2,
@@ -23,23 +23,23 @@ export const addCoinStyle = StyleSheet.create({
   },
   rowBell: {
     flex: 0.4,
-    alignSelf: 'center',
-    textAlign: 'center',
+    alignSelf: "center",
+    textAlign: "center",
   },
   addBtn: {
     width: 50,
     height: 25,
     borderColor: COLOR.APP_GREY,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   coinIcon: {
     width: 24,
     height: 24,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginRight: 10,
   },
   coinCell: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

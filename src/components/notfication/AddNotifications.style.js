@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {COLOR} from '../shared/colors';
+import { StyleSheet } from "react-native";
+import { COLOR } from "../shared/colors";
 
 export const notificationsStyle = StyleSheet.create({
   input: {
@@ -12,7 +12,7 @@ export const notificationsStyle = StyleSheet.create({
   },
   infoText: {
     flex: 7,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   saveBtn: {
     flex: 1,

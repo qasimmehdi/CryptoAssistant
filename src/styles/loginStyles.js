@@ -1,19 +1,19 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const loginStyles = StyleSheet.create({
   button: {
     flex: 1,
     marginTop: 10,
     marginBottom: 30,
-    alignSelf: 'center',
-    flexDirection: 'column-reverse',
+    alignSelf: "center",
+    flexDirection: "column-reverse",
   },
   SigninOrRegisterButton: {
     flex: 1,
     marginTop: 10,
     marginBottom: 40,
-    alignSelf: 'center',
-    flexDirection: 'column-reverse',
+    alignSelf: "center",
+    flexDirection: "column-reverse",
   },
   SigninOrRegisterBorderless: {
     borderWidth: 0,
@@ -28,25 +28,25 @@ export const loginStyles = StyleSheet.create({
   },
   forgotPassword: {
     marginRight: 30,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   goBack: {
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 30,
   },
   body: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: "#121212",
   },
   centerForm: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   title: {
-    alignSelf: 'center',
+    alignSelf: "center",
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'column',
+    justifyContent: "center",
+    flexDirection: "column",
   },
   description: {
     marginTop: 20,
@@ -54,16 +54,16 @@ export const loginStyles = StyleSheet.create({
   },
   extraText: {
     paddingTop: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   row: {
-    flexDirection: 'row',
-    alignSelf: 'center',
+    flexDirection: "row",
+    alignSelf: "center",
     paddingTop: 20,
   },
   input: {
-    borderColor: '#808080',
-    backgroundColor: '#121212',
+    borderColor: "#808080",
+    backgroundColor: "#121212",
     borderRadius: 0,
     borderTopWidth: 0,
     borderLeftWidth: 0,

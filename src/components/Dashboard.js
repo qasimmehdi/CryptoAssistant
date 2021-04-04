@@ -1,24 +1,29 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useIsFocused} from '@react-navigation/native';
-import {Text} from 'galio-framework';
-import numeral from 'numeral';
-import React, {useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
-import {useDispatch} from 'react-redux';
-import {getFavourites} from '../db/methods';
-import CCXT from '../services/ccxt/react-ccxt';
-import * as Actions from '../store/actions';
-import {dashboardStyles} from '../styles/dashboardStyles';
-import Row from './dashboard.row';
-import {COLOR} from './shared/colors';
-import Hr from './shared/hr';
-import Loading from './SplashScreen';
+import { useIsFocused } from "@react-navigation/native";
+import { Text } from "galio-framework";
+import numeral from "numeral";
+import React, { useEffect, useState } from "react";
+import {
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import Icon from "react-native-vector-icons/dist/MaterialIcons";
+import EntypoIcon from "react-native-vector-icons/Entypo";
+import { useDispatch } from "react-redux";
+import { getFavourites } from "../db/methods";
+import CCXT from "../services/ccxt/react-ccxt";
+import * as Actions from "../store/actions";
+import { dashboardStyles } from "../styles/dashboardStyles";
+import Row from "./dashboard.row";
+import { COLOR } from "./shared/colors";
+import Hr from "./shared/hr";
+import Loading from "./SplashScreen";
 
-function Dashboard({navigation}) {
+function Dashboard({ navigation }) {
   const isFocused = useIsFocused();
   const ccxt = new CCXT();
   const [balance, setbalance] = useState(0.0);
@@ -26,33 +31,33 @@ function Dashboard({navigation}) {
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const onClickCoin = coin => {
-    return dispatch(Actions.setSelectedCoin({base: coin, quote: 'USD'}));
+  const onClickCoin = (coin) => {
+    return dispatch(Actions.setSelectedCoin({ base: coin, quote: "USD" }));
   };
-  const changeTitle = title => {
-    return dispatch(Actions.Header({title: title}));
+  const changeTitle = (title) => {
+    return dispatch(Actions.Header({ title: title }));
   };
 
   function updateTable(data, tempArray) {
-    console.log('updateTable', data);
-    console.log('updateTable coinsData', tempArray);
+    console.log("updateTable", data);
+    console.log("updateTable coinsData", tempArray);
     let tempCoinsData = tempArray;
     for (let i = 0; i < tempCoinsData.length; i++) {
       let pair = `${tempCoinsData[i].name}-USD`;
       console.log(pair);
-      tempCoinsData[i].price = numeral(data[pair].last).format('$0,0.0[0000]');
+      tempCoinsData[i].price = numeral(data[pair].last).format("$0,0.0[0000]");
       tempCoinsData[i].priceChange = numeral(data[pair].change).format(
-        '+0,0.0[0000]',
+        "+0,0.0[0000]"
       );
     }
-    console.log('updateTable', tempCoinsData);
+    console.log("updateTable", tempCoinsData);
     return tempCoinsData;
   }
 
   useEffect(() => {
     //do not do anything here make another useEffect if needed
     if (isFocused) {
-      changeTitle('Crypto Assistant');
+      changeTitle("Crypto Assistant");
     }
   }, [isFocused]);
 
@@ -79,9 +84,9 @@ function Dashboard({navigation}) {
       setIsLoading(true);
       let tempArray = [];
       getFavourites()
-        .then(resp => {
+        .then((resp) => {
           const len = resp.length;
-          console.log('dashboard get favourites', resp);
+          console.log("dashboard get favourites", resp);
           for (let i = 0; i < len; i++) {
             for (let j = 0; j < resp[i].rows.length; j++) {
               let item = resp[i].rows.item(j);
@@ -89,31 +94,31 @@ function Dashboard({navigation}) {
               tempArray.push({
                 name: item.base,
                 quote: item.quote,
-                price: '0',
-                priceChange: '0',
-                changePercentage: '0',
-                holdingConverted: '0',
+                price: "0",
+                priceChange: "0",
+                changePercentage: "0",
+                holdingConverted: "0",
                 holdingUnits: item.balance,
-                notification: item.notification === '1' ? true : false,
+                notification: item.notification === "1" ? true : false,
                 balance: parseFloat(item.balance) > 0 ? true : false,
               });
             }
           }
-          console.log('tempArray', tempArray);
+          console.log("tempArray", tempArray);
           setCoinsData([...tempArray]);
-          let favPairs = tempArray.map(i => `${i.name}/${i.quote}`);
+          let favPairs = tempArray.map((i) => `${i.name}/${i.quote}`);
           ccxt
             .coinDetails(favPairs)
-            .then(resp2 => {
-              console.log('resp', resp2);
+            .then((resp2) => {
+              console.log("resp", resp2);
               setCoinsData([...updateTable(resp2, tempArray)]);
             })
-            .catch(err => console.log(err))
+            .catch((err) => console.log(err))
             .finally(() => {
               setIsLoading(false);
             });
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
   }, [isFocused]);
 
@@ -121,20 +126,20 @@ function Dashboard({navigation}) {
     if (isFocused) {
       ccxt
         .fetchBalances()
-        .then(response => {
+        .then((response) => {
           let total = 0;
           for (let exchange of response) {
             if (exchange?.info?.balances) {
               total += exchange.info.balances.reduce(
                 (p, f) => p + parseFloat(f.free),
-                0,
+                0
               );
             }
           }
           setbalance(total);
-          console.log('Calculate balance');
+          console.log("Calculate balance");
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           setbalance(0.0);
         });
@@ -143,25 +148,26 @@ function Dashboard({navigation}) {
 
   const onRefresh = React.useCallback(() => {
     setRefresh(true);
-    console.log('refreshing', coinsData);
-    let favPairs = coinsData.map(i => `${i.name}/USD`);
+    console.log("refreshing", coinsData);
+    let favPairs = coinsData.map((i) => `${i.name}/USD`);
     ccxt
       .coinDetails(favPairs)
-      .then(resp => {
-        console.log('resp', resp);
+      .then((resp) => {
+        console.log("resp", resp);
         setCoinsData([...updateTable(resp, coinsData)]);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => setRefresh(false));
   }, [coinsData]);
 
   return (
     <View style={dashboardStyles.body}>
       <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
         colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-        style={dashboardStyles.linearGradient}>
+        style={dashboardStyles.linearGradient}
+      >
         <View style={dashboardStyles.topCard}>
           <View style={dashboardStyles.leftView}>
             <Text color={COLOR.WHITE} h5 style={dashboardStyles.topCardText}>
@@ -171,7 +177,8 @@ function Dashboard({navigation}) {
               color={COLOR.WHITE}
               h4
               bold
-              style={dashboardStyles.topCardText}>
+              style={dashboardStyles.topCardText}
+            >
               ${`${balance.toFixed(2)}`}
             </Text>
           </View>
@@ -179,7 +186,7 @@ function Dashboard({navigation}) {
             <Text
               color={COLOR.WHITE}
               h6
-              style={{...dashboardStyles.topCardText, textAlign: 'right'}}
+              style={{ ...dashboardStyles.topCardText, textAlign: "right" }}
             />
           </View>
         </View>
@@ -191,14 +198,16 @@ function Dashboard({navigation}) {
             color={COLOR.APP_GREY}
             size={12}
             bold
-            style={dashboardStyles.theadCoin}>
+            style={dashboardStyles.theadCoin}
+          >
             COIN
           </Text>
           <Text
             color={COLOR.APP_GREY}
             size={12}
             bold
-            style={dashboardStyles.theadPrice}>
+            style={dashboardStyles.theadPrice}
+          >
             PRICE
           </Text>
           {/* <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" /> */}
@@ -206,7 +215,8 @@ function Dashboard({navigation}) {
             color={COLOR.APP_GREY}
             size={12}
             bold
-            style={dashboardStyles.theadHoldings}>
+            style={dashboardStyles.theadHoldings}
+          >
             HOLDINGS
           </Text>
           {/* <EntypoIcon color={COLOR.APP_GREY} name="chevron-small-down" /> */}
@@ -220,21 +230,23 @@ function Dashboard({navigation}) {
         <Hr color={COLOR.APP_GREY} />
 
         <ScrollView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-          }>
+          }
+        >
           {isLoading ? (
             <Loading />
           ) : (
-            coinsData.map(coin => (
+            coinsData.map((coin) => (
               <TouchableOpacity
                 key={coin.name}
                 onPress={() => {
                   onClickCoin(coin.name);
-                  navigation.navigate('CoinPageTabNav');
-                }}>
+                  navigation.navigate("CoinPageTabNav");
+                }}
+              >
                 <Row
                   name={coin.name}
                   price={coin.price}

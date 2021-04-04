@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-export const getCoins = limit => {
+export const getCoins = (limit) => {
   return new Promise((resolve, reject) => {
     axios
       .get(`/coins/get?limit=${limit}`)
-      .then(resp => {
+      .then((resp) => {
         resolve(resp.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });

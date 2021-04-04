@@ -1,37 +1,37 @@
 /* eslint-disable handle-callback-err */
 /* eslint-disable dot-notation */
 /* eslint-disable no-unused-vars */
-import ccxt from 'ccxt';
-import {pairs} from './pairs';
+import ccxt from "ccxt";
+import { pairs } from "./pairs";
 import {
   saveTransaction,
   saveExchange,
   getExchange,
   getAllExchanges,
-} from '../../db/methods';
+} from "../../db/methods";
 
 export default class CCXT {
   constructor() {
     this.certifiedEx = [
-      {imp: new ccxt.binance({enableRateLimit: true}), name: 'Binance'},
-      {imp: new ccxt.bitfinex({enableRateLimit: true}), name: 'Bitfinex'},
-      {imp: new ccxt.bittrex({enableRateLimit: true}), name: 'Bittrex'},
-      {imp: new ccxt.bitvavo({enableRateLimit: true}), name: 'Bitvavo'},
-      {imp: new ccxt.bytetrade({enableRateLimit: true}), name: 'ByteTrade'},
+      { imp: new ccxt.binance({ enableRateLimit: true }), name: "Binance" },
+      { imp: new ccxt.bitfinex({ enableRateLimit: true }), name: "Bitfinex" },
+      { imp: new ccxt.bittrex({ enableRateLimit: true }), name: "Bittrex" },
+      { imp: new ccxt.bitvavo({ enableRateLimit: true }), name: "Bitvavo" },
+      { imp: new ccxt.bytetrade({ enableRateLimit: true }), name: "ByteTrade" },
       {
-        imp: new ccxt.currencycom({enableRateLimit: true}),
-        name: 'Currency.com',
+        imp: new ccxt.currencycom({ enableRateLimit: true }),
+        name: "Currency.com",
       },
-      {imp: new ccxt.eterbase({enableRateLimit: true}), name: 'Eterbase'},
-      {imp: new ccxt.ftx({enableRateLimit: true}), name: 'FTX'},
-      {imp: new ccxt.idex({enableRateLimit: true}), name: 'IDEX'},
-      {imp: new ccxt.kraken({enableRateLimit: true}), name: 'Kraken'},
-      {imp: new ccxt.upbit({enableRateLimit: true}), name: 'Upbit'},
+      { imp: new ccxt.eterbase({ enableRateLimit: true }), name: "Eterbase" },
+      { imp: new ccxt.ftx({ enableRateLimit: true }), name: "FTX" },
+      { imp: new ccxt.idex({ enableRateLimit: true }), name: "IDEX" },
+      { imp: new ccxt.kraken({ enableRateLimit: true }), name: "Kraken" },
+      { imp: new ccxt.upbit({ enableRateLimit: true }), name: "Upbit" },
       {
-        imp: new ccxt.wavesexchange({enableRateLimit: true}),
-        name: 'Waves.Exchange',
+        imp: new ccxt.wavesexchange({ enableRateLimit: true }),
+        name: "Waves.Exchange",
       },
-      {imp: new ccxt.xena({enableRateLimit: true}), name: 'Xena Exchange'},
+      { imp: new ccxt.xena({ enableRateLimit: true }), name: "Xena Exchange" },
     ];
   }
 
@@ -43,23 +43,23 @@ export default class CCXT {
           let exchange = null;
           let resolved = false;
           let all = pairs.filter(
-            x => x.symbols.findIndex(x => x === symbol) > -1,
+            (x) => x.symbols.findIndex((x) => x === symbol) > -1
           );
           if (all.length < 1) {
-            resolve({[symbol.replace('/', '-')]: 'not found'});
+            resolve({ [symbol.replace("/", "-")]: "not found" });
           }
           for (let i of all) {
             if (!resolved) {
               console.log(i.exchange, symbol);
-              exchange = new ccxt[i.exchange]({enableRateLimit: true});
+              exchange = new ccxt[i.exchange]({ enableRateLimit: true });
               try {
                 let resp = await exchange.fetchTicker(symbol.toUpperCase());
                 if (resp && resp.last) {
                   resolve({
-                    [symbol.replace('/', '-')]: {
-                      last: resp.last ? resp.last : '',
-                      change: resp.change ? resp.change : '',
-                      perChange: resp.percentage ? resp.percentage : '',
+                    [symbol.replace("/", "-")]: {
+                      last: resp.last ? resp.last : "",
+                      change: resp.change ? resp.change : "",
+                      perChange: resp.percentage ? resp.percentage : "",
                       //other: resp,
                     },
                   });
@@ -67,14 +67,14 @@ export default class CCXT {
                 } else {
                   if (i === all[all.length - 1]) {
                     resolve({
-                      [symbol.replace('/', '-')]: 'not found',
+                      [symbol.replace("/", "-")]: "not found",
                     });
                   }
                 }
               } catch (e) {}
             }
           }
-        }),
+        })
       );
     }
 
@@ -82,40 +82,45 @@ export default class CCXT {
   }
 
   getAllExchangeAndLogo() {
-    return this.certifiedEx.map(x => ({name: x.name, logo: x.imp.urls.logo}));
+    return this.certifiedEx.map((x) => ({
+      name: x.name,
+      logo: x.imp.urls.logo,
+    }));
   }
 
   Candles(symbol, hr) {
     let date = new Date();
-    let interval = '';
-    if (hr === '1y') {
+    let interval = "";
+    if (hr === "1y") {
       date.setFullYear(date.getFullYear() - 1);
-      interval = '1w';
-    } else if (hr === '1h') {
+      interval = "1w";
+    } else if (hr === "1h") {
       date.setHours(date.getHours() - 1);
-      interval = '1m';
-    } else if (hr === '12h') {
+      interval = "1m";
+    } else if (hr === "12h") {
       date.setHours(date.getHours() - 12);
-      interval = '1m';
-    } else if (hr === '1w') {
+      interval = "1m";
+    } else if (hr === "1w") {
       date.setDate(date.getDate() - 7);
-      interval = '1h';
-    } else if (hr === '1d') {
+      interval = "1h";
+    } else if (hr === "1d") {
       date.setDate(date.getDate() - 1);
-      interval = '15m';
-    } else if (hr === '1m') {
+      interval = "15m";
+    } else if (hr === "1m") {
       date.setMonth(date.getMonth() - 1);
-      interval = '1d';
-    } else if (hr === 'all') {
-      interval = '1M';
-      date = '';
+      interval = "1d";
+    } else if (hr === "all") {
+      interval = "1M";
+      date = "";
     }
     return new Promise(async (resolve, reject) => {
-      let all = pairs.filter(x => x.symbols.findIndex(y => y === symbol) > -1);
+      let all = pairs.filter(
+        (x) => x.symbols.findIndex((y) => y === symbol) > -1
+      );
 
       try {
-        let exchange = new ccxt['kraken']({enableRateLimit: true});
-        console.log('timeframes', exchange.timeframes);
+        let exchange = new ccxt["kraken"]({ enableRateLimit: true });
+        console.log("timeframes", exchange.timeframes);
         if (exchange.has.fetchOHLCV) {
           let res = await exchange.fetchOHLCV(symbol, interval, date);
           if (res.length > 0) {
@@ -129,12 +134,12 @@ export default class CCXT {
   coinDetails(symbols) {
     return new Promise((resolve, reject) => {
       console.log(symbols);
-      this.batchExchanges(symbols).then(resp => {
+      this.batchExchanges(symbols).then((resp) => {
         if (resp.length < 1) {
-          reject('no data found');
+          reject("no data found");
         } else {
           let response = {};
-          resp.forEach(x => {
+          resp.forEach((x) => {
             Object.assign(response, x);
           });
           resolve(response);
@@ -144,40 +149,40 @@ export default class CCXT {
   }
 
   addExchange(name, publickey, secretkey) {
-    const index = this.certifiedEx.findIndex(x => x.name === name);
+    const index = this.certifiedEx.findIndex((x) => x.name === name);
     this.certifiedEx[index].imp.apiKey = publickey;
     this.certifiedEx[index].imp.secret = secretkey;
     return new Promise((resolve, reject) => {
       this.certifiedEx[index].imp
-        .fetchBalance({recvWindow: 59000})
-        .then(balance => {
+        .fetchBalance({ recvWindow: 59000 })
+        .then((balance) => {
           saveExchange(name, publickey, secretkey);
           this.getTradeData(name)
-            .then(tradedata => {
-              tradedata.forEach(resp => {
-                resp.forEach(x => {
+            .then((tradedata) => {
+              tradedata.forEach((resp) => {
+                resp.forEach((x) => {
                   saveTransaction(
                     name,
-                    x?.symbol?.split('/')[0],
-                    x?.symbol?.split('/')[1],
+                    x?.symbol?.split("/")[0],
+                    x?.symbol?.split("/")[1],
                     x?.price,
                     x?.side,
                     x?.amount,
-                    x?.fee?.cost ?? '',
+                    x?.fee?.cost ?? "",
                     x?.timestamp,
                     x?.timestamp,
-                    'N/A',
+                    "N/A"
                   );
                 });
                 resolve(balance);
               });
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
               reject(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           reject(err);
         });
@@ -185,108 +190,108 @@ export default class CCXT {
   }
 
   saveTransactionstodb(exname) {
-    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     return new Promise((resolve, reject) => {
       if (exchange && exchange.checkRequiredCredentials()) {
         if (exchange.hasFetchTransactions) {
           exchange
             .fetchTransactions()
-            .then(data => {
+            .then((data) => {
               console.log(data);
-              data.forEach(x => {
+              data.forEach((x) => {
                 saveTransaction(
                   exname,
                   x?.currency,
-                  '',
+                  "",
                   x?.amount,
                   x?.type,
-                  '',
+                  "",
                   x?.fee?.cost,
                   x?.datetime,
                   x?.timestamp,
-                  x?.comment,
+                  x?.comment
                 );
               });
 
-              resolve('Data saved');
+              resolve("Data saved");
             })
-            .catch(err => {
+            .catch((err) => {
               reject(err);
             });
         } else if (exchange.hasFetchWithdrawals && exchange.hasFetchDeposits) {
           exchange
             .fetchDeposits()
-            .then(deposits => {
-              deposits.forEach(x => {
+            .then((deposits) => {
+              deposits.forEach((x) => {
                 saveTransaction(
                   exname,
                   x?.currency,
-                  '',
+                  "",
                   x?.amount,
                   x?.type,
-                  '',
+                  "",
                   x?.fee?.cost,
                   x?.datetime,
                   x?.timestamp,
-                  x?.comment,
+                  x?.comment
                 );
               });
 
-              resolve('Data saved');
+              resolve("Data saved");
             })
-            .catch(err => {
+            .catch((err) => {
               reject(err);
             });
           exchange
             .fetchWithdrawals()
-            .then(withdrawal => {
-              withdrawal.forEach(x => {
+            .then((withdrawal) => {
+              withdrawal.forEach((x) => {
                 saveTransaction(
                   exname,
                   x?.currency,
-                  '',
+                  "",
                   x?.amount,
                   x?.type,
-                  '',
+                  "",
                   x?.fee?.cost,
                   x?.datetime,
                   x?.timestamp,
-                  x?.comment,
+                  x?.comment
                 );
               });
 
-              resolve('Data saved');
+              resolve("Data saved");
             })
-            .catch(err => {
+            .catch((err) => {
               reject(err);
             });
         } else {
-          reject('exchange not supported');
+          reject("exchange not supported");
         }
       } else {
-        reject('Api key not found');
+        reject("Api key not found");
       }
     });
   }
 
   getTradeData(exname) {
-    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
-    const symbols = pairs.find(x => x.exchange === exname.toLowerCase())
+    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
+    const symbols = pairs.find((x) => x.exchange === exname.toLowerCase())
       .symbols;
     const promises = [];
-    symbols.forEach(x => {
+    symbols.forEach((x) => {
       if (exchange.hasFetchMyTrades) {
         promises.push(
           new Promise((resolve, reject) => {
             exchange
-              .fetchMyTrades(x, undefined, undefined, {recvWindow: 59000})
-              .then(resp => {
+              .fetchMyTrades(x, undefined, undefined, { recvWindow: 59000 })
+              .then((resp) => {
                 resolve(resp);
               })
-              .catch(err => {
+              .catch((err) => {
                 resolve([]);
               });
-          }),
+          })
         );
       }
     });
@@ -295,7 +300,7 @@ export default class CCXT {
   }
 
   async createOrder(exname, symbol, side, amount, price) {
-    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
 
     if (resp.length > 0) {
@@ -304,9 +309,9 @@ export default class CCXT {
       console.log(exchange.apiKey, exchange.secret);
     }
 
-    let type = 'market';
+    let type = "market";
     if (!exchange.hasCreateMarketOrder) {
-      type = 'limit';
+      type = "limit";
     }
     return new Promise((resolve, reject) => {
       if (exchange && exchange.checkRequiredCredentials()) {
@@ -317,20 +322,20 @@ export default class CCXT {
               type,
               side.toLowerCase(),
               amount,
-              price,
+              price
             )
-            .then(x => {
+            .then((x) => {
               resolve(`${side.toUpperCase()} Order successfully placed`);
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err.message);
-              reject(err?.message ? err.message : 'Something Went Wrong');
+              reject(err?.message ? err.message : "Something Went Wrong");
             });
         } else {
-          reject('Exchange Not Supported');
+          reject("Exchange Not Supported");
         }
       } else {
-        reject('No Api Keys Founded');
+        reject("No Api Keys Founded");
       }
     });
   }
@@ -348,11 +353,11 @@ export default class CCXT {
       }
     }
     console.log(tempArray);
-    console.log('Exchnages added', tempArray);
+    console.log("Exchnages added", tempArray);
 
     for (let ex of tempArray) {
       const Exchange = this.certifiedEx.find(
-        x => x.name.toLowerCase() === ex.exchange.toLowerCase(),
+        (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
       ).imp;
       Exchange.apiKey = ex.public;
       Exchange.secret = ex.secret;
@@ -364,7 +369,7 @@ export default class CCXT {
   }
 
   async fetchBalancesByExchange(exname) {
-    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
 
     if (resp.length > 0) {
@@ -384,8 +389,8 @@ export default class CCXT {
   }
 
   async getExchangeObj(exname) {
-    console.log('getExchangeObj', exname);
-    const exchange = this.certifiedEx.find(x => x.name === exname).imp;
+    console.log("getExchangeObj", exname);
+    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
 
     if (resp.length > 0) {

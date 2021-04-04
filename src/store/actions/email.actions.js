@@ -1,6 +1,6 @@
-export const SetEmail = 'SetEmail';
+export const SetEmail = "SetEmail";
 
-export const EditEmail = payload => ({
+export const EditEmail = (payload) => ({
   type: SetEmail,
   payload,
 });

@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Button, Text, theme} from 'galio-framework';
-import React from 'react';
-import {View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {loginStyles} from '../styles/loginStyles';
-import {COLOR} from './shared/colors';
+import { Button, Text, theme } from "galio-framework";
+import React from "react";
+import { View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { loginStyles } from "../styles/loginStyles";
+import { COLOR } from "./shared/colors";
 
-function SigninOrRegister({navigation}) {
+function SigninOrRegister({ navigation }) {
   return (
     <View style={loginStyles.body}>
       <View style={loginStyles.title}>
@@ -18,22 +18,25 @@ function SigninOrRegister({navigation}) {
         <Button
           round
           color="transparent"
-          style={{borderColor: COLOR.APP_GREY, marginBottom: 20}}
-          onPress={() => navigation.navigate('Sign In')}>
+          style={{ borderColor: COLOR.APP_GREY, marginBottom: 20 }}
+          onPress={() => navigation.navigate("Sign In")}
+        >
           <Text color={COLOR.WHITE} h5 bold>
             Sign In
           </Text>
         </Button>
         <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-          style={{...loginStyles.linearGradient, marginBottom: 20}}>
+          style={{ ...loginStyles.linearGradient, marginBottom: 20 }}
+        >
           <Button
             round
             color="transparent"
             style={loginStyles.borderless}
-            onPress={() => navigation.navigate('EnterUsername')}>
+            onPress={() => navigation.navigate("EnterUsername")}
+          >
             <Text color={COLOR.WHITE} h5 bold>
               Register
             </Text>

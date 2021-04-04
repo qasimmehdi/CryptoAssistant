@@ -1,15 +1,15 @@
-import React from 'react';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import ViewTransactions from '../transaction/view-transaction';
-import coinPage from './coinPage';
-import {COLOR} from '../shared/colors';
-import {useSelector} from 'react-redux';
+import React from "react";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import ViewTransactions from "../transaction/view-transaction";
+import coinPage from "./coinPage";
+import { COLOR } from "../shared/colors";
+import { useSelector } from "react-redux";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function CoinPageTabNav({navigation}) {
-  const coinPageTitle = useSelector(state => state.setSelectedCoin.base);
-  navigation.setOptions({title: coinPageTitle});
+export default function CoinPageTabNav({ navigation }) {
+  const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
+  navigation.setOptions({ title: coinPageTitle });
 
   return (
     <Tab.Navigator
@@ -22,17 +22,18 @@ export default function CoinPageTabNav({navigation}) {
           borderTopWidth: 0,
           borderTopColor: COLOR.BG,
         },
-        labelStyle: {textTransform: 'none'},
-      }}>
+        labelStyle: { textTransform: "none" },
+      }}
+    >
       <Tab.Screen
         name="coinPage"
         component={coinPage}
-        options={{title: 'Details'}}
+        options={{ title: "Details" }}
       />
       <Tab.Screen
         name="ViewTransactions"
         component={ViewTransactions}
-        options={{title: 'Transactions'}}
+        options={{ title: "Transactions" }}
       />
     </Tab.Navigator>
   );

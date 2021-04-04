@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {COLOR} from './shared/colors';
+import React, { Component } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { COLOR } from "./shared/colors";
 
 export default class Loading extends Component {
   render() {
@@ -16,11 +16,11 @@ export default class Loading extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     padding: 10,
   },
 });
