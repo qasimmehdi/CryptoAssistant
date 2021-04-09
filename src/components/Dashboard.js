@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useIsFocused } from "@react-navigation/native";
-import { Text } from "galio-framework";
+import { Text, Button } from "galio-framework";
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
 import {
@@ -22,6 +22,7 @@ import Row from "./dashboard.row";
 import { COLOR } from "./shared/colors";
 import Hr from "./shared/hr";
 import Loading from "./SplashScreen";
+import { sharedStyles } from "./shared/shared.style";
 
 function Dashboard({ navigation }) {
   const isFocused = useIsFocused();
@@ -37,6 +38,7 @@ function Dashboard({ navigation }) {
   const changeTitle = (title) => {
     return dispatch(Actions.Header({ title: title }));
   };
+
 
   function updateTable(data, tempArray) {
     console.log("updateTable", data);
@@ -239,7 +241,8 @@ function Dashboard({ navigation }) {
           {isLoading ? (
             <Loading />
           ) : (
-            coinsData.map((coin) => (
+            <View>
+              {coinsData.map((coin) => (
               <TouchableOpacity
                 key={coin.name}
                 onPress={() => {
@@ -259,7 +262,27 @@ function Dashboard({ navigation }) {
                   quote={coin.quote}
                 />
               </TouchableOpacity>
-            ))
+              ))}
+              <View style={{ marginTop:50,marginBottom:5 }}>
+                <LinearGradient
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+                  style={sharedStyles.linearGradient}
+                >
+                  <Button
+                    round
+                    color="transparent"
+                    style={sharedStyles.borderless}
+                    onPress={() => navigation.navigate("Add Coin")}
+                  >
+                    <Text color={COLOR.WHITE} h5 bold>
+                      Add More
+                    </Text>
+                  </Button>
+                </LinearGradient>
+              </View>
+            </View>
           )}
         </ScrollView>
       </View>

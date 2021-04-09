@@ -17,6 +17,7 @@ export default function ViewTransactions() {
   const base = useSelector((state) => state.setSelectedCoin.base);
 
   useEffect(() => {
+    console.log("trnsa")
     getAllTransactions(base)
       .then((resp) => {
         let tempArray = [];

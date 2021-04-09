@@ -40,17 +40,20 @@ export default function TradeBotStarted({ navigation, route }) {
       setPercentage(route.params.percentage);
       setPair(route.params.pair);
       setTimerId(startTimer());
-      setBotId(startBot());
+      setTimeout(() => setBotId(startBot()), 2000);
+      navigation.setOptions({
+        title: `Bot Trading (${route.params.side.toLowerCase()})`,
+      });
     } else {
       clearInterval(timerId);
       clearInterval(botId);
     }
-  }, [isFocused]);
+  }, [isFocused, route.params]);
 
   const startTimer = () => {
     const startDate = new Date().getTime();
 
-    const intervalId = setInterval(function () {
+    const intervalId = setInterval(function() {
       // Get today's date and time
       const now = new Date().getTime();
 
@@ -76,50 +79,68 @@ export default function TradeBotStarted({ navigation, route }) {
   const startBot = () => {
     const exchangeObj = ccxt.getExchangeObj(route.params.exchange);
 
-    const intervalId = setInterval(async function () {
+    const intervalId = setInterval(async function() {
       let rate = await ccxt.coinDetails([route.params.pair]); //await exchangeObj.fetchTicker(pair.toUpperCase());
-      console.log("--------------", rate);
+      //console.log("--------------", rate);
       rate = rate[route.params.pair.replace("/", "-")]["last"];
-      console.log(rate);
+      //console.log(rate);
 
       if (rate) {
-        let stp = rate - ((parseInt(percentage) / 100) * rate).toFixed(2);
+        console.log("percent", route.params.percentage);
+        console.log("rate", rate);
+        console.log("side", route.params.side);
+        let stp = rate - (parseInt(route.params.percentage) / 100) * rate;
+        console.log("stprate", stp);
 
         if (stopCopy === "") {
-          //setStop(stp);
+          setStop(stp);
           setStopCopy(stp);
         }
 
-        if (stopCopy <= stp) {
-          //setStop(stp);
+        if (route.params.side.toLowerCase().indexOf("sell") > -1) {
+          if (stopCopy <= stp) {
+            setStop(stp);
+            setStopCopy(stp);
+          }
+        } else {
+          if (stopCopy >= stp) {
+            setStop(stp);
+            setStopCopy(stp);
+          }
         }
 
         setLast(rate ? rate : 0);
         setDifference(route.params.limit - rate);
+        setLimit(rate * route.params.quantity);
 
-        if (rate >= limit) {
-          /* ccxt.createOrder(
-            exchange,
-            pair,
-            'sell',
-            parseInt(quantity),
-            parseFloat(limit),
-          ); */
-          //Alert('Success', 'Order successfully created');
-        } else if (rate <= stop) {
-          /* ccxt.createOrder(
-            exchange,
-            pair,
-            'sell',
-            parseInt(quantity),
-            parseFloat(stop),
-          ); */
-          //Alert('Success', 'Order successfully created');
+        if (rate <= stp) {
+          await ccxt
+            .createOrder(
+              route.params.exchange,
+              route.params.pair,
+              route.params.side.toLowerCase(),
+              parseInt(route.params.quantity),
+              parseFloat(rate)
+            )
+            .then((success) => {
+              Alert.alert("Success", success);
+              StopBotAndTimer();
+            })
+            .catch((err) => {
+              Alert.alert("Error", JSON.stringify(err));
+              StopBotAndTimer();
+            });
         }
       }
     }, 5000);
 
     return intervalId;
+  };
+
+  const StopBotAndTimer = () => {
+    navigation.navigate("TradeBot");
+    clearInterval(timerId);
+    clearInterval(botId);
   };
 
   return (
@@ -159,7 +180,7 @@ export default function TradeBotStarted({ navigation, route }) {
               }}
             >
               <Text color={COLOR.APP_GREY} size={15}>
-                Limit Price ({pair.split("/")[1]})
+                Total Price ({pair.split("/")[1]})
               </Text>
               <Text color={COLOR.WHITE} size={20}>
                 {numeral(limit).format("0,0[.][00000000]")}
@@ -265,7 +286,7 @@ export default function TradeBotStarted({ navigation, route }) {
               }}
             >
               <Text color={COLOR.APP_GREY} size={15}>
-                Echange
+                Exchange
               </Text>
               <Text color={COLOR.WHITE} size={20}>
                 {exchange}
@@ -322,10 +343,7 @@ export default function TradeBotStarted({ navigation, route }) {
                 marginTop: 10,
               }}
               onPress={() => {
-                navigation.navigate("TradeBot");
-                console.log("object");
-                clearInterval(timerId);
-                clearInterval(botId);
+                StopBotAndTimer();
               }}
             >
               <FontAwesome5Icon

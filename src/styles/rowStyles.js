@@ -21,6 +21,7 @@ export const rowStyles = StyleSheet.create({
     flex: 0.4,
     alignSelf: "center",
     textAlign: "center",
+    marginTop:5
   },
   addBtn: {
     width: 50,

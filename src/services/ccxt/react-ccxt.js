@@ -300,7 +300,9 @@ export default class CCXT {
   }
 
   async createOrder(exname, symbol, side, amount, price) {
-    const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
+    const exchange = this.certifiedEx.find(
+      (x) => x.name.toLowerCase() === exname.toLowerCase()
+    ).imp;
     const resp = await getExchange(exname);
 
     if (resp.length > 0) {
@@ -328,8 +330,14 @@ export default class CCXT {
               resolve(`${side.toUpperCase()} Order successfully placed`);
             })
             .catch((err) => {
-              console.log(err.message);
-              reject(err?.message ? err.message : "Something Went Wrong");
+              console.log("object", err);
+              reject(
+                Array.isArray(err)
+                  ? "Total value must greater than 10 USD"
+                  : err?.message
+                  ? err.message
+                  : "Something Went Wrong"
+              );
             });
         } else {
           reject("Exchange Not Supported");

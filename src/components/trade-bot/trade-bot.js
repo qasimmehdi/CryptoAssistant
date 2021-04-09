@@ -297,7 +297,7 @@ export default function TradeBotScreen({ navigation, route }) {
           </View>
         </View>
       </ScrollView>
-      <View style={{ paddingBottom: 5 }}>
+      <View style={{ paddingBottom: 5,marginBottom:20 }}>
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
