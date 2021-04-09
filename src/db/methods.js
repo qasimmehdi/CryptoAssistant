@@ -119,7 +119,7 @@ export function setNotification(value, base, quote) {
 export function getAllTransactions(base) {
   return new Promise((resolve, reject) => {
     SQLite.openDatabase({ name: "CryptoAssistant" }).then((DB) => {
-      DB.executeSql(`${queries.getAllTransaction} '${base}'`)
+      DB.executeSql(`${queries.getAllTransaction.replace('[base]',base)}`)
         .then((res) => resolve(res))
         .catch((err) => reject(err));
     });

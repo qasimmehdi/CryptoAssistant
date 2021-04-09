@@ -10,6 +10,7 @@ import { COLOR } from "../components/shared/colors";
 import TradingScreen from "../components/trade/trade";
 import DrawerNav from "./DrawerNav";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
+import IonicIcon from "react-native-vector-icons/Ionicons";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ export default function TabNavigation({ navigation }) {
         inactiveBackgroundColor: COLOR.TAB,
         labelStyle: {
           fontSize: 12,
-          marginBottom: 10,
+          marginBottom: 3,
         },
         iconStyle: {
           //marginTop: 10,
@@ -42,13 +43,31 @@ export default function TabNavigation({ navigation }) {
       <Tab.Screen
         name="Dashboard"
         component={DrawerNav}
-        options={{ title: "Home" }}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <AntDesignIcon
+              style={{ marginBottom: 15 }}
+              name={"home"}
+              size={20}
+              color={color}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="Trade"
         children={(props) => <TradingScreen {...props} tabNav={navigation} />}
         options={{
           title: "Trade",
+          tabBarIcon: ({ color }) => (
+            <IonicIcon
+              style={{ marginBottom: 15 }}
+              name={"cash-outline"}
+              size={20}
+              color={color}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -57,19 +76,39 @@ export default function TabNavigation({ navigation }) {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <AntDesignIcon name={"pluscircle"} size={30} color={COLOR.WHITE} />
+            <AntDesignIcon name={"pluscircle"} style={{marginBottom:8}} size={30} color={COLOR.WHITE} />
           ),
         }}
       />
       <Tab.Screen
         name="News"
         component={NewsScreen}
-        options={{ title: "News" }}
+        options={{
+          title: "News",
+          tabBarIcon: ({ color }) => (
+            <IonicIcon
+              style={{ marginBottom: 15 }}
+              name={"newspaper-outline"}
+              size={20}
+              color={color}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="Markets"
         component={MarketScreen}
-        options={{ title: "Markets" }}
+        options={{
+          title: "Markets",
+          tabBarIcon: ({ color }) => (
+            <IonicIcon
+              style={{ marginBottom: 15 }}
+              name={"ios-stats-chart-outline"}
+              size={20}
+              color={color}
+            />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
