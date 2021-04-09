@@ -74,24 +74,29 @@ export default function AddCoin({ navigation }) {
   const cryptoSymbols = [...crypto.symbols()];
   const [symbols, setSymbols] = useState([...cryptoSymbols]);
 
+  useEffect(() => {
+    const id = setTimeout(() => {
+      onChangeSearch(coin);
+    }, 500);
+
+    return () => clearTimeout(id);
+  }, [coin]);
+
   const onChangeSearch = (text) => {
-    setCoin(text);
     const temp = cryptoSymbols.filter((item) => {
-      console.log(item);
       return (
         item.toLowerCase().indexOf(text.toString().toLowerCase()) > -1 ||
         text === ""
       );
     });
-    console.log(temp);
     setSymbols([...temp]);
   };
+
   const isFocused = useIsFocused();
   useEffect(() => {
     //do not do anything here make another useEffect if needed
     if (isFocused) {
       setCoin("");
-      onChangeSearch("");
     }
   }, [isFocused]);
 
@@ -102,7 +107,7 @@ export default function AddCoin({ navigation }) {
         placeholder="Search"
         placeholderTextColor={COLOR.APP_GREY}
         value={coin}
-        onChangeText={(text) => onChangeSearch(text)}
+        onChangeText={setCoin}
         color={COLOR.WHITE}
       />
       <ScrollView style={{ flex: 1, flexDirection: "column" }}>

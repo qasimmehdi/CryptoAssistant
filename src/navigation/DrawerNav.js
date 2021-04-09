@@ -32,6 +32,20 @@ function CustomDrawerContent({ navigation }) {
           minHeight: 50,
         }}
         onPress={() => {
+          navigation.navigate("PNL");
+        }}
+      >
+        <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
+          Profit & Loss
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          backgroundColor: COLOR.TAB,
+          justifyContent: "center",
+          minHeight: 50,
+        }}
+        onPress={() => {
           navigation.navigate("Settings");
         }}
       >

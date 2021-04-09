@@ -29,6 +29,7 @@ import Help from "../components/help/help";
 import Graph from "../components/Graph";
 import TradeBotScreen from "../components/trade-bot/trade-bot";
 import TradeBotStarted from "../components/trade-bot/trade-bot-started";
+import PNL from "../components/pnl/pnl";
 
 const Stack = createStackNavigator();
 
@@ -135,6 +136,11 @@ export default function StackNav() {
         name="TradeBotStarted"
         component={TradeBotStarted}
         options={{ title: "Bot Trading", headerLeft: null }}
+      />
+      <Stack.Screen
+        name="PNL"
+        component={PNL}
+        options={{ title: "Profit & Loss", headerLeft: null }}
       />
     </Stack.Navigator>
   );

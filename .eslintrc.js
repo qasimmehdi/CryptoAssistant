@@ -146,7 +146,7 @@ module.exports = {
     "consistent-return": 0, // require return statements to either always or never specify values
     curly: 1, // specify curly brace conventions for all control statements
     "default-case": 0, // require default case in switch statements (off by default)
-    "dot-notation": 1, // encourages use of dot notation whenever possible
+    "dot-notation": 0, // encourages use of dot notation whenever possible
     eqeqeq: [1, "allow-null"], // require the use of === and !==
     "guard-for-in": 0, // make sure for-in loops have an if statement (off by default)
     "no-alert": 1, // disallow the use of alert, confirm, and prompt
@@ -289,7 +289,7 @@ module.exports = {
     "react/no-unknown-property": 0,
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 1,
-    "react/self-closing-comp": 1,
+    "react/self-closing-comp": 0,
     "react/wrap-multilines": 0,
 
     // React-Hooks Plugin
@@ -300,7 +300,7 @@ module.exports = {
     // React-Native Plugin
     // The following rules are made available via `eslint-plugin-react-native`
 
-    "react-native/no-inline-styles": 1,
+    "react-native/no-inline-styles": 0,
 
     // Jest Plugin
     // The following rules are made available via `eslint-plugin-jest`.
