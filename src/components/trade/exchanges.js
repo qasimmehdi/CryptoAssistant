@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Text } from "galio-framework";
+import { Button, Text } from "galio-framework";
 import React, { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
@@ -12,6 +12,7 @@ import { ScrollView } from "react-native";
 import CCXT from "../../services/ccxt/react-ccxt";
 import iconImages from "../../assets/coinIcons/names";
 import { getAllExchanges } from "../../db/methods";
+import LinearGradient from "react-native-linear-gradient";
 
 const ExchangeRow = (props) => {
   return (
@@ -41,7 +42,7 @@ const ExchangeRow = (props) => {
 };
 
 export default function SelectExchangeList({ navigation, route }) {
-  const [exchanges] = React.useState(new CCXT().getAllExchangeAndLogo());
+  const [exchanges, setExchanges] = React.useState([]);
 
   useEffect(() => {
     getAllExchanges()
@@ -52,11 +53,15 @@ export default function SelectExchangeList({ navigation, route }) {
         for (let i = 0; i < len; i++) {
           for (let j = 0; j < resp[i].rows.length; j++) {
             let item = resp[i].rows.item(j);
-            console.log(item);
-            tempArray.push(item);
+            tempArray.push(item.exchange);
           }
         }
         console.log(tempArray);
+        const temp = new CCXT().getAllExchangeAndLogo();
+        const filteredArray = temp.filter((value) =>
+          tempArray.includes(value.name.toLowerCase())
+        );
+        setExchanges(filteredArray);
       })
       .catch((err) => {
         console.log(err);
@@ -77,6 +82,25 @@ export default function SelectExchangeList({ navigation, route }) {
           />
         ))}
       </ScrollView>
+      <LinearGradient
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+        style={{ ...sharedStyles.linearGradient, marginBottom: 10 }}
+      >
+        <Button
+          round
+          color="transparent"
+          style={sharedStyles.borderless}
+          onPress={() => {
+            navigation.navigate("ExchangeList");
+          }}
+        >
+          <Text color={COLOR.WHITE} h5 bold>
+            Connect Exchange
+          </Text>
+        </Button>
+      </LinearGradient>
     </View>
   );
 }

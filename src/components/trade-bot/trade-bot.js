@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useIsFocused } from "@react-navigation/native";
 import { Button, Input, Text } from "galio-framework";
 import numeral from "numeral";
@@ -27,7 +25,7 @@ export default function TradeBotScreen({ navigation, route }) {
   const [buyBtnColor, setBuyBtnColor] = useState(COLOR.BUY);
   const [sellBtnColor, setSellBtnColor] = useState(COLOR.DISABLED);
   const [exchange, setExchange] = useState("");
-  const [pair, setPair] = useState("ADA/BTC");
+  const [pair, setPair] = useState("");
   const [side, setSide] = useState("Buy");
   const [quantity, setQuantity] = useState("");
   const [btnDisable, setBtnDisable] = useState(false);
@@ -39,7 +37,7 @@ export default function TradeBotScreen({ navigation, route }) {
   useEffect(() => {
     if (isFocused) {
       setExchange(route?.params?.name || "");
-      console.log(route?.params?.name || "");
+      setPair(route?.params?.pair || "");
     }
   }, [isFocused]);
 
@@ -98,7 +96,7 @@ export default function TradeBotScreen({ navigation, route }) {
     }
 
     if (balance <= 0) {
-      Alert.alert("Balance Error", `Unsufficient balance`);
+      Alert.alert("Balance Error", `Insufficient balance`);
       return;
     }
 
@@ -181,16 +179,27 @@ export default function TradeBotScreen({ navigation, route }) {
             >
               Pair
             </Text>
-            <Input
-              style={transactionStyles.input}
-              textAlign={"right"}
-              placeholder="0"
-              placeholderTextColor={COLOR.APP_GREY}
-              iconColor={COLOR.APP_GREY}
-              color={COLOR.WHITE}
-              value={pair}
-              onChangeText={(text) => setPair(text.toUpperCase())}
-            />
+            <TouchableOpacity
+              disabled={!exchange}
+              onPress={() =>
+                navigation.navigate("SelectPair", {
+                  redirect: "TradeBot",
+                  exchange,
+                })
+              }
+            >
+              <Input
+                style={transactionStyles.input}
+                textAlign={"right"}
+                placeholder="Pair"
+                placeholderTextColor={COLOR.APP_GREY}
+                iconColor={COLOR.APP_GREY}
+                color={COLOR.WHITE}
+                value={pair}
+                editable={false}
+                disabled={!exchange}
+              />
+            </TouchableOpacity>
           </View>
           <View style={transactionStyles.field}>
             <Text
@@ -202,7 +211,9 @@ export default function TradeBotScreen({ navigation, route }) {
             </Text>
             <Input
               style={transactionStyles.input}
-              placeholder={`Price (${pair.split("/")[1]})`}
+              placeholder={`Price ${
+                pair.split("/")[1] ? `(${pair.split("/")[1]})` : "( )"
+              }`}
               textAlign={"right"}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
@@ -222,7 +233,9 @@ export default function TradeBotScreen({ navigation, route }) {
             </Text>
             <Input
               style={transactionStyles.input}
-              placeholder={`Price (${pair.split("/")[1]})`}
+              placeholder={`Price ${
+                pair.split("/")[1] ? `(${pair.split("/")[1]})` : "( )"
+              }`}
               textAlign={"right"}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
@@ -265,7 +278,9 @@ export default function TradeBotScreen({ navigation, route }) {
             <Input
               style={transactionStyles.input}
               textAlign={"right"}
-              placeholder={`Quantity (${pair.split("/")[0]})`}
+              placeholder={`Quantity ${
+                pair.split("/")[0] ? `(${pair.split("/")[0]})` : "( )"
+              }`}
               type="decimal-pad"
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
@@ -297,7 +312,7 @@ export default function TradeBotScreen({ navigation, route }) {
           </View>
         </View>
       </ScrollView>
-      <View style={{ paddingBottom: 5,marginBottom:20 }}>
+      <View style={{ paddingBottom: 5, marginBottom: 20 }}>
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}

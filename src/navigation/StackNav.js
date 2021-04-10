@@ -30,6 +30,7 @@ import Graph from "../components/Graph";
 import TradeBotScreen from "../components/trade-bot/trade-bot";
 import TradeBotStarted from "../components/trade-bot/trade-bot-started";
 import PNL from "../components/pnl/pnl";
+import SelectPair from "../components/trade/select-pair";
 
 const Stack = createStackNavigator();
 
@@ -113,9 +114,21 @@ export default function StackNav() {
       <Stack.Screen name="Drawer" component={DrawerNav} />
       <Stack.Screen name="Settings" component={Settings} />
 
-      <Stack.Screen name="ConnectExchange" component={ConnectExchange} />
-      <Stack.Screen name="ExchangeList" component={ExchangeList} />
-      <Stack.Screen name="SelectExchangeList" component={SelectExchangeList} />
+      <Stack.Screen
+        name="ConnectExchange"
+        component={ConnectExchange}
+        options={{ title: "Connect Exchange" }}
+      />
+      <Stack.Screen
+        name="ExchangeList"
+        component={ExchangeList}
+        options={{ title: "Exchange List" }}
+      />
+      <Stack.Screen
+        name="SelectExchangeList"
+        component={SelectExchangeList}
+        options={{ title: "Select Exchange" }}
+      />
       <Stack.Screen
         name="AIPredictionChart"
         component={AIPredictionChart}
@@ -140,7 +153,12 @@ export default function StackNav() {
       <Stack.Screen
         name="PNL"
         component={PNL}
-        options={{ title: "Profit & Loss", headerLeft: null }}
+        options={{ title: "Profit & Loss" }}
+      />
+      <Stack.Screen
+        name="SelectPair"
+        component={SelectPair}
+        options={{ title: "Select Pair" }}
       />
     </Stack.Navigator>
   );
