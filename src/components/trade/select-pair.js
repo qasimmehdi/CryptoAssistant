@@ -1,27 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { useIsFocused } from "@react-navigation/core";
 import { Input, Text } from "galio-framework";
-import React, { Suspense, useEffect, useState } from "react";
-import { ScrollView } from "react-native";
-import { View } from "react-native";
-import { COLOR } from "../shared/colors";
-import { sharedStyles } from "../shared/shared.style";
-import { addCoinStyle } from "./AddCoin.style";
-import * as crypto from "cryptocurrencies";
-import Hr from "../shared/hr";
+import React, { useEffect, useState } from "react";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import iconImages from "../../assets/coinIcons/names";
-import { Image } from "react-native";
+import { pairs } from "../../services/ccxt/pairs";
+import { addCoinStyle } from "../add-favourite/AddCoin.style";
+import { COLOR } from "../shared/colors";
+import Hr from "../shared/hr";
+import { sharedStyles } from "../shared/shared.style";
 import Loading from "../SplashScreen";
-import { TouchableOpacity } from "react-native";
-import { saveFavourites } from "../../db/methods";
-import { useIsFocused } from "@react-navigation/native";
 
 const Row = (props) => {
+  const icon = props.name.split("/")[0];
   return (
     <React.Fragment>
       <TouchableOpacity
         onPress={() => {
-          saveFavourites("binance", props.name, "USD", "0", "0");
-          props.navigation.navigate("Dashboard");
+          props.navigation.navigate(props.redirect, { pair: props.name });
         }}
       >
         <View style={addCoinStyle.row}>
@@ -29,8 +24,8 @@ const Row = (props) => {
             <Image
               style={addCoinStyle.coinIcon}
               source={
-                iconImages.hasOwnProperty(props.name)
-                  ? iconImages[props.name]
+                iconImages.hasOwnProperty(icon)
+                  ? iconImages[icon]
                   : iconImages.GENERIC
               }
             />
@@ -40,7 +35,7 @@ const Row = (props) => {
               bold
               style={addCoinStyle.coinitem}
             >
-              {crypto[props.name]}
+              {}
             </Text>
             <Text
               color={COLOR.APP_GREY}
@@ -62,26 +57,57 @@ const RenderList = (props) => {
   let rows = [];
   for (let i = 0; i <= 100 && i < props.data.length; i++) {
     rows.push(
-      <Row key={i} name={props.data[i]} navigation={props.navigation} />
+      <Row
+        key={i}
+        name={props.data[i]}
+        navigation={props.navigation}
+        redirect={props.redirect}
+      />
     );
   }
   return <React.Fragment>{rows}</React.Fragment>;
 };
 
-export default function AddCoin({ navigation }) {
+export default function SelectPair({ navigation, route }) {
   const [coin, setCoin] = useState("");
-  const cryptoSymbols = [...crypto.symbols()];
-  const [symbols, setSymbols] = useState([...cryptoSymbols]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cryptoSymbols, setCryptoSymbols] = useState([]);
+  const [symbols, setSymbols] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      var a = pairs.find(
+        (i) => i.exchange.toLowerCase() === route.params.exchange.toLowerCase()
+      ).symbols;
+      console.log(a);
+      setCryptoSymbols(
+        pairs.find(
+          (i) =>
+            i.exchange.toLowerCase() === route.params.exchange.toLowerCase()
+        ).symbols
+      );
+      setSymbols(
+        pairs.find(
+          (i) =>
+            i.exchange.toLowerCase() === route.params.exchange.toLowerCase()
+        ).symbols
+      );
+      setIsLoading(false);
+    })();
+  }, []);
 
   useEffect(() => {
     const id = setTimeout(() => {
-      onChangeSearch(coin);
+      coin && onChangeSearch(coin);
     }, 500);
 
     return () => clearTimeout(id);
   }, [coin]);
 
-  const onChangeSearch = (text) => {
+  const onChangeSearch = async (text) => {
+    setIsLoading(true);
     const temp = cryptoSymbols.filter((item) => {
       return (
         item.toLowerCase().indexOf(text.toString().toLowerCase()) > -1 ||
@@ -89,9 +115,9 @@ export default function AddCoin({ navigation }) {
       );
     });
     setSymbols([...temp]);
+    setIsLoading(false);
   };
 
-  const isFocused = useIsFocused();
   useEffect(() => {
     //do not do anything here make another useEffect if needed
     if (isFocused) {
@@ -110,9 +136,15 @@ export default function AddCoin({ navigation }) {
         color={COLOR.WHITE}
       />
       <ScrollView style={{ flex: 1, flexDirection: "column" }}>
-        <Suspense fallback={<Loading />}>
-          <RenderList data={symbols} navigation={navigation} />
-        </Suspense>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <RenderList
+            data={symbols}
+            navigation={navigation}
+            redirect={route.params.redirect}
+          />
+        )}
       </ScrollView>
     </View>
   );

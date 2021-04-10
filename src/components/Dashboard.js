@@ -39,7 +39,6 @@ function Dashboard({ navigation }) {
     return dispatch(Actions.Header({ title: title }));
   };
 
-
   function updateTable(data, tempArray) {
     console.log("updateTable", data);
     console.log("updateTable coinsData", tempArray);
@@ -157,35 +156,41 @@ function Dashboard({ navigation }) {
 
   return (
     <View style={dashboardStyles.body}>
-      <LinearGradient
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-        style={dashboardStyles.linearGradient}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("PNL");
+        }}
       >
-        <View style={dashboardStyles.topCard}>
-          <View style={dashboardStyles.leftView}>
-            <Text color={COLOR.WHITE} h5 style={dashboardStyles.topCardText}>
-              Main Portfolio
-            </Text>
-            <Text
-              color={COLOR.WHITE}
-              h4
-              bold
-              style={dashboardStyles.topCardText}
-            >
-              ${`${balance.toFixed(2)}`}
-            </Text>
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+          style={dashboardStyles.linearGradient}
+        >
+          <View style={dashboardStyles.topCard}>
+            <View style={dashboardStyles.leftView}>
+              <Text color={COLOR.WHITE} h5 style={dashboardStyles.topCardText}>
+                Main Portfolio
+              </Text>
+              <Text
+                color={COLOR.WHITE}
+                h4
+                bold
+                style={dashboardStyles.topCardText}
+              >
+                ${`${balance.toFixed(2)}`}
+              </Text>
+            </View>
+            <View style={dashboardStyles.rightView}>
+              <Text
+                color={COLOR.WHITE}
+                h6
+                style={{ ...dashboardStyles.topCardText, textAlign: "right" }}
+              />
+            </View>
           </View>
-          <View style={dashboardStyles.rightView}>
-            <Text
-              color={COLOR.WHITE}
-              h6
-              style={{ ...dashboardStyles.topCardText, textAlign: "right" }}
-            />
-          </View>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
+      </TouchableOpacity>
 
       <View style={dashboardStyles.container}>
         <View style={dashboardStyles.thead}>
@@ -236,48 +241,46 @@ function Dashboard({ navigation }) {
           ) : (
             <View>
               {coinsData.map((coin) => (
-              <TouchableOpacity
-                key={coin.name}
-                onPress={() => {
-                  onClickCoin(coin.name);
-                  navigation.navigate("CoinPageTabNav");
-                }}
-              >
-                <Row
-                  name={coin.name}
-                  price={coin.price}
-                  priceChange={coin.priceChange}
-                  holdingConverted={coin.holdingConverted}
-                  holdingUnits={coin.holdingUnits}
-                  notification={coin.notification}
-                  balance={coin.balance}
-                  navigation={navigation}
-                  quote={coin.quote}
-                />
-              </TouchableOpacity>
-              ))}
-              <View style={{ marginTop:50,marginBottom:5 }}>
-                <LinearGradient
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-                  style={sharedStyles.linearGradient}
+                <TouchableOpacity
+                  key={coin.name}
+                  onPress={() => {
+                    onClickCoin(coin.name);
+                    navigation.navigate("CoinPageTabNav");
+                  }}
                 >
-                  <Button
-                    round
-                    color="transparent"
-                    style={sharedStyles.borderless}
-                    onPress={() => navigation.navigate("Add Coin")}
-                  >
-                    <Text color={COLOR.WHITE} h5 bold>
-                      Add More
-                    </Text>
-                  </Button>
-                </LinearGradient>
-              </View>
+                  <Row
+                    name={coin.name}
+                    price={coin.price}
+                    priceChange={coin.priceChange}
+                    holdingConverted={coin.holdingConverted}
+                    holdingUnits={coin.holdingUnits}
+                    notification={coin.notification}
+                    balance={coin.balance}
+                    navigation={navigation}
+                    quote={coin.quote}
+                  />
+                </TouchableOpacity>
+              ))}
             </View>
           )}
         </ScrollView>
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
+          style={{ ...sharedStyles.linearGradient, marginTop: 5 }}
+        >
+          <Button
+            round
+            color="transparent"
+            style={sharedStyles.borderless}
+            onPress={() => navigation.navigate("Add Coin")}
+          >
+            <Text color={COLOR.WHITE} h5 bold>
+              Add More
+            </Text>
+          </Button>
+        </LinearGradient>
       </View>
     </View>
   );
