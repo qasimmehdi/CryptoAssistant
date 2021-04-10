@@ -63,6 +63,9 @@ function Dashboard({ navigation }) {
     }
   }, [isFocused]);
 
+  //test
+
+
   /* useEffect(() => {
     if (isFocused) {
       let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
@@ -125,28 +128,18 @@ function Dashboard({ navigation }) {
   }, [isFocused]);
 
   useEffect(() => {
-    if (isFocused) {
-      ccxt
-        .fetchBalances()
-        .then((response) => {
-          let total = 0;
-          for (let exchange of response) {
-            if (exchange?.info?.balances) {
-              total += exchange.info.balances.reduce(
-                (p, f) => p + parseFloat(f.free),
-                0
-              );
-            }
-          }
-          setbalance(total);
-          console.log("Calculate balance");
-        })
-        .catch((err) => {
-          console.log(err);
-          setbalance(0.0);
-        });
-    }
+    getBalance();
   }, [isFocused]);
+
+  const getBalance = async () => {
+    let ccxt = new CCXT();
+    let balances = await ccxt.GetHoldings();
+    let total = balances.reduce(function (a, b) { // function(previousValue, currentValue)
+      return {amount : parseFloat(a.amount) + parseFloat(b.amount)}; //select age in object array;
+    });
+    setbalance(total.amount);
+    console.log("total Balance",total);
+  }
 
   const onRefresh = React.useCallback(() => {
     setRefresh(true);

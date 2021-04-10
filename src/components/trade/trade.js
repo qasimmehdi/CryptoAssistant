@@ -17,6 +17,7 @@ import numeral from "numeral";
 import { regexes } from "../shared/regexes";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { TouchableOpacity } from "react-native";
+import {Test } from "../../db/methods";
 
 export default function TradingScreen({ navigation, route, tabNav }) {
   const name = route?.params?.name;
@@ -114,6 +115,8 @@ export default function TradingScreen({ navigation, route, tabNav }) {
         headerRight: null,
       });
   }, [isFocused]);
+
+
   return (
     <View style={sharedStyles.body}>
       <ScrollView>
