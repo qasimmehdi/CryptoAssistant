@@ -348,6 +348,72 @@ export default class CCXT {
     });
   }
 
+  async GetHoldings() {
+    let holdingsUSD = [];
+    const resp = await getAllExchanges();
+    let tempArray = [];
+    const len = resp.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < resp[i].rows.length; j++) {
+        let item = resp[i].rows.item(j);
+        console.log(item);
+        tempArray.push(item);
+      }
+    }
+
+    for (let ex of tempArray) {
+      const exchange = this.certifiedEx.find(
+        (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
+      ).imp;
+      exchange.apiKey = ex.public;
+      exchange.secret = ex.secret;
+    
+
+    let deposits = await exchange.fetchBalance();
+    deposits = deposits?.info?.balances.filter((x) => parseFloat(x.free) > 0);
+    let USDS = deposits.filter(a => a.asset.indexOf("USD") > -1);
+    let pairs = deposits.filter(a => a.asset.indexOf("USD") < 0).map((x) => x.asset + "/USD");
+    let rates = await this.coinDetails(pairs);
+    Object.keys(rates).forEach((x) => {
+      if (rates[x] !== "not found") {
+        let symbol = x.split("-")[0];
+        let quantity = deposits.find(
+          (d) => d.asset.toLowerCase() === symbol.toLowerCase()
+        ).free;
+        let amount = quantity * rates[x]["last"];
+        let i = holdingsUSD.findIndex(x => x.symbol === symbol);
+        if(i > -1){
+          holdingsUSD[i].quantity += quantity;
+          holdingsUSD[i].amount += amount;
+        }
+        else{
+          holdingsUSD.push({
+            symbol,
+            quantity,
+            amount,
+          });
+        }
+      }
+    });
+
+    USDS.forEach(x => {
+      let i = holdingsUSD.findIndex(x => x.symbol === x.asset);
+      if(i > -1){
+        holdingsUSD[i].quantity += x.free;
+        holdingsUSD[i].amount += x.free;
+      }
+      else{
+        holdingsUSD.push({
+          symbol:x.asset,
+          quantity:x.free,
+          amount:x.free,
+        });
+      }
+    })
+  }
+    return holdingsUSD;
+  }
+
   async fetchBalances() {
     let responses = [];
     const resp = await getAllExchanges();
