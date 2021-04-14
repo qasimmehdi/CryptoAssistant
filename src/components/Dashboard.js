@@ -1,7 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useIsFocused } from "@react-navigation/native";
-import { Text, Button } from "galio-framework";
+import { Button, Text } from "galio-framework";
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
 import {
@@ -12,7 +10,6 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Icon from "react-native-vector-icons/dist/MaterialIcons";
-import EntypoIcon from "react-native-vector-icons/Entypo";
 import { useDispatch } from "react-redux";
 import { getFavourites } from "../db/methods";
 import CCXT from "../services/ccxt/react-ccxt";
@@ -21,8 +18,8 @@ import { dashboardStyles } from "../styles/dashboardStyles";
 import Row from "./dashboard.row";
 import { COLOR } from "./shared/colors";
 import Hr from "./shared/hr";
-import Loading from "./SplashScreen";
 import { sharedStyles } from "./shared/shared.style";
+import Loading from "./SplashScreen";
 
 function Dashboard({ navigation }) {
   const isFocused = useIsFocused();
@@ -62,30 +59,8 @@ function Dashboard({ navigation }) {
     }
   }, [isFocused]);
 
-  //test
-
-
-  /* useEffect(() => {
-    if (isFocused) {
-      let favPairs = coinsData.map(i => `${i.name}/${i.quote}`);
-      console.log(favPairs);
-      setIsLoading(true);
-      ccxt
-        .coinDetails(favPairs)
-        .then(resp => {
-          console.log('resp', resp);
-          setCoinsData([...updateTable(resp)]);
-        })
-        .catch(err => console.log(err))
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [coinsData.length]); */
-
   useEffect(() => {
     if (isFocused) {
-      setIsLoading(true);
       let tempArray = [];
       getFavourites()
         .then((resp) => {
@@ -98,8 +73,11 @@ function Dashboard({ navigation }) {
               tempArray.push({
                 name: item.base,
                 quote: item.quote,
-                price: "0",
-                priceChange: "0",
+                price:
+                  numeral(coinsData[j].price).format("$0,0.0[0000]") || "0",
+                priceChange:
+                  numeral(coinsData[j].priceChange).format("$0,0.0[0000]") ||
+                  "0",
                 changePercentage: "0",
                 holdingConverted: "0",
                 holdingUnits: item.balance,
@@ -117,28 +95,69 @@ function Dashboard({ navigation }) {
               console.log("resp", resp2);
               setCoinsData([...updateTable(resp2, tempArray)]);
             })
-            .catch((err) => console.log(err))
-            .finally(() => {
-              setIsLoading(false);
-            });
+            .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     }
   }, [isFocused]);
 
   useEffect(() => {
-    getBalance();
+    setIsLoading(true);
+    let tempArray = [];
+    getFavourites()
+      .then((resp) => {
+        const len = resp.length;
+        console.log("dashboard get favourites", resp);
+        for (let i = 0; i < len; i++) {
+          for (let j = 0; j < resp[i].rows.length; j++) {
+            let item = resp[i].rows.item(j);
+            console.log(item);
+            tempArray.push({
+              name: item.base,
+              quote: item.quote,
+              price: "0",
+              priceChange: "0",
+              changePercentage: "0",
+              holdingConverted: "0",
+              holdingUnits: item.balance,
+              notification: item.notification === "1" ? true : false,
+              balance: parseFloat(item.balance) > 0 ? true : false,
+            });
+          }
+        }
+        console.log("tempArray", tempArray);
+        setCoinsData([...tempArray]);
+        let favPairs = tempArray.map((i) => `${i.name}/${i.quote}`);
+        ccxt
+          .coinDetails(favPairs)
+          .then((resp2) => {
+            console.log("resp", resp2);
+            setCoinsData([...updateTable(resp2, tempArray)]);
+          })
+          .catch((err) => console.log(err))
+          .finally(() => {
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      getBalance();
+    }
   }, [isFocused]);
 
   const getBalance = async () => {
     let ccxt = new CCXT();
     let balances = await ccxt.GetHoldings();
-    let total = balances.reduce(function (a, b) { // function(previousValue, currentValue)
-      return {amount : parseFloat(a.amount) + parseFloat(b.amount)}; //select age in object array;
+    let total = balances.reduce(function (a, b) {
+      // function(previousValue, currentValue)
+      return { amount: parseFloat(a.amount) + parseFloat(b.amount) }; //select age in object array;
     });
     setbalance(total.amount);
-    console.log("total Balance",total);
-  }
+    console.log("total Balance", total);
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefresh(true);
@@ -240,12 +259,16 @@ function Dashboard({ navigation }) {
             <Loading />
           ) : (
             <View>
-              {coinsData.map((coin) => (
+              {coinsData.map((coin, i) => (
                 <TouchableOpacity
                   key={coin.name}
                   onPress={() => {
                     onClickCoin(coin.name);
-                    navigation.navigate("CoinPageTabNav");
+                    navigation.navigate("CoinPageTabNav", {
+                      base: coinsData[i].name,
+                      price: coinsData[i].price,
+                      priceChange: coinsData[i].priceChange,
+                    });
                   }}
                 >
                   <Row

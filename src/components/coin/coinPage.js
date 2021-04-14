@@ -1,12 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react-native/no-inline-styles */
+import { useIsFocused } from "@react-navigation/core";
 import { Button, Text } from "galio-framework";
-import moment from "moment";
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useSelector } from "react-redux";
 import CCXT from "../../services/ccxt/react-ccxt";
@@ -16,19 +12,21 @@ import { sharedStyles } from "../shared/shared.style";
 import Loading from "../SplashScreen";
 import { coinPageStyles } from "./coinPageStyle";
 
-export default function coinPage({ navigation }) {
+export default function CoinPage({ navigation, route }) {
   const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
   let ccxt = new CCXT();
   const [graphData, setGraphData] = useState(null);
   const [price, setPrice] = useState("");
+  const [priceChange, setPriceChange] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     navigation.setOptions({ title: coinPageTitle });
     let isMounted = true;
     setIsLoading(true);
     ccxt
-      .Candles(`${coinPageTitle}/USD`, "1d")
+      .Candles(`${coinPageTitle}/USD`, "1m")
       .then((resp) => {
         console.log(resp);
         /* let tempData = [];
@@ -51,48 +49,51 @@ export default function coinPage({ navigation }) {
     };
   }, []);
 
+  useEffect(() => {
+    ccxt
+      .coinDetails([route.params.base + "/USD"])
+      .then((resp) => {
+        console.log("resp", resp);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      setPrice(route?.params?.price || "");
+      setPriceChange(route?.params?.priceChange || "");
+      console.log("route?.params", route?.params);
+    }
+  }, [isFocused]);
+
   return (
     <View style={coinPageStyles.body}>
-      <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
-        {!isLoading && numeral(price).format("$0,0.[00]")}
-      </Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 10,
+          paddingVertical: 20,
+        }}
+      >
+        <Text color={COLOR.WHITE} h3 bold>
+          {numeral(price).format("$0,0.[00]")}
+        </Text>
+        <Text
+          color={priceChange?.includes("-") ? COLOR.RED : COLOR.GREEN}
+          h5
+          bold
+        >
+          {numeral(priceChange).format("0,0.[00]%")}
+        </Text>
+      </View>
       <View style={{ flex: 6 }}>
         {isLoading ? (
           <Loading />
         ) : (
           graphData && <Graph graphData={graphData} symbol={coinPageTitle} />
-          // <LineChart
-          //   data={{
-          //     labels: [...labels],
-          //     datasets: [
-          //       {
-          //         data: [...data],
-          //       },
-          //     ],
-          //   }}
-          //   width={Dimensions.get('window').width} // from react-native
-          //   height={220}
-          //   yAxisLabel="$"
-          //   yAxisInterval={1} // optional, defaults to 1
-          //   chartConfig={{
-          //     backgroundGradientFrom: COLOR.BG,
-          //     backgroundGradientTo: COLOR.BG,
-          //     backgroundColor: COLOR.BG,
-          //     decimalPlaces: 2, // optional, defaults to 2dp
-          //     color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
-          //     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          //     /* propsForBackgroundLines: {
-          //                   strokeWidth: 0
-          //               }, */
-          //     style: {
-          //       borderRadius: 16,
-          //       backgroundColor: COLOR.BG,
-          //     },
-          //     strokeWidth: 2,
-          //   }}
-          //   withInnerLines={false}
-          //   withDots={false}
-          // />
         )}
       </View>
       <View style={{ padding: 10, flex: 1 }}>

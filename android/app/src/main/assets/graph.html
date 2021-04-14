@@ -7,7 +7,7 @@
     <style>
       html,
       body {
-        font-family: 'Trebuchet MS', Roboto, Ubuntu, sans-serif;
+        font-family: "Trebuchet MS", Roboto, Ubuntu, sans-serif;
         background: #000;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -31,16 +31,20 @@
         border: 1px solid rgba(184, 134, 11, 1);
         border-radius: 2px;
       }
+
+      .tv-lightweight-charts{
+        padding-bottom: 10px;
+      }
     </style>
   </head>
 
   <body>
     <script type="text/javascript" src="./lightweight-charts.js"></script>
     <script>
-      document.addEventListener('message', handleEvent);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      let symbol = '';
+      document.addEventListener("message", handleEvent);
+      const width = window.innerWidth - 20;
+      const height = window.innerHeight - 20;
+      let symbol = "";
       let areaSeries;
 
       function handleEvent(message) {
@@ -49,14 +53,14 @@
         symbol = eventData.symbol;
         data = eventData.graphData;
         areaSeries.setData(eventData.graphData);
-        window.ReactNativeWebView.postMessage('symbol' + eventData.symbol);
+        window.ReactNativeWebView.postMessage("symbol" + eventData.symbol);
         window.ReactNativeWebView.postMessage(
-          'graphData' + eventData.graphData,
+          "graphData" + eventData.graphData
         );
       }
 
-      document.body.style.position = 'relative';
-      var container = document.createElement('div');
+      document.body.style.position = "relative";
+      var container = document.createElement("div");
       document.body.appendChild(container);
 
       var chart = LightweightCharts.createChart(container, {
@@ -73,8 +77,8 @@
           borderVisible: false,
         },
         layout: {
-          backgroundColor: '#000000',
-          textColor: '#d1d4dc',
+          backgroundColor: "#000000",
+          textColor: "#d1d4dc",
         },
         grid: {
           horzLines: {
@@ -87,16 +91,16 @@
       });
 
       areaSeries = chart.addAreaSeries({
-        topColor: 'rgba(184, 134, 11, 0.56)',
-        bottomColor: 'rgba(184, 134, 11, 0.04)',
-        lineColor: 'rgba(184, 134, 11, 1)',
+        topColor: "rgba(184, 134, 11, 0.56)",
+        bottomColor: "rgba(184, 134, 11, 0.04)",
+        lineColor: "rgba(184, 134, 11, 1)",
         lineWidth: 1,
         symbol: symbol,
       });
 
       function businessDayToString(businessDay) {
         return (
-          businessDay.year + '-' + businessDay.month + '-' + businessDay.day
+          businessDay.year + "-" + businessDay.month + "-" + businessDay.day
         );
       }
 
@@ -104,12 +108,12 @@
       var toolTipHeight = 80;
       var toolTipMargin = 15;
 
-      var toolTip = document.createElement('div');
-      toolTip.className = 'floating-tooltip-2';
+      var toolTip = document.createElement("div");
+      toolTip.className = "floating-tooltip-2";
       container.appendChild(toolTip);
 
       // update tooltip
-      chart.subscribeCrosshairMove(function(param) {
+      chart.subscribeCrosshairMove(function (param) {
         if (
           !param.time ||
           param.point.x < 0 ||
@@ -117,7 +121,7 @@
           param.point.y < 0 ||
           param.point.y > height
         ) {
-          toolTip.style.display = 'none';
+          toolTip.style.display = "none";
           return;
         }
 
@@ -126,14 +130,14 @@
           : new Date(param.time * 1000).toLocaleDateString(); */
         const date = new Date(param.time * 1000);
         const dateStr = date.toLocaleDateString();
-        const minutes = date.getMinutes() + '';
-        const hours = date.getHours() + '';
+        const minutes = date.getMinutes() + "";
+        const hours = date.getHours() + "";
         const timeStr =
-          (hours.length > 1 ? hours : '0' + hours) +
-          ':' +
-          (minutes.length > 1 ? minutes : '0' + minutes);
+          (hours.length > 1 ? hours : "0" + hours) +
+          ":" +
+          (minutes.length > 1 ? minutes : "0" + minutes);
 
-        toolTip.style.display = 'block';
+        toolTip.style.display = "block";
         var price = param.seriesPrices.get(areaSeries);
         toolTip.innerHTML = `
           <div style="color: #000">${symbol}</div>
@@ -156,8 +160,8 @@
           top = y - toolTipHeight - toolTipMargin;
         }
 
-        toolTip.style.left = left + 'px';
-        toolTip.style.top = top + 'px';
+        toolTip.style.left = left + "px";
+        toolTip.style.top = top + "px";
       });
     </script>
   </body>

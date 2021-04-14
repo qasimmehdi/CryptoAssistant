@@ -1,13 +1,13 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ViewTransactions from "../transaction/view-transaction";
-import coinPage from "./coinPage";
+import CoinPage from "./coinPage";
 import { COLOR } from "../shared/colors";
 import { useSelector } from "react-redux";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function CoinPageTabNav({ navigation }) {
+export default function CoinPageTabNav({ navigation, route }) {
   const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
   navigation.setOptions({ title: coinPageTitle });
 
@@ -27,7 +27,7 @@ export default function CoinPageTabNav({ navigation }) {
     >
       <Tab.Screen
         name="coinPage"
-        component={coinPage}
+        children={(props) => <CoinPage {...props} route={route} />}
         options={{ title: "Details" }}
       />
       <Tab.Screen
