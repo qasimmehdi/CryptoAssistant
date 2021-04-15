@@ -33,11 +33,69 @@ export default function TradeBotScreen({ navigation, route }) {
   const [stop, setStop] = useState("");
   const [limit, setLimit] = useState("");
   const [percentage, setPercentage] = useState("");
+  const [limitInterval,setLimitInterval] = useState(null);
+  const ccxtObj = new CCXT();
+  const [stopPercenChange,setstopPercenChange] = useState(null);
+
+  //pair rate for limit
+  useEffect(() => {
+    let interval = UpdateLimit();
+    if(interval){
+      setLimitInterval(interval);
+    }
+  },[pair])
+
+  //for stop to percentage
+  useEffect(() => {
+    if(stopPercenChange !== null){
+      if(stopPercenChange === 1 && limit){
+        let percDiff = ""+ (100 * Math.abs( (+limit - +stop) / ( (+limit + +stop)/2 ) )).toFixed(5);
+        setPercentage(percDiff);
+      }
+      if(stopPercenChange === 2 && limit){
+        let stop = ""+ (+limit - (parseInt(percentage) / 100) * +limit).toFixed(5);
+          setStop(stop);
+      }
+      if(stopPercenChange === 11){ //for empty values
+        setPercentage("");
+      }
+      if(stopPercenChange === 22){
+        setStop("");
+      }
+    }
+    
+  },[limit,stopPercenChange,stop,percentage])
+
+
+  const UpdateLimit = async () => {
+    const intervelId = setInterval(async function() {
+      if(pair){
+        let rate = await ccxtObj.coinDetails([route.params.pair]); 
+  
+        let isNotFound = Object.keys(rate).findIndex(x => x.toLowerCase() === 'not found');
+  
+        if(isNotFound < 0){
+          let finalRate = rate[route.params.pair.replace("/", "-")]["last"];
+          setLimit(""+finalRate);
+          const temp = numeral(parseFloat(finalRate) * parseFloat(quantity === "" ? 0 : quantity)).format(
+            "0[.][0000]"
+          );
+          setTotal(temp);
+        }
+        
+      }
+    },5000);
+    return intervelId;
+  }
+
 
   useEffect(() => {
     if (isFocused) {
       setExchange(route?.params?.name || "");
       setPair(route?.params?.pair || "");
+    }
+    else{
+      clearInterval(limitInterval);
     }
   }, [isFocused]);
 
@@ -60,6 +118,11 @@ export default function TradeBotScreen({ navigation, route }) {
 
   const startBot = async () => {
     //for exchange is avaialble or not
+    if(stop > limit){
+        Alert.alert("Invalid Input","Please enter stop less than limit");
+        return;
+    }
+
     const isExchangeAvaialble = pairs.findIndex(
       (x) => x.exchange.toLowerCase() === exchange.toLowerCase()
     );
@@ -81,7 +144,7 @@ export default function TradeBotScreen({ navigation, route }) {
           return;
         } else {
           //fetching balance
-          balance = new CCXT().fetchBalancesByExchange(exchange);
+          balance = ccxtObj.fetchBalancesByExchange(exchange);
         }
       } else {
         Alert.alert("Keys Not Found", `Please add API keys for ${exchange}`);
@@ -220,7 +283,10 @@ export default function TradeBotScreen({ navigation, route }) {
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
               value={stop}
-              onChangeText={(text) => setStop(text.replace(regexes.float, ""))}
+              onChangeText={(text) => {
+                setStop(text.replace(regexes.float, ""));
+                setstopPercenChange(text === "" ? 11 : 1);
+              }}
             />
           </View>
           <View style={transactionStyles.field}>
@@ -242,6 +308,8 @@ export default function TradeBotScreen({ navigation, route }) {
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
               value={limit}
+              editable={false}
+              disabled={true}
               onChangeText={(text) => setLimit(text.replace(regexes.float, ""))}
             />
           </View>
@@ -262,9 +330,11 @@ export default function TradeBotScreen({ navigation, route }) {
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
               value={percentage}
-              onChangeText={(text) =>
-                setPercentage(text.replace(regexes.float, ""))
+              onChangeText={(text) =>{
+                setPercentage(text.replace(regexes.float, ""));
+                setstopPercenChange(text === "" ? 22 : 2);
               }
+            }
             />
           </View>
           <View style={transactionStyles.field}>
@@ -307,6 +377,8 @@ export default function TradeBotScreen({ navigation, route }) {
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
+              editable={false}
+              disabled={true}
               value={total}
             />
           </View>
