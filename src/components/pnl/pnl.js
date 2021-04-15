@@ -6,32 +6,40 @@ import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import iconImages from "../../assets/coinIcons/names";
+import CCXT from "../../services/ccxt/react-ccxt";
 import { rowStyles } from "../../styles/rowStyles";
 import { COLOR } from "../shared/colors";
 import { sharedStyles } from "../shared/shared.style";
 
 export default function PNL() {
+  const ccxt = new CCXT();
+
   const [totalValue, setTotalValue] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
 
-  const [assets, setAssets] = useState([
-    { symbol: "BTC", profit: 12420 },
-    { symbol: "ADA", profit: 12420 },
-    { symbol: "REN", profit: 12420 },
-    { symbol: "ETH", profit: 12420 },
-    { symbol: "DOT", profit: 12420 },
-    { symbol: "LTC", profit: 12420 },
-    { symbol: "BNB", profit: 12420 },
-    { symbol: "LUNA", profit: 12420 },
-    { symbol: "REN", profit: 12420 },
-    { symbol: "ETH", profit: 12420 },
-    { symbol: "DOT", profit: 12420 },
-    { symbol: "LTC", profit: 12420 },
-  ]);
+  const [assets, setAssets] = useState([]);
 
   useEffect(() => {
-    //get values
+    getData();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (assets.length > 0) {
+        const total = assets
+          .map((item) => item.amount)
+          .reduce((prev, next) => parseFloat(prev) + parseFloat(next));
+        setTotalValue(total);
+        console.log(total);
+      }
+    })();
+  }, [assets]);
+
+  const getData = async () => {
+    const holdings = await ccxt.GetHoldings();
+    console.log("holdings", holdings);
+    setAssets(holdings);
+  };
 
   return (
     <View style={sharedStyles.body}>
@@ -40,6 +48,7 @@ export default function PNL() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          paddingVertical: 15,
         }}
       >
         <View
@@ -50,7 +59,7 @@ export default function PNL() {
           }}
         >
           <Text style={{ paddingTop: 5 }} color={COLOR.APP_GREY} size={12} bold>
-            Total Value (USD)
+            Total Value ($)
           </Text>
           <Text style={{ paddingTop: 5 }} color={COLOR.WHITE} size={18} bold>
             ${numeral(totalValue).format("0,0[.][00000000]")}
@@ -63,16 +72,16 @@ export default function PNL() {
             justifyContent: "center",
           }}
         >
-          <Text style={{ paddingTop: 5 }} color={COLOR.APP_GREY} size={12} bold>
+          {/* <Text style={{ paddingTop: 5 }} color={COLOR.APP_GREY} size={12} bold>
             Total Profit (USD)
           </Text>
           <Text style={{ paddingTop: 5 }} color={COLOR.WHITE} size={18} bold>
             ${numeral(totalProfit).format("0,0[.][00000000]")}
-          </Text>
+          </Text> */}
         </View>
       </View>
 
-      <View style={{ paddingTop: 10, display: 'flex', flex: 1 }}>
+      <View style={{ paddingTop: 10, display: "flex", flex: 1 }}>
         <View
           style={{
             display: "flex",
@@ -87,7 +96,10 @@ export default function PNL() {
             Coin
           </Text>
           <Text color={COLOR.APP_GREY} size={12} bold>
-            Profit
+            Quantity
+          </Text>
+          <Text color={COLOR.APP_GREY} size={12} bold>
+            Value ($)
           </Text>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -133,7 +145,10 @@ export default function PNL() {
                   </Text>
                 </View>
                 <Text color={COLOR.WHITE} size={14} bold>
-                  ${numeral(asset.profit).format("0,0[.][00000000]")}
+                  {numeral(asset.quantity).format("0,0[.][00000000]")}
+                </Text>
+                <Text color={COLOR.WHITE} size={14} bold>
+                  ${numeral(asset.amount).format("0,0[.][00000000]")}
                 </Text>
               </View>
             </LinearGradient>

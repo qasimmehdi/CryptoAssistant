@@ -1,5 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useRef } from "react";
 import { Dimensions, View } from "react-native";
 import WebView from "react-native-webview";
@@ -46,7 +44,7 @@ export default function Graph({ graphData, symbol }) {
         backgroundColor: COLOR.BG,
       }}
     >
-      <View style={{ width: Dimensions.get("window").width, height: 235 }}>
+      <View style={{ width: Dimensions.get("window").width, height: 250 }}>
         <WebView
           ref={webRef}
           originWhitelist={["*"]}
