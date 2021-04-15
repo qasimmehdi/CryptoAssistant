@@ -149,14 +149,15 @@ function Dashboard({ navigation }) {
   }, [isFocused]);
 
   const getBalance = async () => {
-    let ccxt = new CCXT();
     let balances = await ccxt.GetHoldings();
-    let total = balances.reduce(function (a, b) {
-      // function(previousValue, currentValue)
-      return { amount: parseFloat(a.amount) + parseFloat(b.amount) }; //select age in object array;
-    });
-    setbalance(total.amount);
-    console.log("total Balance", total);
+    if (balances.length > 0) {
+      let total = balances.reduce(function (a, b) {
+        // function(previousValue, currentValue)
+        return { amount: parseFloat(a.amount) + parseFloat(b.amount) }; //select age in object array;
+      });
+      setbalance(total.amount);
+      console.log("total Balance", total);
+    }
   };
 
   const onRefresh = React.useCallback(() => {
