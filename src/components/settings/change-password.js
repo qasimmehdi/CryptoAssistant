@@ -1,6 +1,6 @@
 import { Button, Input, Text } from "galio-framework";
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../shared/colors";
@@ -8,6 +8,7 @@ import CustomInput from "../shared/NewCustomInput";
 import { regexes } from "../shared/regexes";
 import { sharedStyles } from "../shared/shared.style";
 import { settingsStyle } from "./Settings.style";
+import {changePassword} from '../../services/profile.services';
 
 export default function ChangePassword() {
   const [password, setPassword] = useState("");
@@ -37,6 +38,15 @@ export default function ChangePassword() {
       }
     }
   }, [password, confirmPassword, currentPassword, passV, pass2V]);
+
+  const submitPassword = () => {
+    setBtnDisabled(true);
+    changePassword(currentPassword,password).then(x => Alert.alert("Success","Password Changed"))
+    .catch(err => {
+       Alert.alert("Error",err?.response?.status === 400 ? "Incorrect current password":"Something went wrong")
+    })
+    .finally(() => setBtnDisabled(false))
+  }
 
   return (
     <View style={sharedStyles.body}>
@@ -122,7 +132,7 @@ export default function ChangePassword() {
               round
               color="transparent"
               style={sharedStyles.borderless}
-              onPress={() => {}}
+              onPress={submitPassword}
               disabled={btnDisabled}
             >
               <Text color={COLOR.WHITE} h5 bold>

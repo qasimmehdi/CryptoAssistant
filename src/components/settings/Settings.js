@@ -1,6 +1,6 @@
 import { Button, Input, Text } from "galio-framework";
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View , Alert} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../shared/colors";
@@ -8,6 +8,7 @@ import CustomInput from "../shared/NewCustomInput";
 import { regexes } from "../shared/regexes";
 import { sharedStyles } from "../shared/shared.style";
 import { settingsStyle } from "./Settings.style";
+import {getProfile,updateProfile} from '../../services/profile.services';
 
 export default function Settings({ navigation }) {
   const [firstName, setFirstName] = useState("");
@@ -31,6 +32,34 @@ export default function Settings({ navigation }) {
       setBtnDisabled(true);
     }
   }, [firstName, lastName, email, emailV]);
+
+  useEffect(() => {
+      getProfile()
+      .then(x => {
+        const data = x?.data;
+        setFirstName(data?.firstName || "");
+        setLastName(data?.lastName || "");
+        setEmail(data?.email || "");
+        setEmailV(data?.email ? true : false);
+        setUserName(data?.userName || "");
+        
+      })
+      .catch(err => Alert.alert("Error","Unable to fetch profile"))
+  },[])
+
+
+  const saveProfile = () => {
+    setBtnDisabled(true);
+    const data = {
+      firstName,
+      lastName,
+      email,
+    }
+
+    updateProfile(data).then(x => Alert.alert("Success","Profile Updated Successfully"))
+    .catch(err => Alert.alert("Error","Something went wrong"))
+    .finally(() => setBtnDisabled(false));
+  }
 
   return (
     <View style={sharedStyles.body}>
@@ -77,6 +106,8 @@ export default function Settings({ navigation }) {
               placeholderTextColor={COLOR.APP_GREY}
               iconColor={COLOR.APP_GREY}
               color={COLOR.WHITE}
+              disabled={true}
+              editable={false}
               value={userName}
               editable={false}
             />
@@ -112,7 +143,7 @@ export default function Settings({ navigation }) {
               round
               color="transparent"
               style={sharedStyles.borderless}
-              onPress={() => {}}
+              onPress={saveProfile}
               disabled={btnDisabled}
             >
               <Text color={COLOR.WHITE} h5 bold>
