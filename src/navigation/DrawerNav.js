@@ -2,10 +2,13 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Dashboard from "../components/Dashboard";
 import { COLOR } from "../components/shared/colors";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity,View } from "react-native";
 import { Text } from "galio-framework";
 import { CommonActions } from "@react-navigation/routers";
 import { SDeleteInfo } from "../services/sensitiveStorage";
+import IonicIcon from "react-native-vector-icons/Ionicons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MaterialCommun from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Drawer = createDrawerNavigator();
 
@@ -30,8 +33,14 @@ function CustomDrawerContent({ navigation }) {
           navigation.navigate("ExchangeList");
         }}
       >
+
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
-          Connect Exchange
+        <FontAwesome
+              name={"exchange"}
+              size={20}
+            />
+            <Text>   Connect Exchange</Text>
+         
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -45,7 +54,12 @@ function CustomDrawerContent({ navigation }) {
         }}
       >
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
-          Profit & Loss
+        <MaterialCommun
+              name={"account-cash-outline"}
+              size={20}
+            />
+            <Text>   Profit & Loss</Text>
+          
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -59,7 +73,12 @@ function CustomDrawerContent({ navigation }) {
         }}
       >
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
-          Settings
+        <IonicIcon
+              name={"settings-outline"}
+              size={20}
+            />
+            <Text>   Settings</Text>
+          
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -73,7 +92,12 @@ function CustomDrawerContent({ navigation }) {
         }}
       >
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
-          Help
+        <IonicIcon
+              name={"help-circle-outline"}
+              size={20}
+            />
+            <Text>   Help</Text>
+          
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -96,7 +120,12 @@ function CustomDrawerContent({ navigation }) {
         }}
       >
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
-          Log Out
+        <IonicIcon
+              name={"exit-outline"}
+              size={20}
+            />
+            <Text>   Log Out</Text>
+         
         </Text>
       </TouchableOpacity>
     </React.Fragment>
