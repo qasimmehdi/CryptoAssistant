@@ -4,8 +4,18 @@ import Dashboard from "../components/Dashboard";
 import { COLOR } from "../components/shared/colors";
 import { TouchableOpacity } from "react-native";
 import { Text } from "galio-framework";
+import { CommonActions } from "@react-navigation/routers";
+import { SDeleteInfo } from "../services/sensitiveStorage";
 
 const Drawer = createDrawerNavigator();
+
+function Logout() {
+  return new Promise((resolve, reject) => {
+    SDeleteInfo("auth_token")
+      .then(() => resolve())
+      .catch(() => reject);
+  });
+}
 
 function CustomDrawerContent({ navigation }) {
   return (
@@ -64,6 +74,29 @@ function CustomDrawerContent({ navigation }) {
       >
         <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
           Help
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          backgroundColor: COLOR.TAB,
+          justifyContent: "center",
+          minHeight: 50,
+        }}
+        onPress={() => {
+          Logout()
+            .then(() => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "SigninOrRegister" }],
+                })
+              );
+            })
+            .catch((err) => console.log(err));
+        }}
+      >
+        <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
+          Log Out
         </Text>
       </TouchableOpacity>
     </React.Fragment>

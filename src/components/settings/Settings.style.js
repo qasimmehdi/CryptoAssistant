@@ -7,7 +7,14 @@ export const settingsStyle = StyleSheet.create({
     marginBottom: 10,
   },
   topPart: {
+    paddingTop: 15,
     flex: 5,
     flexDirection: "column",
+  },
+  input: {
+    borderColor: "#808080",
+    backgroundColor: "#121212",
+    borderRadius: 5,
+    borderWidth: 0.5,
   },
 });

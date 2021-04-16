@@ -10,12 +10,14 @@ import CCXT from "../../services/ccxt/react-ccxt";
 import { rowStyles } from "../../styles/rowStyles";
 import { COLOR } from "../shared/colors";
 import { sharedStyles } from "../shared/shared.style";
+import Loading from "../SplashScreen";
 
 export default function PNL() {
   const ccxt = new CCXT();
 
   const [totalValue, setTotalValue] = useState(0);
-  const [totalProfit, setTotalProfit] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  /* const [totalProfit, setTotalProfit] = useState(0); */
 
   const [assets, setAssets] = useState([]);
 
@@ -36,9 +38,10 @@ export default function PNL() {
   }, [assets]);
 
   const getData = async () => {
+    setIsLoading(true);
     const holdings = await ccxt.GetHoldings();
-    console.log("holdings", holdings);
     setAssets(holdings);
+    setIsLoading(false);
   };
 
   return (
@@ -103,56 +106,60 @@ export default function PNL() {
           </Text>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {assets.map((asset, i) => (
-            <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
-              style={{
-                borderRadius: 8,
-                marginBottom: 15,
-              }}
-              key={`asset-${i}`}
-            >
-              <View
+          {isLoading ? (
+            <Loading />
+          ) : (
+            assets.map((asset, i) => (
+              <LinearGradient
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                colors={[COLOR.GRADIENT_0, COLOR.GRADIENT_1]}
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: 40,
-                  paddingLeft: 5,
-                  paddingRight: 8,
+                  borderRadius: 8,
+                  marginBottom: 15,
                 }}
+                key={`asset-${i}`}
               >
                 <View
                   style={{
                     display: "flex",
                     flexDirection: "row",
+                    justifyContent: "space-between",
                     alignItems: "center",
+                    height: 40,
+                    paddingLeft: 5,
+                    paddingRight: 8,
                   }}
                 >
-                  <Image
-                    style={rowStyles.coinIcon}
-                    source={
-                      iconImages.hasOwnProperty(asset.symbol)
-                        ? iconImages[asset.symbol]
-                        : iconImages.GENERIC
-                    }
-                  />
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      style={rowStyles.coinIcon}
+                      source={
+                        iconImages.hasOwnProperty(asset.symbol)
+                          ? iconImages[asset.symbol]
+                          : iconImages.GENERIC
+                      }
+                    />
+                    <Text color={COLOR.WHITE} size={14} bold>
+                      {asset.symbol}
+                    </Text>
+                  </View>
                   <Text color={COLOR.WHITE} size={14} bold>
-                    {asset.symbol}
+                    {numeral(asset.quantity).format("0,0[.][00000000]")}
+                  </Text>
+                  <Text color={COLOR.WHITE} size={14} bold>
+                    ${numeral(asset.amount).format("0,0[.][00000000]")}
                   </Text>
                 </View>
-                <Text color={COLOR.WHITE} size={14} bold>
-                  {numeral(asset.quantity).format("0,0[.][00000000]")}
-                </Text>
-                <Text color={COLOR.WHITE} size={14} bold>
-                  ${numeral(asset.amount).format("0,0[.][00000000]")}
-                </Text>
-              </View>
-            </LinearGradient>
-          ))}
+              </LinearGradient>
+            ))
+          )}
         </ScrollView>
       </View>
     </View>
