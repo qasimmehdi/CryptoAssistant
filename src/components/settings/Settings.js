@@ -1,6 +1,6 @@
 import { Button, Input, Text } from "galio-framework";
 import React, { useEffect, useState } from "react";
-import { View , Alert} from "react-native";
+import { View, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../shared/colors";
@@ -8,7 +8,7 @@ import CustomInput from "../shared/NewCustomInput";
 import { regexes } from "../shared/regexes";
 import { sharedStyles } from "../shared/shared.style";
 import { settingsStyle } from "./Settings.style";
-import {getProfile,updateProfile} from '../../services/profile.services';
+import { getProfile, updateProfile } from "../../services/profile.services";
 
 export default function Settings({ navigation }) {
   const [firstName, setFirstName] = useState("");
@@ -34,32 +34,35 @@ export default function Settings({ navigation }) {
   }, [firstName, lastName, email, emailV]);
 
   useEffect(() => {
-      getProfile()
-      .then(x => {
+    getProfile()
+      .then((x) => {
         const data = x?.data;
         setFirstName(data?.firstName || "");
         setLastName(data?.lastName || "");
         setEmail(data?.email || "");
         setEmailV(data?.email ? true : false);
         setUserName(data?.userName || "");
-        
       })
-      .catch(err => Alert.alert("Error","Unable to fetch profile"))
-  },[])
-
+      .catch(() => Alert.alert("Error", "Unable to fetch profile"));
+  }, []);
 
   const saveProfile = () => {
+    setGradientColors([COLOR.DISABLED, COLOR.DISABLED]);
     setBtnDisabled(true);
     const data = {
       firstName,
       lastName,
       email,
-    }
+    };
 
-    updateProfile(data).then(x => Alert.alert("Success","Profile Updated Successfully"))
-    .catch(err => Alert.alert("Error","Something went wrong"))
-    .finally(() => setBtnDisabled(false));
-  }
+    updateProfile(data)
+      .then((x) => Alert.alert("Success", "Profile Updated Successfully"))
+      .catch(() => Alert.alert("Error", "Something went wrong"))
+      .finally(() => {
+        setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
+        setBtnDisabled(false);
+      });
+  };
 
   return (
     <View style={sharedStyles.body}>
@@ -109,7 +112,6 @@ export default function Settings({ navigation }) {
               disabled={true}
               editable={false}
               value={userName}
-              editable={false}
             />
           </View>
           <View style={{ paddingBottom: 10 }}>
