@@ -48,7 +48,7 @@ export default function Graph({ graphData, symbol }) {
         <WebView
           ref={webRef}
           originWhitelist={["*"]}
-          source={{ uri: "file:///android_asset/graph.html" }}
+          source={{ uri: "file:///android_asset/graph.html" }}  //USING WEB VIEW AND SENDING DATA TO IT
           style={{
             backgroundColor: COLOR.BG,
           }}

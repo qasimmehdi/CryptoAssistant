@@ -11,7 +11,7 @@ import {
 } from "../../db/methods";
 
 export default class CCXT {
-  constructor() {
+  constructor() {   //CO NSTRUCTR TO CREATE INSTANCES FOR ALL CERTIFIED EXCHANGE
     this.certifiedEx = [
       { imp: new ccxt.binance({ enableRateLimit: true }), name: "Binance" },
       { imp: new ccxt.bitfinex({ enableRateLimit: true }), name: "Bitfinex" },
@@ -35,7 +35,7 @@ export default class CCXT {
     ];
   }
 
-  batchExchanges(symbols) {
+  batchExchanges(symbols) {   //QUERYING CCXT TO GET DATA OF COINS SUPPLIED AS ARRAY
     let proms = [];
     for (let symbol of symbols) {
       proms.push(
@@ -81,14 +81,14 @@ export default class CCXT {
     return Promise.all(proms);
   }
 
-  getAllExchangeAndLogo() {
+  getAllExchangeAndLogo() {  //GETTING LOGO OF EXCHANEGES
     return this.certifiedEx.map((x) => ({
       name: x.name,
       logo: x.imp.urls.logo,
     }));
   }
 
-  Candles(symbol, hr) {
+  Candles(symbol, hr) {  //GETTING GRAPH DATA FROM CCXT
     let date = new Date();
     let interval = "";
     if (hr === "1y") {
@@ -131,7 +131,7 @@ export default class CCXT {
     });
   }
 
-  coinDetails(symbols) {
+  coinDetails(symbols) {  //GETTING DETAILS OF SPECIFIC COIN 
     return new Promise((resolve, reject) => {
       console.log(symbols);
       this.batchExchanges(symbols).then((resp) => {
@@ -148,7 +148,7 @@ export default class CCXT {
     });
   }
 
-  addExchange(name, publickey, secretkey) {
+  addExchange(name, publickey, secretkey) {  //ADDING EXCHANGE TO DB AND GETTING ALL TRANSACTIONS
     const index = this.certifiedEx.findIndex((x) => x.name === name);
     this.certifiedEx[index].imp.apiKey = publickey;
     this.certifiedEx[index].imp.secret = secretkey;
@@ -189,7 +189,7 @@ export default class CCXT {
     });
   }
 
-  saveTransactionstodb(exname) {
+  saveTransactionstodb(exname) {  //SAVING TRANSACTION TO LOCAL DB
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     return new Promise((resolve, reject) => {
       if (exchange && exchange.checkRequiredCredentials()) {
@@ -274,7 +274,7 @@ export default class CCXT {
     });
   }
 
-  getTradeData(exname) {
+  getTradeData(exname) {  //GETTING TRADE DATA FROM EXCHANEG THROUGH CCXT
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const symbols = pairs.find((x) => x.exchange === exname.toLowerCase())
       .symbols;
@@ -299,7 +299,7 @@ export default class CCXT {
     return Promise.all(promises);
   }
 
-  async createOrder(exname, symbol, side, amount, price) {
+  async createOrder(exname, symbol, side, amount, price) {  //CREATING ORDER OF BUY OR SELL
     const exchange = this.certifiedEx.find(
       (x) => x.name.toLowerCase() === exname.toLowerCase()
     ).imp;
@@ -348,7 +348,7 @@ export default class CCXT {
     });
   }
 
-  async GetHoldings() {
+  async GetHoldings() {  //GETTING HOLDING OF USER 
     let holdingsUSD = [];
     const resp = await getAllExchanges();
     let tempArray = [];
@@ -412,9 +412,9 @@ export default class CCXT {
     })
   }
     return holdingsUSD;
-  }
+  }  
 
-  async fetchBalances() {
+  async fetchBalances() {   //FETCHING BALANCE OF USER 
     let responses = [];
     const resp = await getAllExchanges();
     let tempArray = [];
@@ -440,9 +440,9 @@ export default class CCXT {
       }
     }
     return Promise.all(responses);
-  }
+  } 
 
-  async fetchBalancesByExchange(exname) {
+  async fetchBalancesByExchange(exname) {  //GETTING BALANCE OF SPECIFIC EXCHANGE
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
 
@@ -462,7 +462,7 @@ export default class CCXT {
     }
   }
 
-  async getExchangeObj(exname) {
+  async getExchangeObj(exname) { //GETTING OBJECT OF EXCHANGE
     console.log("getExchangeObj", exname);
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);

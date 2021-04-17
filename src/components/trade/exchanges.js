@@ -45,7 +45,7 @@ export default function SelectExchangeList({ navigation, route }) {
   const [exchanges, setExchanges] = React.useState([]);
 
   useEffect(() => {
-    getAllExchanges()
+    getAllExchanges()   //GETTING ALL EXCHNAGES USING CCXT SERVICE
       .then((resp) => {
         console.log(resp);
         let tempArray = [];

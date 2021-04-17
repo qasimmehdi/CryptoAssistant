@@ -46,20 +46,20 @@ export default function TradeBotScreen({ navigation, route }) {
   },[pair])
 
   //for stop to percentage
-  useEffect(() => {
+  useEffect(() => {  //SETTING PERCENTAGE OR STOP BIDIRECTIONAL
     if(stopPercenChange !== null){
       if(stopPercenChange === 1 && limit){
         let percDiff = ""+ (100 * Math.abs( (+limit - +stop) / ( (+limit + +stop)/2 ) )).toFixed(5);
         setPercentage(percDiff);
       }
-      if(stopPercenChange === 2 && limit){
+      if(stopPercenChange === 2 && limit){  //IF NULL RESET 
         let stop = ""+ (+limit - (parseInt(percentage) / 100) * +limit).toFixed(5);
           setStop(stop);
       }
       if(stopPercenChange === 11){ //for empty values
         setPercentage("");
       }
-      if(stopPercenChange === 22){
+      if(stopPercenChange === 22){  //IF NULL RESET
         setStop("");
       }
     }
@@ -67,14 +67,14 @@ export default function TradeBotScreen({ navigation, route }) {
   },[limit,stopPercenChange,stop,percentage])
 
 
-  const UpdateLimit = async () => {
+  const UpdateLimit = async () => {  //GETTING LIMIT PRICE EVERY 5 sec
     const intervelId = setInterval(async function() {
       if(pair){
         let rate = await ccxtObj.coinDetails([route.params.pair]); 
   
         let isNotFound = Object.keys(rate).findIndex(x => x.toLowerCase() === 'not found');
   
-        if(isNotFound < 0){
+        if(isNotFound < 0){  //CHECKING IF DATA AVAILABLE
           let finalRate = rate[route.params.pair.replace("/", "-")]["last"];
           setLimit(""+finalRate);
           const temp = numeral(parseFloat(finalRate) * parseFloat(quantity === "" ? 0 : quantity)).format(
@@ -107,7 +107,7 @@ export default function TradeBotScreen({ navigation, route }) {
   }, [limit, quantity]);
 
   useEffect(() => {
-    if (exchange && pair && side && quantity && stop && limit && percentage) {
+    if (exchange && pair && side && quantity && stop && limit && percentage) { //VALIDATION ALL FIELDS MANDATORY
       setBtnDisable(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
     } else {
@@ -116,9 +116,9 @@ export default function TradeBotScreen({ navigation, route }) {
     }
   }, [quantity, exchange, pair, side, stop, limit, percentage]);
 
-  const startBot = async () => {
+  const startBot = async () => {   //STARTING BOT AND SENDING DATA TO NEXT SCREEEN
     //for exchange is avaialble or not
-    if(stop > limit){
+    if(stop > limit){  //VALIDATION FOR START BOOT
         Alert.alert("Invalid Input","Please enter stop less than limit");
         return;
     }
@@ -129,11 +129,11 @@ export default function TradeBotScreen({ navigation, route }) {
     let balance = 0;
     if (isExchangeAvaialble > -1) {
       //for exchange keys available
-      const resp = await getExchange(exchange);
+      const resp = await getExchange(exchange);  //GETTING EXCHANGE OBJECT FROM CCXT
       console.log("bot", resp);
       if (resp[0].rows.length > 0) {
         //for pair is supported or not
-        const isPairAvailable = pairs[isExchangeAvaialble].symbols.findIndex(
+        const isPairAvailable = pairs[isExchangeAvaialble].symbols.findIndex(  //CHECKING THE PAIR IS SUPPORTED IN EXCHANGE
           (x) => x === pair
         );
         if (isPairAvailable < 0) {

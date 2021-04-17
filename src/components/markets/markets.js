@@ -46,7 +46,7 @@ export default function MarketScreen({ navigation }) {
 
   useEffect(() => {
     setisCalling(true);
-    getCoins(limit)
+    getCoins(limit)  //API CALL TO SERVER FOR GETTING ALL MARKETS 
       .then((result) => {
         setcoins(result.data);
       })
@@ -54,7 +54,7 @@ export default function MarketScreen({ navigation }) {
         console.log(err);
       })
       .finally(() => {
-        setisCalling(false);
+        setisCalling(false); //SETTING LOADER TO CONDIATIONALLY
       });
   }, [limit]);
   return (

@@ -7,6 +7,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { COLOR } from "../shared/colors";
 import { sharedStyles } from "../shared/shared.style";
 
+
+//help page which we can show some help tips to user
+
 export default function Help() {
   return (
     <View style={sharedStyles.body}>

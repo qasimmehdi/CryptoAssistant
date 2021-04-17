@@ -1,52 +1,42 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
 import { Text } from "galio-framework";
-import moment from "moment";
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { View } from "react-native";
 import { useSelector } from "react-redux";
+import CCXT from "../../services/ccxt/react-ccxt";
 import { getPrediction } from "../../services/user.services";
+import Graph from "../Graph";
 import { COLOR } from "../shared/colors";
 import Loading from "../SplashScreen";
 import { coinPageStyles } from "./coinPageStyle";
 
-export default function AIPredictionChart({ navigation }) {
+export default function AIPredictionChart({ navigation, route }) {
   const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);
-  const [data, setData] = useState([1]);
-  const [labels, setLabels] = useState([]);
+  const [graphData, setGraphData] = useState(null);
   const [price, setPrice] = useState("0");
   const [isLoading, setIsLoading] = useState(false);
-  let labelRadix;
+  /* setPrice(route.params.price || ""); */
+  const ccxt = new CCXT();
+
   useEffect(() => {
     navigation.setOptions({ title: coinPageTitle + " Prediction" });
     let isMounted = true;
     setIsLoading(true);
 
-    getPrediction(coinPageTitle, "30")
+    getPrediction(coinPageTitle, "30") //Api call for prediction
       .then((resp) => {
         console.log(resp);
-        let tempData = [],
-          tempLabels = [];
-        labelRadix = Math.max(Math.floor(resp.data.length / 4), 1);
-        resp.data.forEach((i, j) => {
-          tempData.push(i.prediction);
-          tempLabels.push(
-            j % labelRadix === 0
-              ? moment(i.timestamp * 1000).format("MM-DD")
-              : ""
-          );
+        let tempData = [];
+        resp.data.forEach((i) => {
+          tempData.push({ time: i.timestamp, value: i.prediction });
         });
         if (isMounted) {
-          setData([...tempData]);
-          setLabels([...tempLabels]);
-          setPrice(tempData[tempData.length - 1]);
+          setGraphData(tempData);
         }
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading(false); //after response set the loader off
       });
 
     return () => {
@@ -54,51 +44,36 @@ export default function AIPredictionChart({ navigation }) {
     };
   }, []);
 
+  useEffect(() => {
+    ccxt
+      .coinDetails([coinPageTitle + "/USD"]) //getting details from coin
+      .then((resp) => {
+        console.log("resp", resp[`${coinPageTitle}-USD`]["last"]);
+        setPrice(resp[`${coinPageTitle}-USD`]["last"]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <View style={coinPageStyles.body}>
-      <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
-        {!isLoading && numeral(price).format("$0,0.[00]")}
-      </Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 10,
+          paddingVertical: 20,
+        }}
+      >
+        <Text color={COLOR.WHITE} h3 bold style={{ flex: 1, margin: 10 }}>
+          {numeral(price).format("$0,0.[0000]")}
+        </Text>
+      </View>
       <View style={{ flex: 6 }}>
         {isLoading ? (
           <Loading />
         ) : (
-          <LineChart
-            data={{
-              labels: [...labels],
-              datasets: [
-                {
-                  data: [...data],
-                  color: (opacity = 1) => `rgba(0, 255, 0,${opacity})`,
-                },
-              ],
-              /* legend: ['Market', 'Prediction'], */
-            }}
-            width={Dimensions.get("window").width}
-            height={220}
-            yAxisLabel="$"
-            yAxisInterval={1}
-            chartConfig={{
-              backgroundGradientFrom: COLOR.BG,
-              backgroundGradientTo: COLOR.BG,
-              backgroundColor: COLOR.BG,
-              backgroundGradientFromOpacity: 1,
-              backgroundGradientToOpacity: 1,
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(0, 255, 0, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              fillShadowGradientOpacity: 1,
-              style: {
-                borderRadius: 16,
-                backgroundColor: COLOR.BG,
-                opacity: 1,
-              },
-              strokeWidth: 2,
-            }}
-            withShadow={false}
-            withInnerLines={false}
-            withDots={false}
-          />
+          graphData && <Graph graphData={graphData} symbol={coinPageTitle} />
         )}
       </View>
     </View>

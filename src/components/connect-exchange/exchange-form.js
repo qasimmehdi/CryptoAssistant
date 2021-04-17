@@ -19,7 +19,7 @@ export default function ConnectExchange({ route, navigation }) {
   const addexchange = () => {
     setdisbutton(true);
     setIsLoading(true);
-    new CCXT()
+    new CCXT()    //saving exchange to db and fetching transaction from ccxt and saving to db
       .addExchange(name, api, secret)
       .then((x) => {
         Alert.alert("Success", "Exchange added successfully");
@@ -32,7 +32,7 @@ export default function ConnectExchange({ route, navigation }) {
         );
       })
       .catch(() => {
-        Alert.alert("Error", "Invalid Api Keys");
+        Alert.alert("Error", "Invalid Api Keys");   //if promise reject then api key is not valid
         setdisbutton(false);
       })
       .finally(() => setIsLoading(false));

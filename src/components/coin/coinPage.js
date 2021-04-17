@@ -26,16 +26,12 @@ export default function CoinPage({ navigation, route }) {
     let isMounted = true;
     setIsLoading(true);
     ccxt
-      .Candles(`${coinPageTitle}/USD`, "1m")
+      .Candles(`${coinPageTitle}/USD`, "1m") //getting graph data from ccxt
       .then((resp) => {
         console.log(resp);
-        /* let tempData = [];
-        resp.forEach(i => {
-          tempData.push({time: i[0] / 1000, value: i[4]});
-        }); */
         const tempData = resp.map((i) => ({ time: i[0] / 1000, value: i[4] }));
         if (isMounted) {
-          setPrice(tempData[tempData.length - 1].value);
+          setPrice(tempData[tempData.length - 1].value); //gettting currenct price
           setGraphData(tempData);
         }
       })
@@ -51,16 +47,17 @@ export default function CoinPage({ navigation, route }) {
 
   useEffect(() => {
     ccxt
-      .coinDetails([route.params.base + "/USD"])
+      .coinDetails([route.params.base + "/USD"]) //getting details from coin
       .then((resp) => {
-        console.log("resp", resp);
+        console.log("resp", resp[`${route.params.base}-USD`]["last"]);
+        setPrice(resp[`${route.params.base}-USD`]["last"]);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     if (isFocused) {
-      setPrice(route?.params?.price || "");
+      setPrice(route?.params?.price || ""); //setting price from coin
       setPriceChange(route?.params?.priceChange || "");
       console.log("route?.params", route?.params);
     }
@@ -79,7 +76,7 @@ export default function CoinPage({ navigation, route }) {
         }}
       >
         <Text color={COLOR.WHITE} h3 bold>
-          {numeral(price).format("$0,0.[00]")}
+          {numeral(price).format("$0,0.[0000]")}
         </Text>
         <Text
           color={priceChange?.includes("-") ? COLOR.RED : COLOR.GREEN}
@@ -107,10 +104,10 @@ export default function CoinPage({ navigation, route }) {
             round
             color="transparent"
             style={sharedStyles.borderless}
-            onPress={() => navigation.navigate("AIPredictionChart")}
+            onPress={() => navigation.navigate("AIPredictionChart", { price })}
           >
             <Text color={COLOR.WHITE} h5 bold>
-              AI Coin chart predictor
+              {coinPageTitle} Price Prediction
             </Text>
           </Button>
         </LinearGradient>

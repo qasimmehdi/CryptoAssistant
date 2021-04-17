@@ -18,7 +18,7 @@ export default function ViewTransactions() {
 
   useEffect(() => {
     console.log("trnsa")
-    getAllTransactions(base)
+    getAllTransactions(base)  //GETTING TRANSACTION FROM DB
       .then((resp) => {
         let tempArray = [];
         const len = resp.length;
@@ -30,7 +30,7 @@ export default function ViewTransactions() {
           }
         }
         console.log(tempArray);
-        setTransactions([...tempArray]);
+        setTransactions([...tempArray]);  //SETTING STATE
         console.log(tempArray.length);
       })
       .catch((err) => {

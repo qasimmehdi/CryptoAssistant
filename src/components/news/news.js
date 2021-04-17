@@ -13,9 +13,9 @@ export default function NewsScreen() {
   };
   useEffect(() => {
     //do not do anything here make another useEffect if needed
-    console.log("News", isFocused);
+    console.log("News", isFocused);     
     if (isFocused) {
-      changeTitle("News");
+      changeTitle("News");    //CHANGING TITLE OF SCREEN 
     }
   }, [isFocused]);
   return <NewsTabNav />;

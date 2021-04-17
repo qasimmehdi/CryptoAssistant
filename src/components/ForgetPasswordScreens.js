@@ -22,7 +22,7 @@ function ForgetEnterEmail({ navigation }) {
   const [userV, setUserV] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { //FIELD VALIDATION
     if (userV) {
       setDisableSignin(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);

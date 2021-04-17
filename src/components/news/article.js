@@ -18,9 +18,9 @@ export default function Article() {
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
+    const delayDebounceFn = setTimeout(() => {   //SEARCHING IMPLEMENTATION
       setIsLoading(true);
-      getNews(search)
+      getNews(search)    //GETTING NEWS FROM REST CALL TO SERVER
         .then((res) => {
           console.log(res.data);
           setNews(res.data);
@@ -29,7 +29,7 @@ export default function Article() {
         .finally(() => setIsLoading(false));
     }, 1000);
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => clearTimeout(delayDebounceFn);   //HIT SEARCH WHEN USER LEAVER KEYBOARD
   }, [search]);
   return (
     <View style={sharedStyles.body}>
@@ -59,7 +59,7 @@ export default function Article() {
 
 function ArticleRow({ news }) {
   const loadInBrowser = () => {
-    Linking.openURL(news.url).catch((err) =>
+    Linking.openURL(news.url).catch((err) =>      //IF USER CLICK THEN NAVIGATE TO NEWS WEBSITE
       console.error("Couldn't load page", err)
     );
   };

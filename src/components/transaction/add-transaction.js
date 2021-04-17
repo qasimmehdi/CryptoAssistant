@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import { Button, Input, Text } from "galio-framework";
 import React, { useEffect, useState } from "react";
@@ -56,7 +55,7 @@ const AddTransaction = ({ route, navigation }) => {
     setShowTime(true);
   };
 
-  const onSave = () => {
+  const onSave = () => {  //ADDING MANUAL TRANSACTION IN DB
     saveTransaction(
       exchange,
       base,
@@ -73,7 +72,7 @@ const AddTransaction = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    if (exchange && base && quote && price && side && quantity && fee) {
+    if (exchange && base && quote && price && side && quantity && fee) { //ALL FIELD VALIDATION, MANDATORY
       setSaveDisabled(false);
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
     } else {

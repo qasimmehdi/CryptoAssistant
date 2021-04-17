@@ -12,10 +12,10 @@ export default function Sentiment() {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      setSearchProp(search);
+      setSearchProp(search);     //IF USER SEARCH ITEM THEN MAKE REST CALL TO SEARCH
     }, 1000);
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => clearTimeout(delayDebounceFn);   //STOP IF USER LEAVE KEYBOARD
   }, [search]);
 
   return (

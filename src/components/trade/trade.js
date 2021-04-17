@@ -60,7 +60,7 @@ export default function TradingScreen({ navigation, route, tabNav }) {
     }
   }, [price, quantity, exchange, pair, side]);
 
-  const initiateOrder = () => {
+  const initiateOrder = () => {   //CREATING ORDER i.e BUY OR SELL
     const ccxt = new CCXT();
     ccxt
       .createOrder(
@@ -85,7 +85,7 @@ export default function TradingScreen({ navigation, route, tabNav }) {
     //do not do anything here make another useEffect if needed
     if (isFocused) {
       changeTitle("Trade");
-      tabNav.setOptions({
+      tabNav.setOptions({    //SETTING TAB NAV OPTIONS
         headerRight: () => (
           <TouchableOpacity
             onPress={() => {
@@ -109,7 +109,7 @@ export default function TradingScreen({ navigation, route, tabNav }) {
     }
 
     return () =>
-      tabNav.setOptions({
+      tabNav.setOptions({  //SETTING TAB NAV OPTIONS
         headerRight: null,
       });
   }, [isFocused]);

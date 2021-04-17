@@ -77,7 +77,7 @@ export default function SelectPair({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
+      setIsLoading(true);   //RENDERING PAIRS FROM CCXT
       var a = pairs.find(
         (i) => i.exchange.toLowerCase() === route.params.exchange.toLowerCase()
       ).symbols;

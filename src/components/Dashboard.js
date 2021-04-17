@@ -74,7 +74,7 @@ function Dashboard({ navigation }) {
                 name: item.base,
                 quote: item.quote,
                 price:
-                  numeral(coinsData[j].price).format("$0,0.0[0000]") || "0",
+                  numeral(coinsData[j].price).format("$0,0.0[0000]") || "0",  //CASTING STRING TO NUMBER
                 priceChange:
                   numeral(coinsData[j].priceChange).format("$0,0.0[0000]") ||
                   "0",
@@ -93,7 +93,7 @@ function Dashboard({ navigation }) {
             .coinDetails(favPairs)
             .then((resp2) => {
               console.log("resp", resp2);
-              setCoinsData([...updateTable(resp2, tempArray)]);
+              setCoinsData([...updateTable(resp2, tempArray)]);  //SETTING COIN DATA IN STATE
             })
             .catch((err) => console.log(err));
         })
@@ -126,17 +126,17 @@ function Dashboard({ navigation }) {
           }
         }
         console.log("tempArray", tempArray);
-        setCoinsData([...tempArray]);
+        setCoinsData([...tempArray]);  //SETTING SATE TO REFLECT ON UI
         let favPairs = tempArray.map((i) => `${i.name}/${i.quote}`);
         ccxt
           .coinDetails(favPairs)
           .then((resp2) => {
             console.log("resp", resp2);
-            setCoinsData([...updateTable(resp2, tempArray)]);
+            setCoinsData([...updateTable(resp2, tempArray)]);  //SETTING SATE TO REFLECT ON UI
           })
           .catch((err) => console.log(err))
           .finally(() => {
-            setIsLoading(false);
+            setIsLoading(false);  //CONDITIONALLY LOADING
           });
       })
       .catch((err) => console.log(err));
@@ -160,12 +160,12 @@ function Dashboard({ navigation }) {
     }
   };
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(() => { //PULL TO REFERESH IMPLEMENTATION
     setRefresh(true);
     console.log("refreshing", coinsData);
     let favPairs = coinsData.map((i) => `${i.name}/USD`);
     ccxt
-      .coinDetails(favPairs)
+      .coinDetails(favPairs)   //GETTING FAV PAIRS FROM DB AND QUERYING CCXT FOR THEIR RATES
       .then((resp) => {
         console.log("resp", resp);
         setCoinsData([...updateTable(resp, coinsData)]);

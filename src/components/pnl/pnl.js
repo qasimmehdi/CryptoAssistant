@@ -22,7 +22,7 @@ export default function PNL() {
   const [assets, setAssets] = useState([]);
 
   useEffect(() => {
-    getData();
+    getData();   //GETTING DATA FROM API KEYS OF SPECIFIC USER AND GET THEIR CRYPTO HOLDINGS
   }, []);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function PNL() {
       if (assets.length > 0) {
         const total = assets
           .map((item) => item.amount)
-          .reduce((prev, next) => parseFloat(prev) + parseFloat(next));
+          .reduce((prev, next) => parseFloat(prev) + parseFloat(next));  //CALCULATING TOTAL PRICES
         setTotalValue(total);
         console.log(total);
       }
@@ -38,8 +38,8 @@ export default function PNL() {
   }, [assets]);
 
   const getData = async () => {
-    setIsLoading(true);
-    const holdings = await ccxt.GetHoldings();
+    setIsLoading(true);   //LOADING CONDITIONALLY
+    const holdings = await ccxt.GetHoldings();  //GET USER HOLDING OF COINS OR HIS ASSETS
     setAssets(holdings);
     setIsLoading(false);
   };

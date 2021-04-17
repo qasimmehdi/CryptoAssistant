@@ -11,9 +11,9 @@ import { setNotification } from "../../db/methods";
 
 export default function AddNotifications({ route, navigation }) {
   const { base, quote, isNotificationOn } = route.params;
-  const [disableBtn, setDisableBtn] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);   //CONFITIONALLY ENABLE AND DISABLE BUTTON
   console.log("base", base, "quote", quote);
-  const fcmToken = useSelector((state) => state.fcmToken.token);
+  const fcmToken = useSelector((state) => state.fcmToken.token);   //GETTING DEVICE FCM TOKEN AND SENDING TO SERVER
   return (
     <View style={sharedStyles.body}>
       <View style={notificationsStyle.infoText}>

@@ -60,7 +60,7 @@ const Row = (props) => {
 
 const RenderList = (props) => {
   let rows = [];
-  for (let i = 0; i <= 100 && i < props.data.length; i++) {
+  for (let i = 0; i <= 100 && i < props.data.length; i++) { //loop for rendering all list present in local storage
     rows.push(
       <Row key={i} name={props.data[i]} navigation={props.navigation} />
     );
@@ -73,7 +73,7 @@ export default function AddCoin({ navigation }) {
   const cryptoSymbols = [...crypto.symbols()];
   const [symbols, setSymbols] = useState([...cryptoSymbols]);
 
-  useEffect(() => {
+  useEffect(() => {   //it will run every time the screen renders
     const id = setTimeout(() => {
       onChangeSearch(coin);
     }, 500);

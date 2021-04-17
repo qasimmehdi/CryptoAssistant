@@ -26,8 +26,8 @@ export default function ChangePassword() {
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   useEffect(() => {
-    if (password && confirmPassword && currentPassword && passV && pass2V) {
-      if (password === confirmPassword) {
+    if (password && confirmPassword && currentPassword && passV && pass2V) {  //GENERATING ERROR ON RUNTIME
+      if (password === confirmPassword) {  //IF PASSWORD DONT MATCH SHOW ERROR
         setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
         setBtnDisabled(false);
         setError("");
@@ -39,7 +39,7 @@ export default function ChangePassword() {
     }
   }, [password, confirmPassword, currentPassword, passV, pass2V]);
 
-  const submitPassword = () => {
+  const submitPassword = () => {   //SERVER CALL TO UPDATE  PASSWORD
     setBtnDisabled(true);
     changePassword(currentPassword,password).then(x => Alert.alert("Success","Password Changed"))
     .catch(err => {
@@ -73,7 +73,7 @@ export default function ChangePassword() {
           </View>
           <View style={{ paddingBottom: 10 }}>
             <Text bold color={COLOR.APP_GREY} style={{ paddingLeft: 5 }}>
-              Password
+              New Password
             </Text>
             <CustomInput
               style={settingsStyle.input}
@@ -96,7 +96,7 @@ export default function ChangePassword() {
           </View>
           <View style={{ paddingBottom: 10 }}>
             <Text bold color={COLOR.APP_GREY} style={{ paddingLeft: 5 }}>
-              Confirm Password
+              Confirm New Password
             </Text>
             <CustomInput
               style={settingsStyle.input}

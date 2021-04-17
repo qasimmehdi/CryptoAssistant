@@ -5,7 +5,7 @@ import CoinPage from "./coinPage";
 import { COLOR } from "../shared/colors";
 import { useSelector } from "react-redux";
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator(); //creating tab navigation
 
 export default function CoinPageTabNav({ navigation, route }) {
   const coinPageTitle = useSelector((state) => state.setSelectedCoin.base);

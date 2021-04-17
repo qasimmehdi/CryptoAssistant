@@ -24,7 +24,7 @@ export default function Settings({ navigation }) {
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   useEffect(() => {
-    if (firstName && lastName && email && emailV) {
+    if (firstName && lastName && email && emailV) {  //FIELD VALIDATION AND BTN DISABLE CONDITINALLY
       setGradientColors([COLOR.GRADIENT_0, COLOR.GRADIENT_1]);
       setBtnDisabled(false);
     } else {
@@ -55,7 +55,7 @@ export default function Settings({ navigation }) {
       email,
     };
 
-    updateProfile(data)
+    updateProfile(data)   //API CALL FOR UPDATING PROFILE
       .then((x) => Alert.alert("Success", "Profile Updated Successfully"))
       .catch(() => Alert.alert("Error", "Something went wrong"))
       .finally(() => {

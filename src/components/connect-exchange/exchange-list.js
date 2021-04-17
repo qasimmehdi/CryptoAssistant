@@ -12,6 +12,8 @@ import { ScrollView } from "react-native";
 import CCXT from "../../services/ccxt/react-ccxt";
 import iconImages from "../../assets/coinIcons/names";
 
+//list of all exchanges supported by system and their logo
+
 const ExchangeRow = (props) => {
   console.log(props.logo);
   return (
