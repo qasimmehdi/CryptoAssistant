@@ -182,7 +182,7 @@ module.exports = {
     "no-void": 1, // disallow use of void operator (off by default)
     "no-warning-comments": 0, // disallow usage of configurable warning terms in comments": 1,                        // e.g. TODO or FIXME (off by default)
     "no-with": 1, // disallow use of the with statement
-    radix: 1, // require use of the second argument for parseInt() (off by default)
+    radix: 0, // require use of the second argument for parseInt() (off by default)
     "semi-spacing": 1, // require a space after a semi-colon
     "vars-on-top": 0, // requires to declare all vars on top of their containing scope (off by default)
     "wrap-iife": 0, // require immediate function invocation to be wrapped in parentheses (off by default)
