@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+	platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'school' do
@@ -36,9 +36,7 @@ target 'school' do
 
   pod 'react-native-sensitive-info', :path => '../node_modules/react-native-sensitive-info'
 
-
-
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
 
   target 'schoolTests' do
     inherit! :search_paths
@@ -56,19 +54,19 @@ target 'school-tvOS' do
     # Pods for testing
   end
 
-  target 'ReactPushNotifications' do
+  #target 'ReactPushNotifications' do
     # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
     # use_frameworks!
   
     # Pods for ReactPushNotifications - Add these lines
-    pod 'Firebase/Core'
-    pod 'Firebase/Messaging'
+    #pod 'Firebase/Core'
+    #pod 'Firebase/Messaging'
   
-    target 'ReactPushNotificationsTests' do
-      inherit! :search_paths
+    #target 'ReactPushNotificationsTests' do
+      #inherit! :search_paths
       # Pods for testing
-    end
+    #end
   
-  end
+  #end
 
 end
