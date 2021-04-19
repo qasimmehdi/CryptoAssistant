@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, View, Platform } from "react-native";
 import WebView from "react-native-webview";
 import { COLOR } from "./shared/colors";
 
@@ -17,6 +17,7 @@ export default function Graph({ graphData, symbol }) {
           data: ${JSON.stringify(string)}
         }));
       }, 0);
+      true;
     `;
   }
 
@@ -46,15 +47,14 @@ export default function Graph({ graphData, symbol }) {
     >
       <View style={{ width: Dimensions.get("window").width, height: 250 }}>
         <WebView
+          javaScriptEnabled={true}
           ref={webRef}
           originWhitelist={["*"]}
-          source={{ uri: "file:///android_asset/graph.html" }}  //USING WEB VIEW AND SENDING DATA TO IT
+          source={Platform.OS === 'ios' ? require('../assets/graph/graph.html') : { uri: "file:///android_asset/graph.html" }}  //USING WEB VIEW AND SENDING DATA TO IT
           style={{
             backgroundColor: COLOR.BG,
           }}
-          onMessage={(event) => {
-            console.log(event.nativeEvent.data);
-          }}
+          onMessage={(event) => {}}
         />
       </View>
     </View>
