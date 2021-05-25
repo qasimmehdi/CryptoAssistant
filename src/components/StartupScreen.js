@@ -30,12 +30,11 @@ const StartupScreen = ({ navigation }) => {
       .then((resp) => {
         console.log("token", resp);
         if (resp != null) {
+          dispatch(Actions.token({ token: resp }));
+          axios.defaults.headers.common["Authorization"] = "Bearer " + resp;
           SInfoGet("touch_id")
             .then((res) => {
               if (parseInt(res)) {
-                dispatch(Actions.token({ token: resp }));
-                axios.defaults.headers.common["Authorization"] =
-                  "Bearer " + resp;
                 TouchID.authenticate(
                   "Fingerprint authentication is required.",
                   optionalConfigObject

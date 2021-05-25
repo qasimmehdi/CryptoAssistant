@@ -18,18 +18,19 @@ export default function Article() {
 
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {   //SEARCHING IMPLEMENTATION
+    const delayDebounceFn = setTimeout(() => {
+      //SEARCHING IMPLEMENTATION
       setIsLoading(true);
-      getNews(search)    //GETTING NEWS FROM REST CALL TO SERVER
+      getNews(search) //GETTING NEWS FROM REST CALL TO SERVER
         .then((res) => {
           console.log(res.data);
           setNews(res.data);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(JSON.stringify(err.request, null, 2)))
         .finally(() => setIsLoading(false));
     }, 1000);
 
-    return () => clearTimeout(delayDebounceFn);   //HIT SEARCH WHEN USER LEAVER KEYBOARD
+    return () => clearTimeout(delayDebounceFn); //HIT SEARCH WHEN USER LEAVER KEYBOARD
   }, [search]);
   return (
     <View style={sharedStyles.body}>
@@ -59,9 +60,9 @@ export default function Article() {
 
 function ArticleRow({ news }) {
   const loadInBrowser = () => {
-    Linking.openURL(news.url).catch((err) =>      //IF USER CLICK THEN NAVIGATE TO NEWS WEBSITE
-      console.error("Couldn't load page", err)
-    );
+    Linking.openURL(news.url).catch((
+      err //IF USER CLICK THEN NAVIGATE TO NEWS WEBSITE
+    ) => console.error("Couldn't load page", err));
   };
   return (
     <TouchableOpacity onPress={loadInBrowser}>

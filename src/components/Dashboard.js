@@ -74,9 +74,9 @@ function Dashboard({ navigation }) {
                 name: item.base,
                 quote: item.quote,
                 price:
-                  numeral(coinsData[j].price).format("$0,0.0[0000]") || "0",  //CASTING STRING TO NUMBER
+                  numeral(coinsData[j]?.price || 0).format("$0,0.0[0000]") || "0",  //CASTING STRING TO NUMBER
                 priceChange:
-                  numeral(coinsData[j].priceChange).format("$0,0.0[0000]") ||
+                  numeral(coinsData[j]?.priceChange || 0).format("$0,0.0[0000]") ||
                   "0",
                 changePercentage: "0",
                 holdingConverted: "0",
