@@ -80,6 +80,23 @@ function CustomDrawerContent({ navigation }) {
           <Text> Profit & Loss</Text>
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{
+          backgroundColor: COLOR.TAB,
+          justifyContent: "center",
+          minHeight: 50,
+        }}
+        onPress={() => {
+          navigation.navigate("OpenOders");
+        }}
+      >
+        <Text style={{ marginLeft: 30 }} color={COLOR.WHITE} bold>
+          <IonicIcon name={"receipt-outline"} size={20} />
+          <Text> Open Orders</Text>
+        </Text>
+      </TouchableOpacity>
+
       {showTouchId && (
         <TouchableOpacity
           style={{

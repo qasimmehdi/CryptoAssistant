@@ -32,6 +32,7 @@ import TradeBotStarted from "../components/trade-bot/trade-bot-started";
 import PNL from "../components/pnl/pnl";
 import SelectPair from "../components/trade/select-pair";
 import ChangePassword from "../components/settings/change-password";
+import OpenOders from "../components/open-orders/OpenOrders";
 
 const Stack = createStackNavigator();
 
@@ -165,6 +166,10 @@ export default function StackNav() {
         name="ChangePassword"
         component={ChangePassword}
         options={{ title: "Change Password" }}
+      /><Stack.Screen
+        name="OpenOders"
+        component={OpenOders}
+        options={{ title: "Open Oders" }}
       />
     </Stack.Navigator>
   );

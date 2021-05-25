@@ -17,8 +17,8 @@ export default function ViewTransactions() {
   const base = useSelector((state) => state.setSelectedCoin.base);
 
   useEffect(() => {
-    console.log("trnsa")
-    getAllTransactions(base)  //GETTING TRANSACTION FROM DB
+    console.log("trnsa");
+    getAllTransactions(base) //GETTING TRANSACTION FROM DB
       .then((resp) => {
         let tempArray = [];
         const len = resp.length;
@@ -30,7 +30,7 @@ export default function ViewTransactions() {
           }
         }
         console.log(tempArray);
-        setTransactions([...tempArray]);  //SETTING STATE
+        setTransactions([...tempArray]); //SETTING STATE
         console.log(tempArray.length);
       })
       .catch((err) => {
@@ -62,7 +62,7 @@ export default function ViewTransactions() {
               </Text>
             </View>
             <Text color={COLOR.APP_GREY} size={10}>
-              {moment(item.date, "x").format("MMM DD, YYYY hh:mm a")}
+              {moment(item.date, "x").format("YYYY-MM-DD HH:mm:ss")}
             </Text>
             <View
               style={{
