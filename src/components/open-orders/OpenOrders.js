@@ -3,17 +3,19 @@ import moment from "moment";
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
-import { View } from "react-native";
+import { View,Alert } from "react-native";
 import { COLOR } from "../shared/colors";
 import Hr from "../shared/hr";
 import { sharedStyles } from "../shared/shared.style";
 import Loading from "../SplashScreen";
+import CCXT from "../../services/ccxt/react-ccxt";
 
 const OrdersRow = (props) => {
-  const { base, quote, amount, price, time, side } = props;
+  const { symbol, amount, price, timestamp, side,remove } = props;
 
   const cancel = () => {
     //cancel order
+    
   };
 
   return (
@@ -33,7 +35,7 @@ const OrdersRow = (props) => {
         }}
       >
         <Text color={COLOR.WHITE} size={14}>
-          {base}/{quote}
+          {symbol}
         </Text>
 
         <View
@@ -47,7 +49,7 @@ const OrdersRow = (props) => {
             {"Side: "}
           </Text>
           <Text color={COLOR.WHITE} size={12}>
-            {side}
+            {side[0].toUpperCase() + side.slice(1)}
           </Text>
         </View>
 
@@ -90,13 +92,13 @@ const OrdersRow = (props) => {
         }}
       >
         <Text color={COLOR.APP_GREY} size={12}>
-          {moment(time, "x").format("YYYY-MM-DD HH:mm:ss")}
+          {moment(timestamp, "x").format("YYYY-MM-DD HH:mm:ss")}
         </Text>
         <Button
           radius={4}
           style={{ width: 70, height: 26 }}
           color={COLOR.APP_GREY}
-          onPress={cancel}
+          onPress={remove}
         >
           Cancel
         </Button>
@@ -106,21 +108,40 @@ const OrdersRow = (props) => {
 };
 
 export default function OpenOders() {
-  const [orders, setOrders] = useState([
-    {
-      base: "BTC",
-      quote: "USDT",
-      amount: 1.5,
-      price: 40000,
-      time: 1621964067000,
-      side: "Buy",
-    },
-  ]);
+  const ccxt = new CCXT();
+
+  const [orders, setOrders] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     //get Data
+    setisLoading(true);
+    ccxt.getOpenOrders().then(orders => {
+      const AllOrders = [].concat.apply([], orders);
+      console.log("openOrders",AllOrders);
+      setOrders(AllOrders);
+      if(AllOrders.length <= 0){
+        Alert.alert("Error","No Open Orders Found");
+      }
+    }).catch(err => console.log("Unable to fetch orders"))
+    .finally(() => setisLoading(false));
+    
   }, []);
+
+
+  const cancelOrder = (id,symbol) => {
+    console.log(id);
+    console.log(symbol);
+    setisLoading(true);
+    ccxt.cancelOrder(id,symbol).then(x => {
+      setOrders(orders.filter(item => item.info.orderId !== id));
+      Alert.alert("Success","Order Cancelled");
+    })
+    .catch(err => {
+      Alert.alert("Error","Unable to cancel order");
+    })
+    .finally(() => setisLoading(false));
+  }
 
   return (
     <View style={sharedStyles.body}>
@@ -130,7 +151,7 @@ export default function OpenOders() {
         ) : (
           orders.map((order, i) => (
             <React.Fragment key={`order-${i}`}>
-              <OrdersRow {...order} />
+              <OrdersRow {...order} remove={() => cancelOrder(order.info.orderId,order.symbol)}/>
               <Hr color={COLOR.APP_GREY} />
             </React.Fragment>
           ))

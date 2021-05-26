@@ -414,6 +414,90 @@ export default class CCXT {
     return holdingsUSD;
   }  
 
+
+   async getOpenOrders(){  //GETTING ALL ORDERS CREATED BY USER
+
+      let openOrdersPromises = [];
+      const resp = await getAllExchanges();
+      let tempArray = [];
+      const len = resp.length;
+      for (let i = 0; i < len; i++) {
+        for (let j = 0; j < resp[i].rows.length; j++) {
+          let item = resp[i].rows.item(j);
+          console.log(item);
+          tempArray.push(item);
+        }
+      }
+  
+      for (let ex of tempArray) {
+        const exchange = this.certifiedEx.find(
+          (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
+        ).imp;
+        exchange.apiKey = ex.public;
+        exchange.secret = ex.secret;
+  
+        if(exchange.has['fetchOpenOrders']){
+          exchange.options["warnOnFetchOpenOrdersWithoutSymbol"] = false;
+         
+          try{
+            openOrdersPromises.push(exchange.fetchOpenOrders(undefined,undefined,undefined,{'recvWindow': 60000}));
+          }
+          catch(e){
+            console.log(`Unable to fetch Order for ${ex.exchange.toLowerCase()}`)
+          }
+          
+        }
+      }
+
+      return Promise.all(openOrdersPromises);
+    
+  }
+
+  cancelOrder(id,symbol){ 
+
+      return new Promise(async (resolve,reject) => {
+        let isOrderCanceled = false;
+
+        const resp = await getAllExchanges();
+          let tempArray = [];
+          const len = resp.length;
+          for (let i = 0; i < len; i++) {
+            for (let j = 0; j < resp[i].rows.length; j++) {
+              let item = resp[i].rows.item(j);
+              console.log(item);
+              tempArray.push(item);
+            }
+          }
+
+
+          for (let ex of tempArray) {
+            const exchange = this.certifiedEx.find(
+              (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
+            ).imp;
+            exchange.apiKey = ex.public;
+            exchange.secret = ex.secret;
+    
+            if(exchange.hasCancelOrder){
+              try{
+                const CancelledOrder = await exchange.cancelOrder(id.toString(),symbol,{'recvWindow': 60000});
+                if(CancelledOrder !== null && CancelledOrder !== undefined){
+                  isOrderCanceled = true;
+                  break;
+                }
+              }
+              catch(err){
+              console.log(err);
+              }
+              
+            }
+            
+          }
+
+          isOrderCanceled ? resolve("Cancelled") : reject("unable to cancel order")
+      })
+      
+  }
+
   async fetchBalances() {   //FETCHING BALANCE OF USER 
     let responses = [];
     const resp = await getAllExchanges();
