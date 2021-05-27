@@ -7,7 +7,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { COLOR } from "../shared/colors";
 import { sharedStyles } from "../shared/shared.style";
 
-
 //help page which we can show some help tips to user
 
 export default function Help() {
@@ -27,7 +26,7 @@ export default function Help() {
             How to connect your exchange?
           </Text>
           <Text p color={COLOR.APP_GREY} size={12}>
-            {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at diam dictum, sagittis ante sit amet, placerat mauris. Donec lobortis est in varius eleifend. Vestibulum malesuada lacus facilisis ex rutrum porttitor. Praesent a maximus eros. Fusce a tempor eros. Duis quis rutrum lacus, malesuada facilisis ante. Suspendisse congue et dui vel convallis. Nam ac finibus erat, ut eleifend dui. Suspendisse sodales molestie urna non tristique. Donec id libero ante. Vivamus feugiat hendrerit tellus eget facilisis. Fusce ipsum tellus, iaculis tincidunt quam luctus, lacinia mollis dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.`}
+            {`First create an API key from your exchange account and give it permission for trading. Then on the Home screen open side menu and click on "Connect Exchange" there you will see a list of supported exchanges click on the one you want and enter you public and secret keys and press "Add Connection". This will save the your keys on your device only and start syncing your balances and old trades to your device only.`}
           </Text>
         </View>
         <View style={{ paddingBottom: 5 }}>
@@ -35,7 +34,7 @@ export default function Help() {
             How to buy cryptocurrency?
           </Text>
           <Text p color={COLOR.APP_GREY} size={12}>
-            {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at diam dictum, sagittis ante sit amet, placerat mauris. Donec lobortis est in varius eleifend. Vestibulum malesuada lacus facilisis ex rutrum porttitor. Praesent a maximus eros. Fusce a tempor eros. Duis quis rutrum lacus, malesuada facilisis ante. Suspendisse congue et dui vel convallis. Nam ac finibus erat, ut eleifend dui. Suspendisse sodales molestie urna non tristique. Donec id libero ante. Vivamus feugiat hendrerit tellus eget facilisis. Fusce ipsum tellus, iaculis tincidunt quam luctus, lacinia mollis dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.`}
+            {`Go to Trade screen select Buy then select the excahnge and currency pair you want to trade, set the price and amount and press Buy button. Remember this will be a limit order. You can see the order you created in Open Orders screen.`}
           </Text>
         </View>
         <View style={{ paddingBottom: 5 }}>
@@ -43,7 +42,7 @@ export default function Help() {
             How to sell cryptocurrency?
           </Text>
           <Text p color={COLOR.APP_GREY} size={12}>
-            {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at diam dictum, sagittis ante sit amet, placerat mauris. Donec lobortis est in varius eleifend. Vestibulum malesuada lacus facilisis ex rutrum porttitor. Praesent a maximus eros. Fusce a tempor eros. Duis quis rutrum lacus, malesuada facilisis ante. Suspendisse congue et dui vel convallis. Nam ac finibus erat, ut eleifend dui. Suspendisse sodales molestie urna non tristique. Donec id libero ante. Vivamus feugiat hendrerit tellus eget facilisis. Fusce ipsum tellus, iaculis tincidunt quam luctus, lacinia mollis dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.`}
+            {`Go to Trade screen select Sell then select the excahnge and currency pair you want to trade, set the price and amount and press Sell button. Remember this will be a limit order. You can see the order you created in Open Orders screen.`}
           </Text>
         </View>
       </ScrollView>

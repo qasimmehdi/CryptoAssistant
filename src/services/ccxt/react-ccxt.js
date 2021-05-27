@@ -11,7 +11,8 @@ import {
 } from "../../db/methods";
 
 export default class CCXT {
-  constructor() {   //CO NSTRUCTR TO CREATE INSTANCES FOR ALL CERTIFIED EXCHANGE
+  constructor() {
+    //CO NSTRUCTR TO CREATE INSTANCES FOR ALL CERTIFIED EXCHANGE
     this.certifiedEx = [
       { imp: new ccxt.binance({ enableRateLimit: true }), name: "Binance" },
       { imp: new ccxt.bitfinex({ enableRateLimit: true }), name: "Bitfinex" },
@@ -35,7 +36,8 @@ export default class CCXT {
     ];
   }
 
-  batchExchanges(symbols) {   //QUERYING CCXT TO GET DATA OF COINS SUPPLIED AS ARRAY
+  batchExchanges(symbols) {
+    //QUERYING CCXT TO GET DATA OF COINS SUPPLIED AS ARRAY
     let proms = [];
     for (let symbol of symbols) {
       proms.push(
@@ -81,14 +83,16 @@ export default class CCXT {
     return Promise.all(proms);
   }
 
-  getAllExchangeAndLogo() {  //GETTING LOGO OF EXCHANEGES
+  getAllExchangeAndLogo() {
+    //GETTING LOGO OF EXCHANEGES
     return this.certifiedEx.map((x) => ({
       name: x.name,
       logo: x.imp.urls.logo,
     }));
   }
 
-  Candles(symbol, hr) {  //GETTING GRAPH DATA FROM CCXT
+  Candles(symbol, hr) {
+    //GETTING GRAPH DATA FROM CCXT
     let date = new Date();
     let interval = "";
     if (hr === "1y") {
@@ -131,7 +135,8 @@ export default class CCXT {
     });
   }
 
-  coinDetails(symbols) {  //GETTING DETAILS OF SPECIFIC COIN 
+  coinDetails(symbols) {
+    //GETTING DETAILS OF SPECIFIC COIN
     return new Promise((resolve, reject) => {
       console.log(symbols);
       this.batchExchanges(symbols).then((resp) => {
@@ -148,7 +153,8 @@ export default class CCXT {
     });
   }
 
-  addExchange(name, publickey, secretkey) {  //ADDING EXCHANGE TO DB AND GETTING ALL TRANSACTIONS
+  addExchange(name, publickey, secretkey) {
+    //ADDING EXCHANGE TO DB AND GETTING ALL TRANSACTIONS
     const index = this.certifiedEx.findIndex((x) => x.name === name);
     this.certifiedEx[index].imp.apiKey = publickey;
     this.certifiedEx[index].imp.secret = secretkey;
@@ -189,7 +195,8 @@ export default class CCXT {
     });
   }
 
-  saveTransactionstodb(exname) {  //SAVING TRANSACTION TO LOCAL DB
+  saveTransactionstodb(exname) {
+    //SAVING TRANSACTION TO LOCAL DB
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     return new Promise((resolve, reject) => {
       if (exchange && exchange.checkRequiredCredentials()) {
@@ -274,7 +281,8 @@ export default class CCXT {
     });
   }
 
-  getTradeData(exname) {  //GETTING TRADE DATA FROM EXCHANEG THROUGH CCXT
+  getTradeData(exname) {
+    //GETTING TRADE DATA FROM EXCHANEG THROUGH CCXT
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const symbols = pairs.find((x) => x.exchange === exname.toLowerCase())
       .symbols;
@@ -299,7 +307,8 @@ export default class CCXT {
     return Promise.all(promises);
   }
 
-  async createOrder(exname, symbol, side, amount, price) {  //CREATING ORDER OF BUY OR SELL
+  async createOrder(exname, symbol, side, amount, price) {
+    //CREATING ORDER OF BUY OR SELL
     const exchange = this.certifiedEx.find(
       (x) => x.name.toLowerCase() === exname.toLowerCase()
     ).imp;
@@ -311,12 +320,13 @@ export default class CCXT {
       console.log(exchange.apiKey, exchange.secret);
     }
 
-    let type = "market";
-    if (!exchange.hasCreateMarketOrder) {
-      type = "limit";
-    }
     return new Promise((resolve, reject) => {
       if (exchange && exchange.checkRequiredCredentials()) {
+        let type = "limit";
+        if (!exchange.hasCreateLimitOrder) {
+          reject("Limit Order Not Supported");
+          return;
+        }
         if (exchange.hasCreateOrder) {
           exchange
             .createOrder(
@@ -341,14 +351,17 @@ export default class CCXT {
             });
         } else {
           reject("Exchange Not Supported");
+          return;
         }
       } else {
         reject("No Api Keys Founded");
+        return;
       }
     });
   }
 
-  async GetHoldings() {  //GETTING HOLDING OF USER 
+  async GetHoldings() {
+    //GETTING HOLDING OF USER
     let holdingsUSD = [];
     const resp = await getAllExchanges();
     let tempArray = [];
@@ -367,57 +380,96 @@ export default class CCXT {
       ).imp;
       exchange.apiKey = ex.public;
       exchange.secret = ex.secret;
-    
 
-    let deposits = await exchange.fetchBalance();
-    deposits = deposits?.info?.balances.filter((x) => parseFloat(x.free) > 0);
-    let USDS = deposits.filter(a => a.asset.indexOf("USD") > -1);
-    let pairs = deposits.filter(a => a.asset.indexOf("USD") < 0).map((x) => x.asset + "/USD");
-    let rates = await this.coinDetails(pairs);
-    Object.keys(rates).forEach((x) => {
-      if (rates[x] !== "not found") {
-        let symbol = x.split("-")[0];
-        let quantity = deposits.find(
-          (d) => d.asset.toLowerCase() === symbol.toLowerCase()
-        ).free;
-        let amount = quantity * rates[x]["last"];
-        let i = holdingsUSD.findIndex(x => x.symbol === symbol);
-        if(i > -1){
-          holdingsUSD[i].quantity += quantity;
-          holdingsUSD[i].amount += amount;
+      let deposits = await exchange.fetchBalance();
+      deposits = deposits?.info?.balances.filter((x) => parseFloat(x.free) > 0);
+      let USDS = deposits.filter((a) => a.asset.indexOf("USD") > -1);
+      let pairs = deposits
+        .filter((a) => a.asset.indexOf("USD") < 0)
+        .map((x) => x.asset + "/USD");
+      let rates = await this.coinDetails(pairs);
+      Object.keys(rates).forEach((x) => {
+        if (rates[x] !== "not found") {
+          let symbol = x.split("-")[0];
+          let quantity = deposits.find(
+            (d) => d.asset.toLowerCase() === symbol.toLowerCase()
+          ).free;
+          let amount = quantity * rates[x]["last"];
+          let i = holdingsUSD.findIndex((x) => x.symbol === symbol);
+          if (i > -1) {
+            holdingsUSD[i].quantity += quantity;
+            holdingsUSD[i].amount += amount;
+          } else {
+            holdingsUSD.push({
+              symbol,
+              quantity,
+              amount,
+            });
+          }
         }
-        else{
+      });
+
+      USDS.forEach((x) => {
+        let i = holdingsUSD.findIndex((x) => x.symbol === x.asset);
+        if (i > -1) {
+          holdingsUSD[i].quantity += x.free;
+          holdingsUSD[i].amount += x.free;
+        } else {
           holdingsUSD.push({
-            symbol,
-            quantity,
-            amount,
+            symbol: x.asset,
+            quantity: x.free,
+            amount: x.free,
           });
         }
-      }
-    });
-
-    USDS.forEach(x => {
-      let i = holdingsUSD.findIndex(x => x.symbol === x.asset);
-      if(i > -1){
-        holdingsUSD[i].quantity += x.free;
-        holdingsUSD[i].amount += x.free;
-      }
-      else{
-        holdingsUSD.push({
-          symbol:x.asset,
-          quantity:x.free,
-          amount:x.free,
-        });
-      }
-    })
-  }
+      });
+    }
     return holdingsUSD;
-  }  
+  }
 
+  async getOpenOrders() {
+    //GETTING ALL ORDERS CREATED BY USER
 
-   async getOpenOrders(){  //GETTING ALL ORDERS CREATED BY USER
+    let openOrdersPromises = [];
+    const resp = await getAllExchanges();
+    let tempArray = [];
+    const len = resp.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < resp[i].rows.length; j++) {
+        let item = resp[i].rows.item(j);
+        console.log(item);
+        tempArray.push(item);
+      }
+    }
 
-      let openOrdersPromises = [];
+    for (let ex of tempArray) {
+      const exchange = this.certifiedEx.find(
+        (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
+      ).imp;
+      exchange.apiKey = ex.public;
+      exchange.secret = ex.secret;
+
+      if (exchange.has["fetchOpenOrders"]) {
+        exchange.options["warnOnFetchOpenOrdersWithoutSymbol"] = false;
+
+        try {
+          openOrdersPromises.push(
+            exchange.fetchOpenOrders(undefined, undefined, undefined, {
+              recvWindow: 60000,
+            })
+          );
+        } catch (e) {
+          console.log(`Unable to fetch Order for ${ex.exchange.toLowerCase()}`);
+        }
+      }
+    }
+
+    return Promise.all(openOrdersPromises);
+  }
+
+  cancelOrder(id, symbol) {
+    return new Promise(async (resolve, reject) => {
+      let isOrderCanceled = false;
+
       const resp = await getAllExchanges();
       let tempArray = [];
       const len = resp.length;
@@ -428,77 +480,37 @@ export default class CCXT {
           tempArray.push(item);
         }
       }
-  
+
       for (let ex of tempArray) {
         const exchange = this.certifiedEx.find(
           (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
         ).imp;
         exchange.apiKey = ex.public;
         exchange.secret = ex.secret;
-  
-        if(exchange.has['fetchOpenOrders']){
-          exchange.options["warnOnFetchOpenOrdersWithoutSymbol"] = false;
-         
-          try{
-            openOrdersPromises.push(exchange.fetchOpenOrders(undefined,undefined,undefined,{'recvWindow': 60000}));
+
+        if (exchange.hasCancelOrder) {
+          try {
+            const CancelledOrder = await exchange.cancelOrder(
+              id.toString(),
+              symbol,
+              { recvWindow: 60000 }
+            );
+            if (CancelledOrder !== null && CancelledOrder !== undefined) {
+              isOrderCanceled = true;
+              break;
+            }
+          } catch (err) {
+            console.log(err);
           }
-          catch(e){
-            console.log(`Unable to fetch Order for ${ex.exchange.toLowerCase()}`)
-          }
-          
         }
       }
 
-      return Promise.all(openOrdersPromises);
-    
+      isOrderCanceled ? resolve("Cancelled") : reject("unable to cancel order");
+    });
   }
 
-  cancelOrder(id,symbol){ 
-
-      return new Promise(async (resolve,reject) => {
-        let isOrderCanceled = false;
-
-        const resp = await getAllExchanges();
-          let tempArray = [];
-          const len = resp.length;
-          for (let i = 0; i < len; i++) {
-            for (let j = 0; j < resp[i].rows.length; j++) {
-              let item = resp[i].rows.item(j);
-              console.log(item);
-              tempArray.push(item);
-            }
-          }
-
-
-          for (let ex of tempArray) {
-            const exchange = this.certifiedEx.find(
-              (x) => x.name.toLowerCase() === ex.exchange.toLowerCase()
-            ).imp;
-            exchange.apiKey = ex.public;
-            exchange.secret = ex.secret;
-    
-            if(exchange.hasCancelOrder){
-              try{
-                const CancelledOrder = await exchange.cancelOrder(id.toString(),symbol,{'recvWindow': 60000});
-                if(CancelledOrder !== null && CancelledOrder !== undefined){
-                  isOrderCanceled = true;
-                  break;
-                }
-              }
-              catch(err){
-              console.log(err);
-              }
-              
-            }
-            
-          }
-
-          isOrderCanceled ? resolve("Cancelled") : reject("unable to cancel order")
-      })
-      
-  }
-
-  async fetchBalances() {   //FETCHING BALANCE OF USER 
+  async fetchBalances() {
+    //FETCHING BALANCE OF USER
     let responses = [];
     const resp = await getAllExchanges();
     let tempArray = [];
@@ -524,9 +536,10 @@ export default class CCXT {
       }
     }
     return Promise.all(responses);
-  } 
+  }
 
-  async fetchBalancesByExchange(exname) {  //GETTING BALANCE OF SPECIFIC EXCHANGE
+  async fetchBalancesByExchange(exname) {
+    //GETTING BALANCE OF SPECIFIC EXCHANGE
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
 
@@ -546,7 +559,8 @@ export default class CCXT {
     }
   }
 
-  async getExchangeObj(exname) { //GETTING OBJECT OF EXCHANGE
+  async getExchangeObj(exname) {
+    //GETTING OBJECT OF EXCHANGE
     console.log("getExchangeObj", exname);
     const exchange = this.certifiedEx.find((x) => x.name === exname).imp;
     const resp = await getExchange(exname);
