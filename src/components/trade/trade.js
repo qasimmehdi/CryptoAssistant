@@ -61,6 +61,9 @@ export default function TradingScreen({ navigation, route, tabNav }) {
   }, [price, quantity, exchange, pair, side]);
 
   const initiateOrder = () => {   //CREATING ORDER i.e BUY OR SELL
+    
+    setBtnDisable(true);  //disabling button
+    
     const ccxt = new CCXT();
     ccxt
       .createOrder(
@@ -75,7 +78,7 @@ export default function TradingScreen({ navigation, route, tabNav }) {
       })
       .catch((err) => {
         Alert.alert("Error", String(err));
-      });
+      }).finally(() => setBtnDisable(false));
   };
 
   const changeTitle = (title) => {
