@@ -18,12 +18,12 @@ export default class CCXT {
       { imp: new ccxt.bitfinex({ enableRateLimit: true }), name: "Bitfinex" },
       { imp: new ccxt.bittrex({ enableRateLimit: true }), name: "Bittrex" },
       { imp: new ccxt.bitvavo({ enableRateLimit: true }), name: "Bitvavo" },
-      { imp: new ccxt.bytetrade({ enableRateLimit: true }), name: "ByteTrade" },
+      /* { imp: new ccxt.bytetrade({ enableRateLimit: true }), name: "ByteTrade" }, */
       {
         imp: new ccxt.currencycom({ enableRateLimit: true }),
         name: "Currency.com",
       },
-      { imp: new ccxt.eterbase({ enableRateLimit: true }), name: "Eterbase" },
+      /* { imp: new ccxt.eterbase({ enableRateLimit: true }), name: "Eterbase" }, */
       { imp: new ccxt.ftx({ enableRateLimit: true }), name: "FTX" },
       { imp: new ccxt.idex({ enableRateLimit: true }), name: "IDEX" },
       { imp: new ccxt.kraken({ enableRateLimit: true }), name: "Kraken" },
